@@ -1,13 +1,16 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { brandSettings } from "@/lib/site-data";
+import { Reveal } from "@/components/reveal";
 
 type Bolo = {
   id: string;
   name: string;
   basePrice: number;
   description: string;
+  imageUrl: string;
 };
 
 type Decoration = {
@@ -30,22 +33,118 @@ type CartItem = {
 const CART_STORAGE_KEY = "csg_cardapio_bolos_cart_v1";
 
 const BOLOS: Bolo[] = [
-  { id: "ninho-abacaxi", name: "Ninho com abacaxi", basePrice: 79.9, description: "Bolo cremoso com ninho e pedaços de abacaxi." },
-  { id: "ninho-morangos", name: "Ninho com morangos", basePrice: 89.9, description: "Combinação clássica de creme de ninho com morangos frescos." },
-  { id: "abacaxi-coco", name: "Abacaxi com coco", basePrice: 79.9, description: "Massa leve com recheio tropical de abacaxi e coco." },
-  { id: "limao-frutas-vermelhas", name: "Limão siciliano e frutas vermelhas", basePrice: 89.9, description: "Toque cítrico equilibrado com frutas vermelhas." },
-  { id: "morango-choc-branco", name: "Morango com chocolate branco", basePrice: 99.9, description: "Recheio intenso de chocolate branco com morango." },
-  { id: "brigadeiro", name: "Brigadeiro", basePrice: 84.9, description: "Bolo tradicional com recheio de brigadeiro cremoso." },
-  { id: "maracuja-chocolate", name: "Maracujá com chocolate", basePrice: 87.9, description: "Contraste perfeito entre maracujá e chocolate." },
-  { id: "prestigio", name: "Prestígio", basePrice: 83.9, description: "Chocolate com coco em versão premium artesanal." },
-  { id: "ninho-nutella", name: "Ninho com Nutella", basePrice: 89.9, description: "Camadas cremosas de ninho com Nutella." },
-  { id: "kinder-bueno", name: "Kinder Bueno", basePrice: 95.9, description: "Recheio inspirado no sabor do Kinder Bueno." },
-  { id: "chocolate-caramelo", name: "Chocolate com Caramelo", basePrice: 99.9, description: "Chocolate intenso com toque de caramelo." },
-  { id: "red-velvet", name: "Red Velvet", basePrice: 99.9, description: "Red velvet clássico com acabamento sofisticado." },
-  { id: "nozes-caramelizadas", name: "Nozes caramelizadas", basePrice: 97.9, description: "Nozes selecionadas com caramelo artesanal." },
-  { id: "surpresa-uva", name: "Surpresa de uva", basePrice: 86.9, description: "Creme suave com uvas inteiras para efeito surpresa." },
-  { id: "morango-chocolate", name: "Morango com Chocolate", basePrice: 92.9, description: "Morangos e chocolate em camadas equilibradas." },
-  { id: "brigadeiro-morangos", name: "Brigadeiro com morangos", basePrice: 87.9, description: "Brigadeiro com toque fresco de morangos." }
+  {
+    id: "ninho-abacaxi",
+    name: "Ninho com abacaxi",
+    basePrice: 79.9,
+    description: "Bolo cremoso com ninho e pedaços de abacaxi.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  },
+  {
+    id: "ninho-morangos",
+    name: "Ninho com morangos",
+    basePrice: 89.9,
+    description: "Combinação clássica de creme de ninho com morangos frescos.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  },
+  {
+    id: "abacaxi-coco",
+    name: "Abacaxi com coco",
+    basePrice: 79.9,
+    description: "Massa leve com recheio tropical de abacaxi e coco.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  },
+  {
+    id: "limao-frutas-vermelhas",
+    name: "Limão siciliano e frutas vermelhas",
+    basePrice: 89.9,
+    description: "Toque cítrico equilibrado com frutas vermelhas.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  },
+  {
+    id: "morango-choc-branco",
+    name: "Morango com chocolate branco",
+    basePrice: 99.9,
+    description: "Recheio intenso de chocolate branco com morango.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  },
+  {
+    id: "brigadeiro",
+    name: "Brigadeiro",
+    basePrice: 84.9,
+    description: "Bolo tradicional com recheio de brigadeiro cremoso.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  },
+  {
+    id: "maracuja-chocolate",
+    name: "Maracujá com chocolate",
+    basePrice: 87.9,
+    description: "Contraste perfeito entre maracujá e chocolate.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  },
+  {
+    id: "prestigio",
+    name: "Prestígio",
+    basePrice: 83.9,
+    description: "Chocolate com coco em versão premium artesanal.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  },
+  {
+    id: "ninho-nutella",
+    name: "Ninho com Nutella",
+    basePrice: 89.9,
+    description: "Camadas cremosas de ninho com Nutella.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  },
+  {
+    id: "kinder-bueno",
+    name: "Kinder Bueno",
+    basePrice: 95.9,
+    description: "Recheio inspirado no sabor do Kinder Bueno.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  },
+  {
+    id: "chocolate-caramelo",
+    name: "Chocolate com Caramelo",
+    basePrice: 99.9,
+    description: "Chocolate intenso com toque de caramelo.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  },
+  {
+    id: "red-velvet",
+    name: "Red Velvet",
+    basePrice: 99.9,
+    description: "Red velvet clássico com acabamento sofisticado.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  },
+  {
+    id: "nozes-caramelizadas",
+    name: "Nozes caramelizadas",
+    basePrice: 97.9,
+    description: "Nozes selecionadas com caramelo artesanal.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  },
+  {
+    id: "surpresa-uva",
+    name: "Surpresa de uva",
+    basePrice: 86.9,
+    description: "Creme suave com uvas inteiras para efeito surpresa.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  },
+  {
+    id: "morango-chocolate",
+    name: "Morango com Chocolate",
+    basePrice: 92.9,
+    description: "Morangos e chocolate em camadas equilibradas.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  },
+  {
+    id: "brigadeiro-morangos",
+    name: "Brigadeiro com morangos",
+    basePrice: 87.9,
+    description: "Brigadeiro com toque fresco de morangos.",
+    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+  }
 ];
 
 const DECORATIONS: Decoration[] = [
@@ -222,22 +321,35 @@ export default function CardapioPage() {
         </p>
       </header>
 
-      <section className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {BOLOS.map((bolo) => (
-          <article key={bolo.id} className="rounded-[1.25rem] bg-white/85 p-5 shadow-panel">
-            <h2 className="font-serifDisplay text-2xl text-cocoa-900">{bolo.name}</h2>
-            <p className="mt-2 text-sm text-cocoa-700">{bolo.description}</p>
-            <p className="mt-4 text-sm font-semibold text-cocoa-900">{formatCurrency(bolo.basePrice)} / 1kg</p>
-            <button
-              type="button"
-              onClick={() => openModal(bolo)}
-              className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:from-cocoa-800 hover:to-cocoa-950"
-            >
-              Selecionar
-            </button>
+    <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {BOLOS.map((bolo, idx) => (
+        <Reveal key={bolo.id} delay={idx * 40}>
+          <article className="group overflow-hidden rounded-[1.25rem] bg-white/90 shadow-panel transition duration-500 hover:-translate-y-1 hover:shadow-2xl">
+            <div className="relative h-52 w-full overflow-hidden rounded-t-[1.25rem]">
+              <Image
+                src={bolo.imageUrl}
+                alt={`Imagem do bolo ${bolo.name}`}
+                fill
+                className="object-cover transition duration-500 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+              />
+            </div>
+            <div className="p-5">
+              <h2 className="font-serifDisplay text-2xl text-cocoa-900">{bolo.name}</h2>
+              <p className="mt-2 text-sm text-cocoa-700">{bolo.description}</p>
+              <p className="mt-4 text-sm font-semibold text-cocoa-900">{formatCurrency(bolo.basePrice)} / 1kg</p>
+              <button
+                type="button"
+                onClick={() => openModal(bolo)}
+                className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:from-cocoa-800 hover:to-cocoa-950"
+              >
+                Selecionar
+              </button>
+            </div>
           </article>
-        ))}
-      </section>
+        </Reveal>
+      ))}
+    </section>
 
       <button
         type="button"
