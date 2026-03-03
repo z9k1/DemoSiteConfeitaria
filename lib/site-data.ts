@@ -32,7 +32,7 @@ export const productCategories: ProductCategory[] = [
   {
     id: "kits-caixas",
     name: "Kits e Caixas Especiais",
-    description: "Combinacoes prontas para presentear e celebrar com praticidade."
+    description: "Combinações prontas para presentear e celebrar com praticidade."
   },
   {
     id: "pedido-rapido",
