@@ -5,19 +5,19 @@ import { SectionHeading } from "@/components/section-heading";
 import { brandSettings, ctaConfigs, productCategories, testimonials } from "@/lib/site-data";
 
 export default function HomePage() {
-  const whatsappPrimary = ctaConfigs.find((item) => item.id === "whatsapp-principal");
   const whatsappWedding = ctaConfigs.find((item) => item.id === "whatsapp-casamento");
   const ifoodCta = ctaConfigs.find((item) => item.id === "external-ifood");
 
   return (
     <div>
+      {/* Hero com âncoras principais */}
       <section className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-14 lg:px-6">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="space-y-6">
             <Reveal>
-                <p className="text-xs font-semibold uppercase tracking-[0.4em] text-rose-500">
-                  Premium artesanal em Londrina-PR
-                </p>
+              <p className="text-xs font-semibold uppercase tracking-[0.4em] text-rose-500">
+                Premium artesanal em Londrina-PR
+              </p>
             </Reveal>
             <Reveal delay={80}>
               <h1 className="font-serifDisplay text-4xl text-cocoa-900 leading-tight sm:text-5xl">
@@ -30,12 +30,9 @@ export default function HomePage() {
             </Reveal>
             <Reveal delay={160}>
               <div className="flex flex-wrap justify-center gap-3">
-                {whatsappPrimary ? (
-                  <CtaLink label={whatsappPrimary.label} message={whatsappPrimary.message} eventName="click_whatsapp" />
-                ) : null}
-                {ifoodCta ? (
-                  <CtaLink label={ifoodCta.label} href={ifoodCta.href} eventName="click_ifood" />
-                ) : null}
+                <CtaLink label="Bolos" href="#bolos" external={false} />
+                <CtaLink label="Docinhos Gourmet" href="#docinhos-gourmet" external={false} />
+                <CtaLink label="Macarons" href="#macarons" external={false} />
               </div>
             </Reveal>
           </div>
@@ -43,7 +40,8 @@ export default function HomePage() {
             <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-rose-100 via-sand-100 to-white px-8 py-9 shadow-panel">
               <h2 className="font-serifDisplay text-2xl text-cocoa-900">Especialidade em macarons</h2>
               <p className="mt-3 text-sm text-cocoa-700">
-                Personalização de cores, iniciais e logos com acabamento premium para casamentos, eventos corporativos e presentes.
+                Personalização de cores, iniciais e logos com acabamento premium para casamentos, eventos corporativos e
+                presentes.
               </p>
               <ul className="mt-6 space-y-2 text-sm text-cocoa-700">
                 <li>- Paleta coordenada com o evento</li>
@@ -55,6 +53,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Categorias gerais */}
       <section className="container-pad pt-12 pb-4">
         <SectionHeading
           eyebrow="Categorias"
@@ -75,6 +74,88 @@ export default function HomePage() {
 
       <Gallery />
 
+      {/* Seção Bolos */}
+      <section id="bolos" className="container-pad py-12">
+        <SectionHeading
+          eyebrow="Seção"
+          title="Bolos sob medida"
+          subtitle="Bolos artesanais personalizados com acabamentos premium."
+        />
+        <Reveal>
+          <div className="mt-6 rounded-[1.25rem] bg-white/80 p-6 shadow-panel">
+            <ul className="space-y-2 text-sm text-cocoa-700">
+              <li>- Personalização de sabores, recheios e acabamentos.</li>
+              <li>- Tamanhos ajustados ao número de convidados.</li>
+              <li>- Coordenação de paleta para eventos sociais e corporativos.</li>
+            </ul>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <CtaLink
+                label="Pedir orçamento no WhatsApp"
+                message="Olá! Quero orçamento de bolos sob medida."
+                eventName="click_whatsapp"
+              />
+              {ifoodCta ? <CtaLink label="Ver no cardápio" href={ifoodCta.href} eventName="click_ifood" /> : null}
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* Seção Docinhos Gourmet */}
+      <section id="docinhos-gourmet" className="container-pad py-12">
+        <SectionHeading
+          eyebrow="Seção"
+          title="Docinhos Gourmet (barras & biscoitos)"
+          subtitle="Barras de chocolate personalizadas e biscoitos floridos apresentados como docinhos gourmet."
+        />
+        <Reveal>
+          <div className="mt-6 rounded-[1.25rem] bg-white/80 p-6 shadow-panel">
+            <ul className="space-y-2 text-sm text-cocoa-700">
+              <li>- Barras de chocolate com personalização de cores e iniciais.</li>
+              <li>- Biscoitos floridos com acabamento artesanal.</li>
+              <li>- Combinações prontas para presentes e mesas de doces.</li>
+            </ul>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <CtaLink
+                label="Pedir orçamento"
+                message="Olá! Quero orçamento de docinhos gourmet (barras e biscoitos)."
+                eventName="click_whatsapp"
+              />
+              {ifoodCta ? <CtaLink label="Cardápio online" href={ifoodCta.href} eventName="click_ifood" /> : null}
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* Seção Macarons */}
+      <section id="macarons" className="container-pad py-12">
+        <SectionHeading
+          eyebrow="Seção"
+          title="Macarons artesanais"
+          subtitle="Especialidade da casa com personalização de cores, iniciais e logos."
+        />
+        <Reveal>
+          <div className="mt-6 rounded-[1.25rem] bg-white/80 p-6 shadow-panel">
+            <ul className="space-y-2 text-sm text-cocoa-700">
+              <li>- Paleta coordenada ao evento, incluindo cores metálicas.</li>
+              <li>- Inserção de iniciais, logos curtos e personalização fina.</li>
+              <li>- Pedido mínimo conforme quantidade, sabores e cores.</li>
+            </ul>
+            <p className="mt-3 text-sm text-cocoa-700">
+              Para encomendar: use o WhatsApp para briefing rápido ou siga pelo cardápio online para opções ágeis.
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <CtaLink
+                label="Orçamento no WhatsApp"
+                message="Olá! Quero orçamento de macarons personalizados."
+                eventName="click_whatsapp"
+              />
+              {ifoodCta ? <CtaLink label="Ver cardápio" href={ifoodCta.href} eventName="click_ifood" /> : null}
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* Processo */}
       <section className="container-pad py-12">
         <SectionHeading
           eyebrow="Como funciona"
@@ -96,6 +177,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Depoimentos */}
       <section className="container-pad py-12">
         <SectionHeading eyebrow="Confiança" title="Clientes que recomendam" />
         <div className="mt-8 grid gap-6 md:grid-cols-3">
@@ -113,6 +195,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* CTA final */}
       <section className="container-pad py-14">
         <div className="section-surface px-6 py-10 text-center">
           <Reveal>

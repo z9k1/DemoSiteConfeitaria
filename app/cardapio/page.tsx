@@ -53,12 +53,12 @@ export default function CardapioPage() {
             />
           ) : null}
           {whatsapp ? (
-              <CtaLink
-                label="Quero apoio para escolher"
-                message="Olá! Quero ajuda para escolher os produtos do cardápio."
-                eventName="click_whatsapp"
-                className="border border-cocoa-200 bg-white text-cocoa-700 hover:border-cocoa-700"
-              />
+            <CtaLink
+              label="Quero apoio para escolher"
+              message="Olá! Quero ajuda para escolher os produtos do cardápio."
+              eventName="click_whatsapp"
+              className="border border-cocoa-200 bg-white text-cocoa-700 hover:border-cocoa-700"
+            />
           ) : null}
         </div>
       </div>
