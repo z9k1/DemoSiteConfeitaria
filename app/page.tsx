@@ -20,7 +20,7 @@ export default function HomePage() {
             <p className="mt-4 text-sm text-cocoa-700">
               Antecedência mínima de {brandSettings.minOrderNoticeDays} dias para encomendas sob medida.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <div className="mt-8 flex flex-wrap justify-center gap-3 w-full">
               {whatsappPrimary ? (
                 <CtaLink
                   label={whatsappPrimary.label}

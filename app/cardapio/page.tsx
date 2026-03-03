@@ -43,7 +43,7 @@ export default function CardapioPage() {
         <p className="mt-2 text-sm text-cocoa-700">
           Para itens de pronta decisao, voce pode seguir pelo cardapio online. Para eventos, recomendamos briefing.
         </p>
-        <div className="mt-4 flex flex-wrap justify-center gap-3">
+        <div className="mt-4 flex flex-wrap justify-center gap-3 w-full">
           {ifood ? (
             <CtaLink
               label={ifood.label}
