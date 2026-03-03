@@ -75,7 +75,7 @@ export default function HomePage() {
       <Gallery />
 
       {/* Seção Bolos */}
-      <section id="bolos" className="container-pad py-12">
+      <section id="bolos" className="container-pad py-12 scroll-mt-28">
         <SectionHeading
           eyebrow="Seção"
           title="Bolos sob medida"
@@ -94,14 +94,14 @@ export default function HomePage() {
                 message="Olá! Quero orçamento de bolos sob medida."
                 eventName="click_whatsapp"
               />
-              {ifoodCta ? <CtaLink label="Ver no cardápio" href={ifoodCta.href} eventName="click_ifood" /> : null}
+              {ifoodCta ? <CtaLink label="Pedido rápido" href={ifoodCta.href} eventName="click_ifood" /> : null}
             </div>
           </div>
         </Reveal>
       </section>
 
       {/* Seção Docinhos Gourmet */}
-      <section id="docinhos-gourmet" className="container-pad py-12">
+      <section id="docinhos-gourmet" className="container-pad py-12 scroll-mt-28">
         <SectionHeading
           eyebrow="Seção"
           title="Docinhos Gourmet (barras & biscoitos)"
@@ -116,18 +116,18 @@ export default function HomePage() {
             </ul>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <CtaLink
-                label="Pedir orçamento"
+                label="Pedir orçamento no WhatsApp"
                 message="Olá! Quero orçamento de docinhos gourmet (barras e biscoitos)."
                 eventName="click_whatsapp"
               />
-              {ifoodCta ? <CtaLink label="Cardápio online" href={ifoodCta.href} eventName="click_ifood" /> : null}
+              {ifoodCta ? <CtaLink label="Pedido rápido" href={ifoodCta.href} eventName="click_ifood" /> : null}
             </div>
           </div>
         </Reveal>
       </section>
 
       {/* Seção Macarons */}
-      <section id="macarons" className="container-pad py-12">
+      <section id="macarons" className="container-pad py-12 scroll-mt-28">
         <SectionHeading
           eyebrow="Seção"
           title="Macarons artesanais"
@@ -145,11 +145,11 @@ export default function HomePage() {
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <CtaLink
-                label="Orçamento no WhatsApp"
+                label="Pedir orçamento no WhatsApp"
                 message="Olá! Quero orçamento de macarons personalizados."
                 eventName="click_whatsapp"
               />
-              {ifoodCta ? <CtaLink label="Ver cardápio" href={ifoodCta.href} eventName="click_ifood" /> : null}
+              {ifoodCta ? <CtaLink label="Pedido rápido" href={ifoodCta.href} eventName="click_ifood" /> : null}
             </div>
           </div>
         </Reveal>
