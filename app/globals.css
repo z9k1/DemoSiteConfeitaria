@@ -11,6 +11,10 @@
   --section-bg: rgba(255, 255, 255, 0.88);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   @apply application-bg font-sansBrand text-cocoa-800 antialiased;
   min-height: 100vh;

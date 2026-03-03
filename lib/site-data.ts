@@ -81,8 +81,8 @@ export const products: Product[] = [
   {
     id: "docinhos-gourmet",
     categoryId: "pedido-rapido",
-    name: "Docinhos gourmet",
-    description: "Seleção para aniversários, reuniões e comemorações em casa.",
+    name: "Docinhos Gourmet (barras & biscoitos)",
+    description: "Barras de chocolate personalizadas e biscoitos floridos apresentados como docinhos gourmet.",
     priceRange: "Preço sob consulta",
     imageHint: "docinhos gourmet coloridos"
   },

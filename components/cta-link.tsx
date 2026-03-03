@@ -21,6 +21,7 @@ export function CtaLink({
   external = true
 }: CtaLinkProps) {
   const finalHref = message ? buildWhatsAppUrl(message) : href ?? "#";
+  const isAnchor = finalHref.startsWith("#");
 
   const handleClick = () => {
     trackEvent(eventName, { target: label, href: finalHref });
@@ -30,8 +31,8 @@ export function CtaLink({
     <a
       href={finalHref}
       onClick={handleClick}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noreferrer" : undefined}
+      target={external && !isAnchor ? "_blank" : undefined}
+      rel={external && !isAnchor ? "noreferrer" : undefined}
       className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-lg transition duration-300 ease-out ${className} bg-gradient-to-br from-cocoa-700 to-cocoa-900 hover:from-cocoa-800 hover:to-cocoa-950`}
     >
       {label}
