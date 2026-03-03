@@ -18,7 +18,7 @@ export default function HomePage() {
             <h1 className="mt-5 font-serifBrand text-4xl text-cocoa-900 sm:text-5xl">{brandSettings.tagline}</h1>
             <p className="mt-5 max-w-xl text-base text-cocoa-700 sm:text-lg">{brandSettings.summary}</p>
             <p className="mt-4 text-sm text-cocoa-700">
-              Antecedencia minima de {brandSettings.minOrderNoticeDays} dias para encomendas sob medida.
+              Antecedência mínima de {brandSettings.minOrderNoticeDays} dias para encomendas sob medida.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               {whatsappPrimary ? (
@@ -42,7 +42,7 @@ export default function HomePage() {
           <div className="rounded-brand bg-gradient-to-br from-rose-100 to-rose-200 p-8 shadow-soft">
             <h2 className="font-serifBrand text-2xl text-cocoa-800">Especialidade em macarons</h2>
             <p className="mt-3 text-sm text-cocoa-700">
-              Personalizacao de cores, iniciais e logos para casamentos, eventos corporativos e presentes especiais.
+              Personalização de cores, iniciais e logos para casamentos, eventos corporativos e presentes especiais.
             </p>
             <ul className="mt-4 space-y-2 text-sm text-cocoa-700">
               <li>- Paleta alinhada ao evento</li>
@@ -57,7 +57,7 @@ export default function HomePage() {
         <SectionHeading
           eyebrow="Categorias"
           title="Oferta estruturada para converter melhor"
-          subtitle="Separacao clara entre encomendas premium, kits especiais e pedidos rapidos."
+        subtitle="Separação clara entre encomendas premium, kits especiais e pedidos rápidos."
         />
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {productCategories.map((category) => (
@@ -76,9 +76,9 @@ export default function HomePage() {
           subtitle="Rapidez no primeiro contato e briefing completo para proposta assertiva."
         />
         <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {[
+            {[
             "1. Envie sua ideia no WhatsApp ou briefing",
-            "2. Receba recomendacao de sabores, formato e quantidades",
+            "2. Receba recomendação de sabores, formato e quantidades",
             "3. Confirme o pedido e acompanhe os detalhes finais"
           ].map((step) => (
             <div key={step} className="rounded-brand border border-rose-100 bg-white p-5 text-sm text-cocoa-700 shadow-soft">
@@ -89,7 +89,7 @@ export default function HomePage() {
       </section>
 
       <section className="container-pad py-12">
-        <SectionHeading eyebrow="Confianca" title="Clientes que recomendam" />
+        <SectionHeading eyebrow="Confiança" title="Clientes que recomendam" />
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {testimonials.map((item) => (
             <blockquote key={item.id} className="rounded-brand border border-rose-100 bg-white p-6 shadow-soft">
@@ -119,7 +119,7 @@ export default function HomePage() {
         <div className="rounded-brand bg-cocoa-700 p-8 text-white">
           <h2 className="font-serifBrand text-3xl">Pronto para elevar seu evento?</h2>
           <p className="mt-3 max-w-xl text-sm text-white/90">
-            Fale com a equipe e receba um orcamento personalizado para casamento, corporativo ou comemoracao especial.
+            Fale com a equipe e receba um orçamento personalizado para casamento, corporativo ou comemoração especial.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             {whatsappWedding ? (

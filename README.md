@@ -7,7 +7,7 @@ MVP institucional-comercial para confeitaria local com foco em leads via WhatsAp
 - Next.js (App Router + SSG)
 - TypeScript
 - Tailwind CSS
-- GitHub Pages (export estatico)
+- GitHub Pages (export estático)
 
 ## Paginas
 
@@ -18,12 +18,12 @@ MVP institucional-comercial para confeitaria local com foco em leads via WhatsAp
 
 ## Conversao
 
-- Formulario de briefing envia para WhatsApp com mensagem pre-preenchida.
-- Nao existe endpoint backend (`/api/lead`) no modo GitHub Pages.
+- Formulário de briefing envia para WhatsApp com mensagem pré-preenchida.
+- Não existe endpoint backend (`/api/lead`) no modo GitHub Pages.
 
 ## Variaveis de ambiente
 
-Crie `.env.local`:
+C rie `.env.local`:
 
 ```bash
 NEXT_PUBLIC_SITE_URL=https://seudominio.com.br

@@ -7,7 +7,7 @@ import { brandSettings, ctaConfigs, eventPackages, faqItems } from "@/lib/site-d
 export const metadata: Metadata = {
   title: "Eventos e Casamentos",
   description:
-    "Macarons personalizados para casamentos e eventos corporativos em Londrina e regiao. Solicite seu briefing."
+    "Macarons personalizados para casamentos e eventos corporativos em Londrina e região. Solicite seu briefing."
 };
 
 const faqSchema = {
@@ -32,18 +32,18 @@ export default function EventosPage() {
 
       <SectionHeading
         eyebrow="Eventos & Casamentos"
-        title="Sofisticacao e personalizacao para impressionar"
-        subtitle="Solucao completa para noivas, cerimonialistas e empresas que querem doces com identidade visual."
+        title="Sofisticação e personalização para impressionar"
+        subtitle="Solução completa para noivas, cerimonialistas e empresas que querem doces com identidade visual."
       />
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_1fr]">
         <div className="space-y-6">
           <div className="rounded-brand border border-rose-100 bg-white p-6 shadow-soft">
-            <h3 className="font-serifBrand text-2xl text-cocoa-800">Solucoes para cada tipo de evento</h3>
+            <h3 className="font-serifBrand text-2xl text-cocoa-800">Soluções para cada tipo de evento</h3>
             <ul className="mt-3 space-y-2 text-sm text-cocoa-700">
-              <li>- Casamentos: mesa de doces, caixas para padrinhos e lembrancas.</li>
+              <li>- Casamentos: mesa de doces, caixas para padrinhos e lembranças.</li>
               <li>- Corporativo: brindes com logo e kits para eventos internos.</li>
-              <li>- Datas especiais: aniversarios e comemoracoes premium.</li>
+              <li>- Datas especiais: aniversários e comemorações premium.</li>
             </ul>
           </div>
 
@@ -63,8 +63,8 @@ export default function EventosPage() {
           <div className="rounded-brand border border-rose-100 bg-white p-6 shadow-soft">
             <h3 className="font-serifBrand text-2xl text-cocoa-800">Regras comerciais transparentes</h3>
             <ul className="mt-3 space-y-2 text-sm text-cocoa-700">
-              <li>- Antecedencia minima: {brandSettings.minOrderNoticeDays} dias.</li>
-              <li>- Minimos variam por item, cor e sabor.</li>
+              <li>- Antecedência mínima: {brandSettings.minOrderNoticeDays} dias.</li>
+              <li>- Mínimos variam por item, cor e sabor.</li>
               <li>- Atendimento em {brandSettings.coverage}.</li>
             </ul>
             {whatsappWedding ? (

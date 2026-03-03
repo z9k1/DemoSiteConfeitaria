@@ -35,15 +35,15 @@ export function LeadForm({ sourcePage }: LeadFormProps) {
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const whatsappMessage = [
-      "Ola! Quero solicitar orcamento para evento.",
+      "Olá! Quero solicitar orçamento para evento.",
       `Origem: ${sourcePage}`,
       `Nome: ${form.name}`,
       `Telefone: ${form.phone}`,
       `Tipo de evento: ${form.event_type}`,
-      `Data: ${form.date || "Nao informado"}`,
-      `Convidados: ${form.guest_count || "Nao informado"}`,
-      `Faixa de investimento: ${form.budget_range || "Nao informado"}`,
-      `Detalhes: ${form.notes || "Nao informado"}`
+      `Data: ${form.date || "Não informado"}`,
+      `Convidados: ${form.guest_count || "Não informado"}`,
+      `Faixa de investimento: ${form.budget_range || "Não informado"}`,
+      `Detalhes: ${form.notes || "Não informado"}`
     ].join("\n");
 
     trackEvent("click_whatsapp", { source_page: sourcePage, event_type: form.event_type });
@@ -107,7 +107,7 @@ export function LeadForm({ sourcePage }: LeadFormProps) {
 
       <textarea
         rows={4}
-        placeholder="Detalhes do pedido, personalizacao e observacoes"
+        placeholder="Detalhes do pedido, personalização e observações"
         value={form.notes}
         onChange={(e) => setForm((prev) => ({ ...prev, notes: e.target.value }))}
         className="w-full rounded-xl border border-rose-200 px-4 py-3 text-sm outline-none ring-cocoa-700/40 focus:ring"
