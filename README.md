@@ -7,7 +7,7 @@ MVP institucional-comercial para confeitaria local com foco em leads via WhatsAp
 - Next.js (App Router + SSG)
 - TypeScript
 - Tailwind CSS
-- Zod (validacao da API de lead)
+- GitHub Pages (export estatico)
 
 ## Paginas
 
@@ -16,22 +16,10 @@ MVP institucional-comercial para confeitaria local com foco em leads via WhatsAp
 - `/eventos`
 - `/politica-de-privacidade`
 
-## API
+## Conversao
 
-- `POST /api/lead`
-  - Payload:
-    ```json
-    {
-      "name": "string",
-      "phone": "string",
-      "event_type": "string",
-      "date": "string",
-      "guest_count": "string",
-      "budget_range": "string",
-      "notes": "string",
-      "source_page": "string"
-    }
-    ```
+- Formulario de briefing envia para WhatsApp com mensagem pre-preenchida.
+- Nao existe endpoint backend (`/api/lead`) no modo GitHub Pages.
 
 ## Variaveis de ambiente
 
@@ -39,6 +27,7 @@ Crie `.env.local`:
 
 ```bash
 NEXT_PUBLIC_SITE_URL=https://seudominio.com.br
+NEXT_PUBLIC_BASE_PATH=/nome-do-repo
 NEXT_PUBLIC_GA4_ID=G-XXXXXXXXXX
 NEXT_PUBLIC_META_PIXEL_ID=1234567890
 NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
@@ -50,3 +39,17 @@ NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
 npm install
 npm run dev
 ```
+
+Build estatico:
+
+```bash
+npm run build
+```
+
+## Deploy GitHub Pages
+
+- Workflow em `.github/workflows/deploy-pages.yml`
+- Publica em `main` automaticamente para:
+  - `https://usuario.github.io/nome-do-repo`
+- No repositorio, habilite:
+  - `Settings > Pages > Build and deployment: GitHub Actions`

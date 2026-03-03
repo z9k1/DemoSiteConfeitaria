@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { trackEvent } from "@/lib/analytics";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 type LeadFormProps = {
   sourcePage: string;
@@ -29,32 +30,25 @@ const initialState: FormState = {
 
 export function LeadForm({ sourcePage }: LeadFormProps) {
   const [form, setForm] = useState<FormState>(initialState);
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [message, setMessage] = useState<string>("");
+  const [status, setStatus] = useState<"idle" | "success">("idle");
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setStatus("loading");
+    const whatsappMessage = [
+      "Ola! Quero solicitar orcamento para evento.",
+      `Origem: ${sourcePage}`,
+      `Nome: ${form.name}`,
+      `Telefone: ${form.phone}`,
+      `Tipo de evento: ${form.event_type}`,
+      `Data: ${form.date || "Nao informado"}`,
+      `Convidados: ${form.guest_count || "Nao informado"}`,
+      `Faixa de investimento: ${form.budget_range || "Nao informado"}`,
+      `Detalhes: ${form.notes || "Nao informado"}`
+    ].join("\n");
 
-    const payload = { ...form, source_page: sourcePage };
-
-    const response = await fetch("/api/lead", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    const data = (await response.json()) as { ok: boolean; message: string };
-
-    if (!response.ok || !data.ok) {
-      setStatus("error");
-      setMessage(data.message || "Nao foi possivel enviar.");
-      return;
-    }
-
-    trackEvent("submit_lead_form", { source_page: sourcePage, event_type: form.event_type });
+    trackEvent("click_whatsapp", { source_page: sourcePage, event_type: form.event_type });
+    window.open(buildWhatsAppUrl(whatsappMessage), "_blank", "noopener,noreferrer");
     setStatus("success");
-    setMessage("Recebemos seu briefing! Em breve entramos em contato.");
     setForm(initialState);
   }
 
@@ -121,13 +115,14 @@ export function LeadForm({ sourcePage }: LeadFormProps) {
 
       <button
         type="submit"
-        disabled={status === "loading"}
         className="w-full rounded-full bg-cocoa-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cocoa-800 disabled:opacity-60"
       >
-        {status === "loading" ? "Enviando..." : "Enviar briefing"}
+        Enviar briefing no WhatsApp
       </button>
 
-      {status !== "idle" ? <p className="text-sm text-cocoa-700">{message}</p> : null}
+      {status === "success" ? (
+        <p className="text-sm text-cocoa-700">Abrimos o WhatsApp com o briefing preenchido.</p>
+      ) : null}
     </form>
   );
 }
