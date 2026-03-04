@@ -415,65 +415,69 @@ export default function CardapioPage() {
       </button>
 
       {isCartOpen ? (
-        <aside className="fixed right-4 top-24 z-30 w-[min(92vw,380px)] rounded-lg bg-white/95 p-5 shadow-soft backdrop-blur">
-          <h3 className="font-serifDisplay text-2xl text-cocoa-900">Resumo do pedido</h3>
-          {cart.length === 0 ? (
-            <p className="mt-4 text-sm text-cocoa-700">Seu carrinho está vazio.</p>
-          ) : (
-            <ul className="mt-4 space-y-3">
-              {cart.map((item, index) => (
-                <li key={`${item.productId}-${item.decorationId}-${index}`} className="rounded-lg bg-rose-50/80 p-3">
-                  <p className="text-sm font-semibold text-cocoa-900">
-                    {item.quantity}x {item.productName}
-                  </p>
-                  <p className="mt-1 text-xs text-cocoa-700">Decoração: {item.decorationLabel}</p>
-                  <p className="mt-1 text-xs text-cocoa-700">Subtotal: {formatCurrency(item.lineTotal)}</p>
-                  <button
-                    type="button"
-                    onClick={() => removeItem(index)}
-                    className="mt-2 text-xs font-semibold uppercase tracking-[0.15em] text-rose-600 hover:text-rose-700"
-                  >
-                    Remover
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <p className="mt-4 text-sm font-semibold text-cocoa-900">Total geral: {formatCurrency(cartTotal)}</p>
-
-            <div className="mt-4 space-y-3">
-              <input
-                type="text"
-                value={customerName}
-                onChange={(event) => setCustomerName(event.target.value)}
-                placeholder="Nome"
-                className="h-14 w-full rounded-lg border border-rose-200 px-6 text-lg outline-none ring-cocoa-700/30 focus:ring"
-              />
-              <label className="block text-base font-bold text-cocoa-900">
-                Data da Retirada / Evento
-                <input
-                  type="date"
-                  value={eventDate}
-                  min={todayISODate()}
-                  onChange={(event) => setEventDate(event.target.value)}
-                  placeholder="Quando você precisa do pedido?"
-                  className="mt-1 h-14 w-full rounded-lg border border-rose-200 px-6 text-lg outline-none ring-cocoa-700/30 focus:ring"
-                />
-                <p className="mt-1 text-sm font-normal text-cocoa-700">
-                  Lembre-se: pedidos com no mínimo 5 dias de antecedência.
-                </p>
-              </label>
-              {submitError ? <p className="text-xs text-rose-700">{submitError}</p> : null}
-              <button
-                type="button"
-                onClick={finalizeOrder}
-                disabled={cart.length === 0}
-                className="inline-flex h-12 md:h-14 w-full items-center justify-center rounded-lg bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-6 text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-white transition enabled:hover:from-cocoa-800 enabled:hover:to-cocoa-950 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Finalizar pedido
-              </button>
+        <aside className="fixed right-4 top-24 z-30 w-[min(92vw,380px)] max-h-[85vh] rounded-lg bg-white/95 p-5 shadow-soft backdrop-blur">
+          <div className="flex h-full flex-col">
+            <h3 className="font-serifDisplay text-2xl text-cocoa-900">Resumo do pedido</h3>
+            <div className="mt-4 flex-1 max-h-[60vh] overflow-y-auto pr-1">
+              {cart.length === 0 ? (
+                <p className="text-sm text-cocoa-700">Seu carrinho está vazio.</p>
+              ) : (
+                <ul className="space-y-3 pb-6">
+                  {cart.map((item, index) => (
+                    <li key={`${item.productId}-${item.decorationId}-${index}`} className="rounded-lg bg-rose-50/80 p-3">
+                      <p className="text-sm font-semibold text-cocoa-900">
+                        {item.quantity}x {item.productName}
+                      </p>
+                      <p className="mt-1 text-xs text-cocoa-700">Decoração: {item.decorationLabel}</p>
+                      <p className="mt-1 text-xs text-cocoa-700">Subtotal: {formatCurrency(item.lineTotal)}</p>
+                      <button
+                        type="button"
+                        onClick={() => removeItem(index)}
+                        className="mt-2 text-xs font-semibold uppercase tracking-[0.15em] text-rose-600 hover:text-rose-700"
+                      >
+                        Remover
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
+            <div className="mt-4 border-t border-rose-100 pt-4">
+              <div className="space-y-3">
+                <p className="text-sm font-semibold text-cocoa-900">Total geral: {formatCurrency(cartTotal)}</p>
+                <input
+                  type="text"
+                  value={customerName}
+                  onChange={(event) => setCustomerName(event.target.value)}
+                  placeholder="Nome"
+                  className="h-14 w-full rounded-lg border border-rose-200 px-6 text-lg outline-none ring-cocoa-700/30 focus:ring"
+                />
+                <label className="block text-base font-bold text-cocoa-900">
+                  Data da Retirada / Evento
+                  <input
+                    type="date"
+                    value={eventDate}
+                    min={todayISODate()}
+                    onChange={(event) => setEventDate(event.target.value)}
+                    placeholder="Quando você precisa do pedido?"
+                    className="mt-1 h-14 w-full rounded-lg border border-rose-200 px-6 text-lg outline-none ring-cocoa-700/30 focus:ring"
+                  />
+                  <p className="mt-1 text-sm font-normal text-cocoa-700">
+                    Lembre-se: pedidos com no mínimo 5 dias de antecedência.
+                  </p>
+                </label>
+                {submitError ? <p className="text-xs text-rose-700">{submitError}</p> : null}
+                <button
+                  type="button"
+                  onClick={finalizeOrder}
+                  disabled={cart.length === 0}
+                  className="inline-flex h-12 md:h-14 w-full items-center justify-center rounded-lg bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-6 text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-white transition enabled:hover:from-cocoa-800 enabled:hover:to-cocoa-950 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Finalizar pedido
+                </button>
+              </div>
+            </div>
+          </div>
         </aside>
       ) : null}
 
