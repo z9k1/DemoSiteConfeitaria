@@ -1,7 +1,14 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { ShoppingCart, X } from "lucide-react";
 import { brandSettings } from "@/lib/site-data";
 import { assetPath } from "@/lib/asset-path";
+
+const CART_STATE_EVENT = "csg:cart-state";
+const CART_TOGGLE_EVENT = "csg:toggle-cart";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -10,6 +17,25 @@ const navItems = [
 ] as const;
 
 export function Header() {
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [badgeCount, setBadgeCount] = useState(0);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleCartState = (event: Event) => {
+      const detail = (event as CustomEvent<{ isOpen: boolean; badgeCount: number }>).detail;
+      setIsCartOpen(detail?.isOpen ?? false);
+      setBadgeCount(detail?.badgeCount ?? 0);
+    };
+    window.addEventListener(CART_STATE_EVENT, handleCartState);
+    return () => window.removeEventListener(CART_STATE_EVENT, handleCartState);
+  }, []);
+
+  const toggleCart = () => {
+    if (typeof window === "undefined") return;
+    window.dispatchEvent(new Event(CART_TOGGLE_EVENT));
+  };
+
   return (
     <header className="sticky top-0 z-20 border-b border-rose-100 bg-white/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
@@ -18,13 +44,29 @@ export function Header() {
           <span>{brandSettings.businessName}</span>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
-          {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="text-sm font-medium text-cocoa-700 hover:text-cocoa-900">
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="flex items-center gap-4">
+          <nav className="hidden items-center gap-6 md:flex">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href} className="text-sm font-medium text-cocoa-700 hover:text-cocoa-900">
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          <button
+            type="button"
+            aria-label={isCartOpen ? "Fechar carrinho" : "Abrir carrinho"}
+            onClick={toggleCart}
+            className="relative inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-cocoa-800 to-cocoa-900 text-white shadow-lg transition md:hover:from-cocoa-900 md:hover:to-cocoa-950"
+          >
+            {isCartOpen ? <X size={16} strokeWidth={2.25} /> : <ShoppingCart size={16} strokeWidth={2.25} />}
+            {badgeCount > 0 ? (
+              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[9px] font-bold leading-none text-white">
+                {badgeCount}
+              </span>
+            ) : null}
+          </button>
+        </div>
       </div>
     </header>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { brandSettings } from "@/lib/site-data";
 import { Reveal } from "@/components/reveal";
 import { CustomSelect } from "@/components/custom-select";
@@ -263,6 +263,29 @@ export default function CardapioPage() {
     [cart]
   );
 
+  const broadcastCartState = useCallback(
+    (open: boolean, count: number) => {
+      if (typeof window === "undefined") return;
+      window.dispatchEvent(
+        new CustomEvent("csg:cart-state", {
+          detail: { isOpen: open, badgeCount: count }
+        })
+      );
+    },
+    []
+  );
+
+  useEffect(() => {
+    broadcastCartState(isCartOpen, badgeCount);
+  }, [isCartOpen, badgeCount, broadcastCartState]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleExternalToggle = () => setIsCartOpen((prev) => !prev);
+    window.addEventListener("csg:toggle-cart", handleExternalToggle);
+    return () => window.removeEventListener("csg:toggle-cart", handleExternalToggle);
+  }, []);
+
   const openModal = (bolo: Bolo) => {
     setSelectedBolo(bolo);
     setQuantity(1);
@@ -376,7 +399,7 @@ export default function CardapioPage() {
             <button
               type="button"
               onClick={() => openModal(bolo)}
-              className="group flex h-full w-full flex-col overflow-hidden rounded-lg bg-white/90 text-left shadow-panel transition duration-500 hover:-translate-y-1 hover:shadow-2xl"
+              className="group flex h-full w-full flex-col overflow-hidden rounded-lg bg-white/90 text-left shadow-panel transition duration-500 md:hover:-translate-y-1 md:hover:shadow-2xl"
             >
               <div className="relative h-60 w-full overflow-hidden rounded-t-lg">
                 <Image
@@ -403,28 +426,22 @@ export default function CardapioPage() {
       </section>
     )}
 
-      <button
-        type="button"
-        onClick={() => setIsCartOpen((prev) => !prev)}
-        className="fixed bottom-6 right-6 z-30 inline-flex items-center gap-3 rounded-lg bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-5 py-3 text-lg font-semibold uppercase tracking-[0.2em] text-white shadow-lg transition hover:from-cocoa-800 hover:to-cocoa-950"
-      >
-        Carrinho
-        <span className="inline-flex h-6 min-w-[1.5rem] items-center justify-center rounded-lg bg-white px-2 text-xs font-bold text-cocoa-900">
-          {badgeCount}
-        </span>
-      </button>
-
       {isCartOpen ? (
-        <aside className="fixed right-4 top-24 z-30 w-[min(92vw,380px)] max-h-[85vh] rounded-lg bg-white/95 p-5 shadow-soft backdrop-blur">
+        <aside className="fixed right-4 top-24 z-30 h-[min(85vh,calc(100vh-7rem))] w-[min(92vw,380px)] rounded-lg bg-white/95 p-5 shadow-soft backdrop-blur">
           <div className="flex h-full flex-col">
-            <h3 className="font-serifDisplay text-2xl text-cocoa-900">Resumo do pedido</h3>
-            <div className="mt-4 flex-1 max-h-[60vh] overflow-y-auto pr-1">
+            <div className="relative z-10">
+              <h3 className="font-serifDisplay text-2xl text-cocoa-900">Resumo do pedido</h3>
+            </div>
+            <div className="relative z-0 mt-4 flex-1 max-h-[50vh] overflow-y-auto pr-1">
               {cart.length === 0 ? (
                 <p className="text-sm text-cocoa-700">Seu carrinho está vazio.</p>
               ) : (
-                <ul className="space-y-3 pb-6">
+                <ul className="space-y-4 pb-6">
                   {cart.map((item, index) => (
-                    <li key={`${item.productId}-${item.decorationId}-${index}`} className="rounded-lg bg-rose-50/80 p-3">
+                    <li
+                      key={`${item.productId}-${item.decorationId}-${index}`}
+                      className="rounded-xl bg-white shadow-sm border border-gray-100 p-3"
+                    >
                       <p className="text-sm font-semibold text-cocoa-900">
                         {item.quantity}x {item.productName}
                       </p>
@@ -433,7 +450,7 @@ export default function CardapioPage() {
                       <button
                         type="button"
                         onClick={() => removeItem(index)}
-                        className="mt-2 text-xs font-semibold uppercase tracking-[0.15em] text-rose-600 hover:text-rose-700"
+                        className="mt-2 text-xs font-semibold uppercase tracking-[0.15em] text-rose-600 md:hover:text-rose-700"
                       >
                         Remover
                       </button>
@@ -442,7 +459,7 @@ export default function CardapioPage() {
                 </ul>
               )}
             </div>
-            <div className="mt-4 border-t border-rose-100 pt-4">
+            <div className="mt-4 border-t border-rose-100 pt-4 pb-4">
               <div className="space-y-3">
                 <p className="text-sm font-semibold text-cocoa-900">Total geral: {formatCurrency(cartTotal)}</p>
                 <input
@@ -471,7 +488,7 @@ export default function CardapioPage() {
                   type="button"
                   onClick={finalizeOrder}
                   disabled={cart.length === 0}
-                  className="inline-flex h-12 md:h-14 w-full items-center justify-center rounded-lg bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-6 text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-white transition enabled:hover:from-cocoa-800 enabled:hover:to-cocoa-950 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex h-12 md:h-14 w-full items-center justify-center rounded-lg bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-6 text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-white transition md:enabled:hover:from-cocoa-800 md:enabled:hover:to-cocoa-950 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Finalizar pedido
                 </button>
@@ -531,14 +548,14 @@ export default function CardapioPage() {
               <button
                 type="button"
                 onClick={closeModal}
-                className="inline-flex h-12 flex-1 items-center justify-center rounded-lg border border-rose-200 px-4 text-base font-semibold uppercase tracking-[0.12em] text-cocoa-800 hover:bg-rose-50"
+                className="inline-flex h-12 flex-1 items-center justify-center rounded-lg border border-rose-200 px-4 text-base font-semibold uppercase tracking-[0.12em] text-cocoa-800 md:hover:bg-rose-50"
               >
                 Fechar
               </button>
               <button
                 type="button"
                 onClick={addToCart}
-                className="inline-flex h-12 flex-[2] items-center justify-center rounded-lg bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-4 text-base font-semibold uppercase tracking-[0.12em] text-white hover:from-cocoa-800 hover:to-cocoa-950"
+                className="inline-flex h-12 flex-[2] items-center justify-center rounded-lg bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-4 text-base font-semibold uppercase tracking-[0.12em] text-white md:hover:from-cocoa-800 md:hover:to-cocoa-950"
               >
                 Adicionar ao carrinho
               </button>
