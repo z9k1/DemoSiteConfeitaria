@@ -18,7 +18,7 @@ export function Gallery() {
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {galleryItems.map((item, index) => (
             <Reveal key={item.title} delay={80 * index}>
-              <article className="group relative overflow-hidden rounded-[1.25rem] border border-transparent bg-cover bg-center shadow-panel">
+            <article className="group relative overflow-hidden rounded-lg border border-transparent bg-cover bg-center shadow-panel">
                 <div className="relative h-56 w-full">
                   <Image
                     src={item.image}

@@ -12,7 +12,7 @@ function IconLink({ href, label, children }: IconLinkProps) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="flex h-10 w-10 items-center justify-center rounded-full border border-transparent bg-white/80 text-cocoa-700 transition hover:border-cocoa-700 hover:text-cocoa-900"
+      className="flex h-10 w-10 items-center justify-center rounded-lg border border-transparent bg-white/80 text-cocoa-700 transition hover:border-cocoa-700 hover:text-cocoa-900"
       aria-label={label}
     >
       {children}

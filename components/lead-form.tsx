@@ -82,10 +82,10 @@ export function LeadForm({ sourcePage }: LeadFormProps) {
       onSubmit={onSubmit}
       className="space-y-4 w-full max-w-5xl rounded-none border-0 bg-transparent p-0 shadow-none"
     >
-      <h3 className="font-serifBrand text-2xl text-cocoa-800">Briefing rápido do evento</h3>
-        <p className="text-sm text-cocoa-700">
-          Preencha os campos principais para receber seu orçamento personalizado.
-        </p>
+      <h3 className="font-serifBrand text-4xl text-cocoa-900">Briefing rápido do evento</h3>
+      <p className="text-lg text-cocoa-700">
+        Preencha os campos principais para receber seu orçamento personalizado.
+      </p>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <input
@@ -93,22 +93,22 @@ export function LeadForm({ sourcePage }: LeadFormProps) {
           placeholder="Nome"
           value={form.name}
           onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
-          className="rounded-xl border border-rose-200 px-4 py-3 text-sm outline-none ring-cocoa-700/40 focus:ring"
+          className="h-14 w-full rounded-lg border border-rose-200 px-6 !text-lg placeholder:text-lg outline-none ring-cocoa-700/40 focus:ring"
         />
         <input
           required
           placeholder="WhatsApp"
           value={form.phone}
           onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))}
-          className="rounded-xl border border-rose-200 px-4 py-3 text-sm outline-none ring-cocoa-700/40 focus:ring"
+          className="h-14 w-full rounded-lg border border-rose-200 px-6 !text-lg placeholder:text-lg outline-none ring-cocoa-700/40 focus:ring"
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
         <div className="flex flex-col gap-1 pt-6">
           <label
             htmlFor="event-type"
-            className="text-xs font-semibold uppercase tracking-[0.25em] text-cocoa-500"
+            className="text-base font-bold uppercase tracking-widest text-cocoa-500"
           >
             Selecionar tipo de evento
           </label>
@@ -118,24 +118,24 @@ export function LeadForm({ sourcePage }: LeadFormProps) {
             placeholder="Tipo de evento"
             value={form.event_type}
             onChange={(e) => setForm((prev) => ({ ...prev, event_type: e.target.value }))}
-            className="h-12 w-full rounded-xl border border-rose-200 px-4 py-3 text-sm outline-none ring-cocoa-700/40 focus:ring"
+            className="h-14 w-full rounded-lg border border-rose-200 px-6 !text-lg placeholder:text-lg outline-none ring-cocoa-700/40 focus:ring"
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label className="text-sm font-semibold text-cocoa-800">Data da Retirada / Evento</label>
+          <label className="text-base font-bold uppercase tracking-widest text-cocoa-800">Data da Retirada / Evento</label>
           <input
             type="date"
             value={form.date}
             placeholder="Quando você precisa do pedido?"
             onChange={(e) => setForm((prev) => ({ ...prev, date: e.target.value }))}
-            className="h-12 w-full rounded-xl border border-rose-200 px-4 py-3 text-sm outline-none ring-cocoa-700/40 focus:ring"
+            className="h-14 w-full rounded-lg border border-rose-200 px-6 !text-lg placeholder:text-lg outline-none ring-cocoa-700/40 focus:ring"
           />
-          <p className="text-xs text-cocoa-700">Lembre-se: pedidos com no mínimo 5 dias de antecedência.</p>
+          <p className="text-sm text-cocoa-700">Lembre-se: pedidos com no mínimo 5 dias de antecedência.</p>
         </div>
         <div className="flex flex-col gap-1 pt-6">
           <label
             htmlFor="guest-count"
-            className="text-xs font-semibold uppercase tracking-[0.25em] text-cocoa-500"
+            className="text-base font-bold uppercase tracking-widest text-cocoa-500"
           >
             Quantidade de convidados
           </label>
@@ -144,7 +144,7 @@ export function LeadForm({ sourcePage }: LeadFormProps) {
             placeholder="Qtd. convidados"
             value={form.guest_count}
             onChange={(e) => setForm((prev) => ({ ...prev, guest_count: e.target.value }))}
-            className="min-w-[150px] h-12 w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-cocoa-700/40 focus:ring"
+            className="min-w-[150px] h-14 w-full rounded-lg border border-rose-200 px-6 !text-lg placeholder:text-lg outline-none ring-cocoa-700/40 focus:ring"
           />
         </div>
       </div>
@@ -155,7 +155,7 @@ export function LeadForm({ sourcePage }: LeadFormProps) {
         onChange={(e) =>
           setForm((prev) => ({ ...prev, budget_range: formatBudgetInput(e.target.value) }))
         }
-        className="w-full rounded-xl border border-rose-200 px-4 py-3 text-sm outline-none ring-cocoa-700/40 focus:ring"
+        className="h-14 w-full rounded-lg border border-rose-200 px-6 !text-lg placeholder:text-lg outline-none ring-cocoa-700/40 focus:ring"
       />
 
       <textarea
@@ -163,12 +163,12 @@ export function LeadForm({ sourcePage }: LeadFormProps) {
         placeholder="Detalhes do pedido, personalização e observações"
         value={form.notes}
         onChange={(e) => setForm((prev) => ({ ...prev, notes: e.target.value }))}
-        className="w-full rounded-xl border border-rose-200 px-4 py-3 text-sm outline-none ring-cocoa-700/40 focus:ring"
+        className="h-14 w-full rounded-lg border border-rose-200 px-6 !text-lg placeholder:text-lg outline-none ring-cocoa-700/40 focus:ring"
       />
 
       <button
         type="submit"
-        className="w-full rounded-full bg-cocoa-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cocoa-800 disabled:opacity-60"
+        className="h-14 w-full rounded-lg bg-cocoa-700 px-6 text-lg font-semibold text-white transition hover:bg-cocoa-800 disabled:opacity-60"
       >
         Enviar briefing no WhatsApp
       </button>

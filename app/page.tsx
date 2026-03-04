@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect } from "react";
 import { CtaLink } from "@/components/cta-link";
 import { BackToTop } from "@/components/back-to-top";
@@ -21,35 +22,30 @@ export default function HomePage() {
           <p className="text-xs font-semibold uppercase tracking-[0.4em] text-rose-500">Cristiane Santos Gastronomia</p>
         </Reveal>
         <Reveal delay={80}>
-          <h1 className="font-serifDisplay text-4xl text-cocoa-900 leading-tight sm:text-5xl">
-            Macarons artesanais para momentos marcantes
-          </h1>
+          <div className="mx-auto flex max-w-xs flex-col items-center justify-center gap-4">
+            <Image src="/gallery/logo.jpg" alt="Logo Cristiane Santos Gastronomia" width={180} height={180} className="rounded-lg object-cover" />
+            <h1 className="font-serifDisplay text-4xl text-cocoa-900 leading-tight sm:text-5xl">
+              Confeitaria artesanal que constrói sonhos em forma de doces
+            </h1>
+          </div>
           <p className="mt-4 text-lg text-cocoa-700">
-            Macarons personalizados para casamentos, eventos corporativos e datas especiais em Londrina-PR.
+            Doces, macarons e bolos personalizados para eventos, festas e ocasiões especiais. Sabor e arte em cada mordida
           </p>
         </Reveal>
         <Reveal delay={160}>
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center gap-3">
             <CtaLink label="Ver cardápio" href="/cardapio" eventName="click_ifood" className="px-8 py-3" external={false} />
+            <CtaLink
+              label="Briefing de eventos"
+              href="/eventos"
+              eventName="click_event_briefing"
+              className="bg-teal-500 px-8 py-3 text-white hover:bg-teal-600"
+              external={false}
+            />
           </div>
         </Reveal>
       </section>
-
-      {/* Especialidade em macarons */}
-      <section className="container-pad pb-12">
-        <div className="rounded-[1.5rem] bg-white/85 px-6 py-10 shadow-panel">
-          <Reveal>
-            <h2 className="font-serifDisplay text-3xl text-cocoa-900">Especialidade em macarons</h2>
-            <p className="mt-3 text-sm text-cocoa-700">
-              Personalização de cores, iniciais e logos com acabamento premium, harmonizando com a paleta do seu evento.
-            </p>
-            <p className="mt-2 text-sm text-cocoa-700">
-              Produção artesanal diária, ingredientes selecionados e técnica refinada para entregas sob medida.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
+      
       <Gallery />
 
       {/* CTA final minimal */}

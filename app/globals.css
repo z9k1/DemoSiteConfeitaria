@@ -35,6 +35,10 @@ a {
   box-shadow: 0 25px 45px -25px rgba(33, 21, 16, 0.45);
 }
 
+.font-sanfrancisco {
+  font-family: "SF Pro Display", "San Francisco", "Helvetica Neue", sans-serif;
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(18px);

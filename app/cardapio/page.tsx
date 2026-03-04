@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { brandSettings } from "@/lib/site-data";
 import { Reveal } from "@/components/reveal";
+import { CustomSelect } from "@/components/custom-select";
 
 type Bolo = {
   id: string;
@@ -31,6 +32,39 @@ type CartItem = {
 };
 
 const CART_STORAGE_KEY = "csg_cardapio_bolos_cart_v1";
+
+const categoryConfigs = [
+  {
+    id: "bolos",
+    label: "Bolos artesanais",
+    title: "Bolos artesanais",
+    description: "Cada item corresponde a 1kg e pode ser ajustado pela quantidade escolhida (para bolos).",
+    isReady: true
+  },
+  {
+    id: "docinhos",
+    label: "Docinhos Gourmet",
+    title: "Docinhos Gourmet",
+    description: "Pedidos por cento. Sabores exclusivos para sua festa.",
+    isReady: false
+  },
+  {
+    id: "macarons",
+    label: "Macarons",
+    title: "Macarons",
+    description: "Em breve.",
+    isReady: false
+  },
+  {
+    id: "kits",
+    label: "Kits Presente",
+    title: "Kits Presente",
+    description: "Em breve.",
+    isReady: false
+  }
+] as const;
+
+type TabId = (typeof categoryConfigs)[number]["id"];
 
 const BOLOS: Bolo[] = [
   {
@@ -173,6 +207,7 @@ function parseISODate(value: string): Date {
 }
 
 export default function CardapioPage() {
+  const [activeTab, setActiveTab] = useState<TabId>("bolos");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedBolo, setSelectedBolo] = useState<Bolo | null>(null);
@@ -181,6 +216,7 @@ export default function CardapioPage() {
   const [customerName, setCustomerName] = useState("");
   const [eventDate, setEventDate] = useState("");
   const [submitError, setSubmitError] = useState("");
+  const activeTabInfo = categoryConfigs.find((tab) => tab.id === activeTab) ?? categoryConfigs[0];
 
   useEffect(() => {
     const raw = localStorage.getItem(CART_STORAGE_KEY);
@@ -315,64 +351,77 @@ export default function CardapioPage() {
     <div className="container-pad py-12">
       <header className="mb-8 text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.35em] text-rose-500">Cardápio na palma da sua mão</p>
-        <h1 className="mt-3 font-serifDisplay text-4xl text-cocoa-900">Bolos artesanais</h1>
-        <p className="mx-auto mt-3 max-w-2xl text-sm text-cocoa-700">
-          Cada item corresponde a 1kg e pode ser ajustado pela quantidade escolhida.
-        </p>
+        <h1 className="mt-3 font-serifDisplay text-5xl text-cocoa-900">{activeTabInfo.title}</h1>
+        <p className="mx-auto mt-3 max-w-2xl text-lg text-cocoa-700">{activeTabInfo.description}</p>
       </header>
 
-    <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {BOLOS.map((bolo, idx) => (
-        <Reveal key={bolo.id} delay={idx * 40}>
-          <article className="group flex h-full flex-col overflow-hidden rounded-[1.25rem] bg-white/90 shadow-panel transition duration-500 hover:-translate-y-1 hover:shadow-2xl">
-            <div className="relative h-52 w-full overflow-hidden rounded-t-[1.25rem]">
-              <Image
-                src={bolo.imageUrl}
-                alt={`Imagem do bolo ${bolo.name}`}
-                fill
-                className="object-cover transition duration-500 group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-              />
-            </div>
-            <div className="flex flex-1 flex-col p-5">
-              <h2 className="font-serifDisplay text-2xl text-cocoa-900">{bolo.name}</h2>
-              <p className="mt-2 text-sm text-cocoa-700">{bolo.description}</p>
-              <p className="mt-4 text-sm font-semibold text-cocoa-900">{formatCurrency(bolo.basePrice)} / 1kg</p>
-              <div className="mt-4 flex flex-1 flex-col justify-end">
-                <button
-                  type="button"
-                  onClick={() => openModal(bolo)}
-                  className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:from-cocoa-800 hover:to-cocoa-950"
-                >
-                  Adicionar ao carrinho
-                </button>
-              </div>
-            </div>
-          </article>
-        </Reveal>
+    <nav className="mb-8 flex flex-wrap justify-center gap-8 text-xl !font-medium uppercase !tracking-tight">
+      {categoryConfigs.map((tab) => (
+        <button
+          key={tab.id}
+          type="button"
+          onClick={() => setActiveTab(tab.id)}
+          className={`transition pb-1 ${activeTab === tab.id ? "border-b-2 border-cocoa-900 text-cocoa-900" : "text-cocoa-600 hover:text-cocoa-900"}`}
+        >
+          {tab.label}
+        </button>
       ))}
-    </section>
+    </nav>
+
+    {activeTabInfo.isReady ? (
+      <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {BOLOS.map((bolo, idx) => (
+          <Reveal key={bolo.id} delay={idx * 40}>
+            <button
+              type="button"
+              onClick={() => openModal(bolo)}
+              className="group flex h-full w-full flex-col overflow-hidden rounded-lg bg-white/90 text-left shadow-panel transition duration-500 hover:-translate-y-1 hover:shadow-2xl"
+            >
+              <div className="relative h-60 w-full overflow-hidden rounded-t-lg">
+                <Image
+                  src={bolo.imageUrl}
+                  alt={`Imagem do bolo ${bolo.name}`}
+                  fill
+                  className="object-cover transition duration-500 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                />
+              </div>
+              <div className="flex flex-1 flex-col p-5">
+                <h2 className="font-serifDisplay text-2xl text-cocoa-900">{bolo.name}</h2>
+                <p className="mt-2 text-lg text-cocoa-700">{bolo.description}</p>
+                <p className="mt-4 text-lg font-semibold text-cocoa-900">{formatCurrency(bolo.basePrice)} / 1kg</p>
+              </div>
+            </button>
+          </Reveal>
+        ))}
+      </section>
+    ) : (
+      <section className="rounded-lg bg-white/70 p-12 text-center text-sm text-cocoa-700 shadow-panel">
+        <p className="font-serifBrand text-2xl text-cocoa-900">{activeTabInfo.title}</p>
+        <p className="mt-3 text-lg">Estamos preparando novidades exclusivas. Em breve!</p>
+      </section>
+    )}
 
       <button
         type="button"
         onClick={() => setIsCartOpen((prev) => !prev)}
-        className="fixed bottom-6 right-6 z-30 inline-flex items-center gap-3 rounded-full bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-lg transition hover:from-cocoa-800 hover:to-cocoa-950"
+        className="fixed bottom-6 right-6 z-30 inline-flex items-center gap-3 rounded-lg bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-5 py-3 text-lg font-semibold uppercase tracking-[0.2em] text-white shadow-lg transition hover:from-cocoa-800 hover:to-cocoa-950"
       >
         Carrinho
-        <span className="inline-flex h-6 min-w-[1.5rem] items-center justify-center rounded-full bg-white px-2 text-xs font-bold text-cocoa-900">
+        <span className="inline-flex h-6 min-w-[1.5rem] items-center justify-center rounded-lg bg-white px-2 text-xs font-bold text-cocoa-900">
           {badgeCount}
         </span>
       </button>
 
       {isCartOpen ? (
-        <aside className="fixed right-4 top-24 z-30 w-[min(92vw,380px)] rounded-[1.25rem] bg-white/95 p-5 shadow-soft backdrop-blur">
+        <aside className="fixed right-4 top-24 z-30 w-[min(92vw,380px)] rounded-lg bg-white/95 p-5 shadow-soft backdrop-blur">
           <h3 className="font-serifDisplay text-2xl text-cocoa-900">Resumo do pedido</h3>
           {cart.length === 0 ? (
             <p className="mt-4 text-sm text-cocoa-700">Seu carrinho está vazio.</p>
           ) : (
             <ul className="mt-4 space-y-3">
               {cart.map((item, index) => (
-                <li key={`${item.productId}-${item.decorationId}-${index}`} className="rounded-xl bg-rose-50/80 p-3">
+                <li key={`${item.productId}-${item.decorationId}-${index}`} className="rounded-lg bg-rose-50/80 p-3">
                   <p className="text-sm font-semibold text-cocoa-900">
                     {item.quantity}x {item.productName}
                   </p>
@@ -398,9 +447,9 @@ export default function CardapioPage() {
                 value={customerName}
                 onChange={(event) => setCustomerName(event.target.value)}
                 placeholder="Nome"
-                className="w-full rounded-xl border border-rose-200 px-3 py-2 text-sm outline-none ring-cocoa-700/30 focus:ring"
+                className="h-14 w-full rounded-lg border border-rose-200 px-6 text-lg outline-none ring-cocoa-700/30 focus:ring"
               />
-              <label className="block text-sm font-semibold text-cocoa-900">
+              <label className="block text-base font-bold text-cocoa-900">
                 Data da Retirada / Evento
                 <input
                   type="date"
@@ -408,10 +457,10 @@ export default function CardapioPage() {
                   min={todayISODate()}
                   onChange={(event) => setEventDate(event.target.value)}
                   placeholder="Quando você precisa do pedido?"
-                  className="mt-1 w-full rounded-xl border border-rose-200 px-3 py-2 text-sm outline-none ring-cocoa-700/30 focus:ring"
+                  className="mt-1 h-14 w-full rounded-lg border border-rose-200 px-6 text-lg outline-none ring-cocoa-700/30 focus:ring"
                 />
-                <p className="mt-1 text-xs font-normal text-cocoa-700">
-                   Lembre-se: pedidos com no mínimo 5 dias de antecedência.
+                <p className="mt-1 text-sm font-normal text-cocoa-700">
+                  Lembre-se: pedidos com no mínimo 5 dias de antecedência.
                 </p>
               </label>
               {submitError ? <p className="text-xs text-rose-700">{submitError}</p> : null}
@@ -419,7 +468,7 @@ export default function CardapioPage() {
                 type="button"
                 onClick={finalizeOrder}
                 disabled={cart.length === 0}
-                className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition enabled:hover:from-cocoa-800 enabled:hover:to-cocoa-950 disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex h-12 md:h-14 w-full items-center justify-center rounded-lg bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-6 text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-white transition enabled:hover:from-cocoa-800 enabled:hover:to-cocoa-950 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Finalizar pedido
               </button>
@@ -429,54 +478,62 @@ export default function CardapioPage() {
 
       {selectedBolo ? (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-cocoa-900/50 p-4">
-          <div className="w-full max-w-lg rounded-[1.5rem] bg-white p-6 shadow-soft">
+          <div className="w-full max-w-lg rounded-lg bg-white p-8 sm:p-10 shadow-soft">
+            <div className="relative mb-4 h-56 w-full overflow-hidden rounded-lg">
+              <Image
+                src={selectedBolo.imageUrl}
+                alt={`Imagem do bolo ${selectedBolo.name}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 540px"
+              />
+            </div>
             <h2 className="font-serifDisplay text-3xl text-cocoa-900">{selectedBolo.name}</h2>
-            <p className="mt-2 text-sm text-cocoa-700">{selectedBolo.description}</p>
-            <p className="mt-3 text-sm font-semibold text-cocoa-900">
+            <p className="mt-2 text-lg text-cocoa-700">{selectedBolo.description}</p>
+            <p className="mt-3 text-lg font-semibold text-cocoa-900">
               Preço base: {formatCurrency(selectedBolo.basePrice)} / 1kg
             </p>
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              <label className="text-sm text-cocoa-700">
+              <label className="text-base font-bold text-cocoa-700">
                 Quantidade (kg)
                 <input
                   type="number"
                   min={1}
                   value={quantity}
                   onChange={(event) => setQuantity(Math.max(1, Number(event.target.value) || 1))}
-                  className="mt-1 w-full rounded-xl border border-rose-200 px-3 py-2 text-sm outline-none ring-cocoa-700/30 focus:ring"
+                  className="mt-1 h-14 w-full rounded-lg border border-rose-200 px-6 text-lg outline-none ring-cocoa-700/30 focus:ring"
                 />
               </label>
-              <label className="text-sm text-cocoa-700">
+              <label className="text-base font-bold text-cocoa-700">
                 Decoração personalizada
-                <select
-                  value={decorationId}
-                  onChange={(event) => setDecorationId(event.target.value)}
-                  className="mt-1 w-full rounded-xl border border-rose-200 px-3 py-2 text-sm outline-none ring-cocoa-700/30 focus:ring"
-                >
-                  {DECORATIONS.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.label} ({formatCurrency(option.extraPrice)})
-                    </option>
-                  ))}
-                </select>
+                <div className="mt-1">
+                  <CustomSelect
+                    value={decorationId}
+                    onChange={setDecorationId}
+                    options={DECORATIONS.map((option) => ({
+                      value: option.id,
+                      label: `${option.label} (${formatCurrency(option.extraPrice)})`
+                    }))}
+                  />
+                </div>
               </label>
             </div>
 
-            <p className="mt-4 text-sm font-semibold text-cocoa-900">Total: {formatCurrency(modalTotal)}</p>
+            <p className="mt-4 text-lg font-semibold text-cocoa-900">Total: {formatCurrency(modalTotal)}</p>
 
-            <div className="mt-6 flex gap-3">
+            <div className="mt-6 flex flex-row gap-3">
               <button
                 type="button"
                 onClick={closeModal}
-                className="inline-flex flex-1 items-center justify-center rounded-full border border-rose-200 px-4 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-cocoa-800 hover:bg-rose-50"
+                className="inline-flex h-12 flex-1 items-center justify-center rounded-lg border border-rose-200 px-4 text-base font-semibold uppercase tracking-[0.12em] text-cocoa-800 hover:bg-rose-50"
               >
                 Fechar
               </button>
               <button
                 type="button"
                 onClick={addToCart}
-                className="inline-flex flex-1 items-center justify-center rounded-full bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-4 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white hover:from-cocoa-800 hover:to-cocoa-950"
+                className="inline-flex h-12 flex-[2] items-center justify-center rounded-lg bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-4 text-base font-semibold uppercase tracking-[0.12em] text-white hover:from-cocoa-800 hover:to-cocoa-950"
               >
                 Adicionar ao carrinho
               </button>

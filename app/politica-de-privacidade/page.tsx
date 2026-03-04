@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <div className="container-pad py-14">
-      <article className="rounded-brand border border-rose-100 bg-white p-8 shadow-soft">
+      <article className="rounded-lg border border-rose-100 bg-white p-8 shadow-soft">
         <h1 className="font-serifBrand text-3xl text-cocoa-800">Política de Privacidade</h1>
         <p className="mt-4 text-sm text-cocoa-700">
           Esta página explica como {brandSettings.businessName} coleta e utiliza dados enviados por formulários e
