@@ -12,6 +12,9 @@ export default function HomePage() {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "/DemoSiteConfeitaria";
+  const cardapioPath = `${basePath.replace(/\/$/, "")}/cardapio`;
+
   return (
     <div>
       <BackToTop />
@@ -34,7 +37,7 @@ export default function HomePage() {
         </Reveal>
         <Reveal delay={160}>
           <div className="flex flex-col items-center gap-3">
-            <CtaLink label="Ver cardápio" href="/cardapio" eventName="click_ifood" className="px-8 py-3" external={false} />
+            <CtaLink label="Ver cardápio" href={cardapioPath} eventName="click_ifood" className="px-8 py-3" external={false} />
             <CtaLink
               label="Briefing de eventos"
               href="/eventos"

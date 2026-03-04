@@ -12,6 +12,17 @@ type CtaLinkProps = {
   external?: boolean;
 };
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+function withBasePath(href?: string) {
+  if (!href) return href;
+  if (!href.startsWith("/")) href = `/${href}`;
+  if (!basePath) return href;
+  const normalizedBase = basePath.endsWith("/") ? basePath.slice(0, -1) : basePath;
+  if (href.startsWith(normalizedBase)) return href;
+  return `${normalizedBase}${href}`;
+}
+
 export function CtaLink({
   label,
   message,
@@ -20,7 +31,8 @@ export function CtaLink({
   className = "",
   external = true
 }: CtaLinkProps) {
-  const finalHref = message ? buildWhatsAppUrl(message) : href ?? "#";
+  const internalHref = !external ? withBasePath(href) : href;
+  const finalHref = message ? buildWhatsAppUrl(message) : internalHref ?? "#";
   const isAnchor = finalHref.startsWith("#");
 
   const handleClick = () => {
