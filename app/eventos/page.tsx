@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { CtaLink } from "@/components/cta-link";
 import { LeadForm } from "@/components/lead-form";
 import { SectionHeading } from "@/components/section-heading";
-import { brandSettings, ctaConfigs, eventPackages, faqItems } from "@/lib/site-data";
+import { brandSettings, eventPackages, faqItems } from "@/lib/site-data";
 
 export const metadata: Metadata = {
   title: "Eventos e Casamentos",
@@ -24,7 +23,6 @@ const faqSchema = {
 };
 
 export default function EventosPage() {
-  const whatsappWedding = ctaConfigs.find((item) => item.id === "whatsapp-casamento");
 
   return (
     <div className="container-pad py-14">
@@ -36,48 +34,45 @@ export default function EventosPage() {
         subtitle="Solução completa para noivas, cerimonialistas e empresas que querem doces com identidade visual."
       />
 
+      <div className="mt-6 pt-6">
+        <p className="text-sm text-cocoa-700">
+          Briefing rápido do evento: conte-nos o tipo de ocasião, número de convidados e cores/temas desejados para que possamos
+          antecipar combinações e personalizações exclusivas.
+        </p>
+      </div>
+
       <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_1fr]">
-        <div className="space-y-6">
-          <div className="rounded-brand border border-rose-100 bg-white p-6 shadow-soft">
+        <div className="space-y-8">
+          <section className="space-y-3 px-6 py-4">
             <h3 className="font-serifBrand text-2xl text-cocoa-800">Soluções para cada tipo de evento</h3>
             <ul className="mt-3 space-y-2 text-sm text-cocoa-700">
               <li>- Casamentos: mesa de doces, caixas para padrinhos e lembranças.</li>
               <li>- Corporativo: brindes com logo e kits para eventos internos.</li>
               <li>- Datas especiais: aniversários e comemorações premium.</li>
             </ul>
-          </div>
+          </section>
 
-          <div className="rounded-brand border border-rose-100 bg-white p-6 shadow-soft">
+          <section className="space-y-4 px-6 py-4">
             <h3 className="font-serifBrand text-2xl text-cocoa-800">Torre de macarons</h3>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               {eventPackages.map((pkg) => (
-                <article key={pkg.id} className="rounded-xl border border-rose-100 p-4">
+                <article key={pkg.id} className="flex flex-col gap-2 rounded-xl bg-rose-50/40 p-4">
                   <h4 className="text-sm font-semibold text-cocoa-800">{pkg.title}</h4>
-                  <p className="mt-1 text-xs text-cocoa-700">{pkg.details}</p>
-                  <p className="mt-2 text-sm font-semibold text-cocoa-800">{pkg.price}</p>
+                  <p className="text-xs text-cocoa-700">{pkg.details}</p>
+                  <p className="text-sm font-semibold text-cocoa-800">{pkg.price}</p>
                 </article>
               ))}
             </div>
-          </div>
+          </section>
 
-          <div className="rounded-brand border border-rose-100 bg-white p-6 shadow-soft">
+          <section className="space-y-3 px-6 py-4">
             <h3 className="font-serifBrand text-2xl text-cocoa-800">Regras comerciais transparentes</h3>
             <ul className="mt-3 space-y-2 text-sm text-cocoa-700">
               <li>- Antecedência mínima: {brandSettings.minOrderNoticeDays} dias.</li>
               <li>- Mínimos variam por item, cor e sabor.</li>
               <li>- Atendimento em {brandSettings.coverage}.</li>
             </ul>
-            {whatsappWedding ? (
-              <div className="mt-4">
-                <CtaLink
-                  label={whatsappWedding.label}
-                  message={whatsappWedding.message}
-                  eventName="click_whatsapp"
-                  className="bg-cocoa-700 text-white hover:bg-cocoa-800"
-                />
-              </div>
-            ) : null}
-          </div>
+          </section>
         </div>
 
         <LeadForm sourcePage="eventos" />

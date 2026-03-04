@@ -45,7 +45,7 @@ const BOLOS: Bolo[] = [
     name: "Ninho com morangos",
     basePrice: 89.9,
     description: "Combinação clássica de creme de ninho com morangos frescos.",
-    imageUrl: "/images/bolos/bolo-placeholder.jpg"
+    imageUrl: "/images/bolos/ninho-com-morangos.jpeg"
   },
   {
     id: "abacaxi-coco",
@@ -314,17 +314,17 @@ export default function CardapioPage() {
   return (
     <div className="container-pad py-12">
       <header className="mb-8 text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.35em] text-rose-500">Cardápio Inteligente</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.35em] text-rose-500">Cardápio na palma da sua mão</p>
         <h1 className="mt-3 font-serifDisplay text-4xl text-cocoa-900">Bolos artesanais</h1>
         <p className="mx-auto mt-3 max-w-2xl text-sm text-cocoa-700">
-          Cada item corresponde a 1kg. Para bolos maiores, aumente a quantidade no modal.
+          Cada item corresponde a 1kg e pode ser ajustado pela quantidade escolhida.
         </p>
       </header>
 
     <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {BOLOS.map((bolo, idx) => (
         <Reveal key={bolo.id} delay={idx * 40}>
-          <article className="group overflow-hidden rounded-[1.25rem] bg-white/90 shadow-panel transition duration-500 hover:-translate-y-1 hover:shadow-2xl">
+          <article className="group flex h-full flex-col overflow-hidden rounded-[1.25rem] bg-white/90 shadow-panel transition duration-500 hover:-translate-y-1 hover:shadow-2xl">
             <div className="relative h-52 w-full overflow-hidden rounded-t-[1.25rem]">
               <Image
                 src={bolo.imageUrl}
@@ -334,17 +334,19 @@ export default function CardapioPage() {
                 sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
               />
             </div>
-            <div className="p-5">
+            <div className="flex flex-1 flex-col p-5">
               <h2 className="font-serifDisplay text-2xl text-cocoa-900">{bolo.name}</h2>
               <p className="mt-2 text-sm text-cocoa-700">{bolo.description}</p>
               <p className="mt-4 text-sm font-semibold text-cocoa-900">{formatCurrency(bolo.basePrice)} / 1kg</p>
-              <button
-                type="button"
-                onClick={() => openModal(bolo)}
-                className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:from-cocoa-800 hover:to-cocoa-950"
-              >
-                Selecionar
-              </button>
+              <div className="mt-4 flex flex-1 flex-col justify-end">
+                <button
+                  type="button"
+                  onClick={() => openModal(bolo)}
+                  className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:from-cocoa-800 hover:to-cocoa-950"
+                >
+                  Adicionar ao carrinho
+                </button>
+              </div>
             </div>
           </article>
         </Reveal>
@@ -390,31 +392,38 @@ export default function CardapioPage() {
 
           <p className="mt-4 text-sm font-semibold text-cocoa-900">Total geral: {formatCurrency(cartTotal)}</p>
 
-          <div className="mt-4 space-y-3">
-            <input
-              type="text"
-              value={customerName}
-              onChange={(event) => setCustomerName(event.target.value)}
-              placeholder="Nome"
-              className="w-full rounded-xl border border-rose-200 px-3 py-2 text-sm outline-none ring-cocoa-700/30 focus:ring"
-            />
-            <input
-              type="date"
-              value={eventDate}
-              min={todayISODate()}
-              onChange={(event) => setEventDate(event.target.value)}
-              className="w-full rounded-xl border border-rose-200 px-3 py-2 text-sm outline-none ring-cocoa-700/30 focus:ring"
-            />
-            {submitError ? <p className="text-xs text-rose-700">{submitError}</p> : null}
-            <button
-              type="button"
-              onClick={finalizeOrder}
-              disabled={cart.length === 0}
-              className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition enabled:hover:from-cocoa-800 enabled:hover:to-cocoa-950 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Finalizar pedido
-            </button>
-          </div>
+            <div className="mt-4 space-y-3">
+              <input
+                type="text"
+                value={customerName}
+                onChange={(event) => setCustomerName(event.target.value)}
+                placeholder="Nome"
+                className="w-full rounded-xl border border-rose-200 px-3 py-2 text-sm outline-none ring-cocoa-700/30 focus:ring"
+              />
+              <label className="block text-sm font-semibold text-cocoa-900">
+                Data da Retirada / Evento
+                <input
+                  type="date"
+                  value={eventDate}
+                  min={todayISODate()}
+                  onChange={(event) => setEventDate(event.target.value)}
+                  placeholder="Quando você precisa do pedido?"
+                  className="mt-1 w-full rounded-xl border border-rose-200 px-3 py-2 text-sm outline-none ring-cocoa-700/30 focus:ring"
+                />
+                <p className="mt-1 text-xs font-normal text-cocoa-700">
+                   Lembre-se: pedidos com no mínimo 5 dias de antecedência.
+                </p>
+              </label>
+              {submitError ? <p className="text-xs text-rose-700">{submitError}</p> : null}
+              <button
+                type="button"
+                onClick={finalizeOrder}
+                disabled={cart.length === 0}
+                className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition enabled:hover:from-cocoa-800 enabled:hover:to-cocoa-950 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Finalizar pedido
+              </button>
+            </div>
         </aside>
       ) : null}
 
