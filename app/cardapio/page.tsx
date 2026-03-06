@@ -51,6 +51,7 @@ type CentoProduct = {
   description: string;
   imageUrl: string;
   unitPrice: number;
+  priceLabel?: string;
 };
 
 type CentoFlavor = {
@@ -365,7 +366,35 @@ const CENTO_18G_FLAVORS: CentoFlavor[] = [
   { id: "uva", label: "Uva" }
 ];
 
+const CENTO_MACARONS_MINI_PRODUCT: CentoProduct = {
+  id: "cento-macarons-mini",
+  name: "Cento de Macarons Mini",
+  description:
+    "Cento de Macarons em tamanho mini. Escolha até 5 cores e 5 sabores do nosso cardápio artesanal.",
+  imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg"),
+  unitPrice: 400,
+  priceLabel: "R$ 400,00 / cento"
+};
+
+const CENTO_MACARONS_MINI_FLAVORS: CentoFlavor[] = [
+  { id: "brigadeiro-choc-branco", label: "Brigadeiro de chocolate branco" },
+  { id: "brigadeiro-meio-amargo", label: "Brigadeiro meio amargo" },
+  { id: "coco-amendoas", label: "Coco com amêndoas" },
+  { id: "capuccino", label: "Capuccino" },
+  { id: "caramelo-flor-de-sal", label: "Caramelo com flor de sal" },
+  { id: "creme-brulee", label: "Creme brûlée" },
+  { id: "damasco-nozes", label: "Damasco com nozes" },
+  { id: "frutas-vermelhas", label: "Frutas vermelhas" },
+  { id: "maracuja-chocolate", label: "Maracujá com chocolate" },
+  { id: "limao-lavanda", label: "Limão siciliano com lavanda" },
+  { id: "morango", label: "Morango" },
+  { id: "ninho-nutella", label: "Ninho com Nutella" },
+  { id: "pacoca", label: "Paçoca" },
+  { id: "pistache", label: "Pistache" }
+];
+
 function getCentoFlavors(productId: string): CentoFlavor[] {
+  if (productId === CENTO_MACARONS_MINI_PRODUCT.id) return CENTO_MACARONS_MINI_FLAVORS;
   if (productId === CENTO_18G_PRODUCT.id) return CENTO_18G_FLAVORS;
   return CENTO_13G_FLAVORS;
 }
@@ -455,6 +484,7 @@ export default function CardapioPage() {
   const [centoQuantityInput, setCentoQuantityInput] = useState("1");
   const [selectedCentoFlavorIds, setSelectedCentoFlavorIds] = useState<string[]>([]);
   const [centoError, setCentoError] = useState("");
+  const [centoColors, setCentoColors] = useState("");
   const [selectedBarraSizeId, setSelectedBarraSizeId] = useState<BarraSizeOption["id"]>(
     BARRAS_FLORIDAS_SIZES[0]?.id ?? "mini-30g"
   );
@@ -593,8 +623,12 @@ export default function CardapioPage() {
     if (!selectedCento) return 0;
     const flavorsCount = selectedCentoFlavorIds.length;
     if (flavorsCount === 0) return 0;
-    return selectedCento.unitPrice * centoQuantity * flavorsCount;
+    const isFixedPriceCento =
+      selectedCento.id === CENTO_MACARONS_MINI_PRODUCT.id || selectedCento.id === CENTO_18G_PRODUCT.id;
+    return selectedCento.unitPrice * centoQuantity * (isFixedPriceCento ? 1 : flavorsCount);
   }, [selectedCento, centoQuantity, selectedCentoFlavorIds.length]);
+
+  const maxCentoFlavors = selectedCento?.id === CENTO_MACARONS_MINI_PRODUCT.id ? 5 : 4;
 
   const selectedBarraSize = useMemo(
     () => BARRAS_FLORIDAS_SIZES.find((size) => size.id === selectedBarraSizeId) ?? BARRAS_FLORIDAS_SIZES[0],
@@ -695,6 +729,7 @@ export default function CardapioPage() {
     setCentoQuantityInput("1");
     setSelectedCentoFlavorIds([]);
     setCentoError("");
+    setCentoColors("");
   };
 
   const openBarraModal = (barra: BarraProduct) => {
@@ -959,7 +994,17 @@ export default function CardapioPage() {
 
     const flavorIds = selectedFlavors.map((flavor) => flavor.id).sort();
     const flavorLabels = selectedFlavors.map((flavor) => flavor.label);
-    const lineTotal = selectedCento.unitPrice * safeQuantity * selectedFlavors.length;
+    const isFixedPriceCento =
+      selectedCento.id === CENTO_MACARONS_MINI_PRODUCT.id || selectedCento.id === CENTO_18G_PRODUCT.id;
+    const lineTotal = selectedCento.unitPrice * safeQuantity * (isFixedPriceCento ? 1 : selectedFlavors.length);
+    const detailLines = [
+      `Sabores: ${flavorLabels.join(", ")}`,
+      `Quantidade por sabor: ${safeQuantity} cento(s)`
+    ];
+    if (selectedCento.id === CENTO_MACARONS_MINI_PRODUCT.id && centoColors.trim()) {
+      detailLines.push(`Cores: ${centoColors.trim()}`);
+    }
+
     const newItem: CartItem = {
       category: "cento",
       productId: selectedCento.id,
@@ -970,7 +1015,7 @@ export default function CardapioPage() {
       decorationLabels: flavorLabels,
       decorationTotal: 0,
       lineTotal,
-      detailLines: [`Sabores: ${flavorLabels.join(", ")}`, `Quantidade por sabor: ${safeQuantity} cento(s)`]
+      detailLines
     };
 
     setCart((prev) => {
@@ -985,10 +1030,12 @@ export default function CardapioPage() {
       const existing = updated[existingIndex];
       const mergedQuantity = existing.quantity + newItem.quantity;
       const flavorsCount = existing.decorationIds.length || 1;
+      const isFixedPriceCento =
+        existing.productId === CENTO_MACARONS_MINI_PRODUCT.id || existing.productId === CENTO_18G_PRODUCT.id;
       updated[existingIndex] = {
         ...existing,
         quantity: mergedQuantity,
-        lineTotal: existing.basePrice * mergedQuantity * flavorsCount
+        lineTotal: existing.basePrice * mergedQuantity * (isFixedPriceCento ? 1 : flavorsCount)
       };
       return updated;
     });
@@ -1291,6 +1338,28 @@ export default function CardapioPage() {
             </p>
             <p className="mt-4 text-lg font-semibold text-cocoa-900">
               A partir de {formatCurrency(minMacaronPrice)} / unidade
+            </p>
+          </div>
+        </button>
+        <button
+          type="button"
+          onClick={() => openCentoModal(CENTO_MACARONS_MINI_PRODUCT)}
+          className="group flex h-full w-full flex-col overflow-hidden rounded-lg bg-white/90 text-left shadow-panel transition duration-500 md:hover:-translate-y-1 md:hover:shadow-2xl"
+        >
+          <div className="relative h-60 w-full overflow-hidden rounded-t-lg">
+            <Image
+              src={CENTO_MACARONS_MINI_PRODUCT.imageUrl}
+              alt={`Imagem do ${CENTO_MACARONS_MINI_PRODUCT.name}`}
+              fill
+              className="object-cover transition duration-500 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+            />
+          </div>
+          <div className="flex flex-1 flex-col p-5">
+            <h2 className="font-serifDisplay text-2xl text-cocoa-900">{CENTO_MACARONS_MINI_PRODUCT.name}</h2>
+            <p className="mt-2 text-lg text-cocoa-700">{CENTO_MACARONS_MINI_PRODUCT.description}</p>
+            <p className="mt-4 text-lg font-semibold text-cocoa-900">
+              {CENTO_MACARONS_MINI_PRODUCT.priceLabel ?? `${formatCurrency(CENTO_MACARONS_MINI_PRODUCT.unitPrice)} / cento (por sabor)`}
             </p>
           </div>
         </button>
@@ -1743,11 +1812,11 @@ export default function CardapioPage() {
                 </label>
 
                 <div className="text-base font-bold text-cocoa-700">
-                  Seleção de sabores (até 4)
+                  Seleção de sabores (até {maxCentoFlavors})
                   <div className="mt-3 space-y-2 pb-4">
                     {getCentoFlavors(selectedCento.id).map((flavor) => {
                       const checked = selectedCentoFlavorIds.includes(flavor.id);
-                      const isAtLimit = selectedCentoFlavorIds.length >= 4;
+                      const isAtLimit = selectedCentoFlavorIds.length >= maxCentoFlavors;
                       return (
                         <label key={flavor.id} className="flex items-start gap-3 text-sm font-normal text-cocoa-700">
                           <input
@@ -1759,7 +1828,7 @@ export default function CardapioPage() {
                                 if (prev.includes(flavor.id)) {
                                   return prev.filter((item) => item !== flavor.id);
                                 }
-                                if (prev.length >= 4) return prev;
+                                if (prev.length >= maxCentoFlavors) return prev;
                                 return [...prev, flavor.id];
                               });
                               setCentoError("");
@@ -1771,6 +1840,18 @@ export default function CardapioPage() {
                       );
                     })}
                   </div>
+                  {selectedCento.id === CENTO_MACARONS_MINI_PRODUCT.id ? (
+                    <label className="mt-2 block text-base font-bold text-cocoa-700">
+                      Cores (até 5)
+                      <input
+                        type="text"
+                        value={centoColors}
+                        onChange={(event) => setCentoColors(event.target.value)}
+                        placeholder="Ex: rosa, branco, verde, dourado, lilás"
+                        className="mt-1 h-14 w-full box-border rounded-lg border border-rose-200 px-6 py-2 text-lg leading-none outline-none ring-cocoa-700/20 focus:ring-1"
+                      />
+                    </label>
+                  ) : null}
                   {centoError ? <p className="text-xs font-semibold text-rose-700">{centoError}</p> : null}
                 </div>
               </div>
