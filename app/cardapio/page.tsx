@@ -1433,7 +1433,7 @@ export default function CardapioPage() {
                     min={1}
                     value={quantity}
                     onChange={(event) => setQuantity(Math.max(1, Number(event.target.value) || 1))}
-                    className="mt-1 h-14 w-full box-border rounded-lg border border-rose-200 px-6 py-2 text-lg leading-none outline-none ring-cocoa-700/30 focus:ring"
+                    className="mt-1 h-14 w-full box-border rounded-lg border border-rose-200 px-6 py-2 text-lg leading-none outline-none ring-cocoa-700/20 focus:ring-1"
                   />
                 </label>
 
