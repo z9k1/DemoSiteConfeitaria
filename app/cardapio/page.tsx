@@ -684,10 +684,14 @@ const KIT_CAKE_FLAVORS = [
   }
 ] as const;
 
+type KitCakeFlavorId = (typeof KIT_CAKE_FLAVORS)[number]["id"];
+
 const KIT_COVERINGS = [
   { id: "chantilly", label: "Chantilly" },
   { id: "chantininho", label: "Chantininho" }
 ] as const;
+
+type KitCoveringId = (typeof KIT_COVERINGS)[number]["id"];
 
 const KIT_DECORATIONS = [
   { id: "flores-comestiveis", label: "Flores comestíveis", price: 25 },
@@ -789,8 +793,8 @@ export default function CardapioPage() {
   const [biscoitoFloridoQuantity, setBiscoitoFloridoQuantity] = useState(1);
   const [biscoitoFloridoQuantityInput, setBiscoitoFloridoQuantityInput] = useState("1");
   const [biscoitoFloridoQuantityError, setBiscoitoFloridoQuantityError] = useState("");
-  const [kitCakeFlavorId, setKitCakeFlavorId] = useState(KIT_CAKE_FLAVORS[0].id);
-  const [kitCoveringId, setKitCoveringId] = useState(KIT_COVERINGS[0].id);
+  const [kitCakeFlavorId, setKitCakeFlavorId] = useState<KitCakeFlavorId>(KIT_CAKE_FLAVORS[0].id);
+  const [kitCoveringId, setKitCoveringId] = useState<KitCoveringId>(KIT_COVERINGS[0].id);
   const [kitDecorationIds, setKitDecorationIds] = useState<string[]>([]);
   const [kitDocinhoIds, setKitDocinhoIds] = useState<string[]>([]);
   const [kitDocinhoError, setKitDocinhoError] = useState("");

@@ -9,17 +9,17 @@ export type GalleryItem = {
 export const galleryItems: GalleryItem[] = [
   {
     image: assetPath("/gallery/photo1.jpg"),
-    title: "Sobremesas delicadas",
-    description: "Macarons, mini gems e doces finos finalizados com folhas douradas."
+    title: "Macarons artesanais",
+    description: "Macarons delicados e coloridos preparados artesanalmente para mesas de doces e eventos especiais."
   },
   {
     image: assetPath("/gallery/photo2.jpg"),
-    title: "Torres de destaque",
-    description: "Mesas de doces com torres, caixas e arranjos personalizados."
+    title: "Elegância em cada detalhe",
+    description: "Macarons organizados em caixas e torres para compor mesas sofisticadas em festas e celebrações."
   },
   {
     image: assetPath("/gallery/photo3.jpg"),
-    title: "Kits e presentes",
-    description: "Caixas transparentes e embalagens premium para padrinhos e clientes."
+    title: "Doces finos",
+    description: "Brigadeiros gourmet e doces finos preparados com ingredientes selecionados para ocasiões especiais."
   }
 ];

@@ -24,30 +24,67 @@ export default function HomePage() {
           <p className="text-xs font-semibold uppercase tracking-[0.4em] text-rose-500">Cristiane Santos Gastronomia</p>
         </Reveal>
         <Reveal delay={80}>
-          <div className="mx-auto flex max-w-xs flex-col items-center justify-center gap-4">
+          <div className="mx-auto flex max-w-2xl flex-col items-center justify-center gap-4">
             <Image src={assetPath("/gallery/logo.jpg")} alt="Logo Cristiane Santos Gastronomia" width={180} height={180} className="rounded-lg object-cover" />
-            <h1 className="font-serifDisplay text-4xl text-cocoa-900 leading-tight sm:text-5xl">
+            <h1 className="max-w-[18ch] font-serifDisplay text-3xl text-cocoa-900 leading-tight sm:text-4xl lg:text-[2.9rem]">
               Confeitaria que constrói sonhos em forma de doces...
             </h1>
           </div>
-          <p className="mt-4 text-lg text-cocoa-700">
-            Doces, macarons e bolos personalizados para eventos, festas e ocasiões especiais. Sabor e arte em cada mordida
+          <p className="mx-auto mt-4 max-w-3xl text-base text-cocoa-700 sm:text-lg">
+            Doces, macarons e bolos personalizados para eventos, festas e ocasiões especiais. Sabor e arte em cada mordida.
           </p>
         </Reveal>
         <Reveal delay={160}>
           <div className="flex flex-col items-center gap-3">
-          <CtaLink label="Faça seu pedido aqui!" href={cardapioPath} eventName="click_ifood" className="px-8 py-3" external={false} />
+          <CtaLink label="Faça seu pedido aqui!" href={cardapioPath} eventName="click_ifood" className="px-8 py-3 shadow-xl hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-2xl active:scale-[0.99]" external={false} />
             <CtaLink
               label="Briefing de eventos"
               href={eventosPath}
               eventName="click_event_briefing"
-              className="bg-teal-500 px-8 py-3 text-white hover:bg-teal-600"
+              className="bg-teal-500 px-8 py-3 text-white shadow-xl hover:-translate-y-0.5 hover:scale-[1.02] hover:bg-teal-600 hover:shadow-2xl active:scale-[0.99]"
               external={false}
             />
           </div>
         </Reveal>
       </section>
-      
+
+      <section className="container-pad pb-10">
+        <Reveal>
+          <div className="grid gap-4 md:grid-cols-3">
+            <article className="rounded-lg border border-rose-100 bg-white/85 p-6 text-left shadow-panel">
+              <div className="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-rose-100 text-cocoa-800">
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5-4.9-2.6-4.9 2.6.9-5.5-4-3.9 5.5-.8L12 3z" />
+                </svg>
+              </div>
+              <h3 className="font-serifDisplay text-2xl text-cocoa-900">Ingredientes premium</h3>
+              <p className="mt-2 text-sm text-cocoa-700">Selecionamos matérias-primas nobres para garantir sabor marcante, textura e acabamento impecável.</p>
+            </article>
+            <article className="rounded-lg border border-rose-100 bg-white/85 p-6 text-left shadow-panel">
+              <div className="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-rose-100 text-cocoa-800">
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M4 20h16" />
+                  <path d="M7 20V8l5-4 5 4v12" />
+                </svg>
+              </div>
+              <h3 className="font-serifDisplay text-2xl text-cocoa-900">Personalização para eventos</h3>
+              <p className="mt-2 text-sm text-cocoa-700">Adaptamos sabores, cores e apresentação ao estilo de cada celebração para uma mesa exclusiva.</p>
+            </article>
+            <article className="rounded-lg border border-rose-100 bg-white/85 p-6 text-left shadow-panel">
+              <div className="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-rose-100 text-cocoa-800">
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M6 7h12" />
+                  <path d="M8 7v10a4 4 0 0 0 8 0V7" />
+                  <path d="M9 11h6" />
+                </svg>
+              </div>
+              <h3 className="font-serifDisplay text-2xl text-cocoa-900">Produção artesanal</h3>
+              <p className="mt-2 text-sm text-cocoa-700">Cada pedido é produzido em pequenos lotes com cuidado técnico e atenção aos detalhes visuais.</p>
+            </article>
+          </div>
+        </Reveal>
+      </section>
+
       <Gallery />
 
       {/* CTA final minimal */}
