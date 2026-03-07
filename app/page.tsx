@@ -11,6 +11,7 @@ const HERO_HEADLINE = "Confeitaria que constrói sonhos em forma de doces...";
 
 export default function HomePage() {
   const [typedHeadline, setTypedHeadline] = useState("");
+  const [heroImageLoaded, setHeroImageLoaded] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -52,28 +53,40 @@ export default function HomePage() {
         <Reveal delay={80}>
           <div className="mx-auto flex max-w-2xl flex-col items-center justify-center gap-6">
             <div className="relative w-full max-w-xl overflow-hidden rounded-2xl shadow-panel">
-              <div className="relative aspect-[16/9] w-full">
+              <div
+                className={`relative aspect-[16/9] w-full transition-opacity duration-700 ease-out ${
+                  heroImageLoaded ? "opacity-100" : "opacity-0"
+                }`}
+              >
                 <Image
                   src={assetPath("/gallery/imagembonitaparainicio.jpeg")}
                   alt="Imagem de destaque da confeitaria"
                   fill
                   priority
                   className="object-cover"
+                  onLoadingComplete={() => setHeroImageLoaded(true)}
                   sizes="(max-width: 640px) 92vw, (max-width: 1024px) 640px, 720px"
                 />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-rose-50/30 via-rose-50/12 to-transparent" />
               </div>
             </div>
-            <h1 className="max-w-[18ch] font-serifDisplay text-3xl text-cocoa-900 leading-tight sm:text-4xl lg:text-[2.9rem]">
+            <h1 className="mx-auto max-w-[22ch] font-serifDisplay text-3xl leading-tight text-cocoa-900 sm:max-w-[26ch] sm:text-4xl lg:max-w-[30ch] lg:text-[2.9rem]">
               {typedHeadline}
             </h1>
           </div>
-          <p className="mx-auto mt-4 max-w-3xl text-base text-cocoa-700 sm:text-lg">
+          <p className="mx-auto mt-4 max-w-xl text-base text-cocoa-700 sm:max-w-2xl sm:text-lg">
             Doces, macarons e bolos personalizados para eventos, festas e ocasiões especiais. Sabor e arte em cada mordida.
           </p>
         </Reveal>
         <Reveal delay={160}>
           <div className="flex flex-col items-center gap-3">
-          <CtaLink label="Faça seu pedido aqui!" href={cardapioPath} eventName="click_ifood" className="px-8 py-3 shadow-xl hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-2xl active:scale-[0.99]" external={false} />
+          <CtaLink
+            label="FAÇA SEU PEDIDO AQUI!"
+            href={cardapioPath}
+            eventName="click_ifood"
+            className="px-8 py-3 shadow-xl !from-rose-500 !to-rose-700 transition-transform duration-300 ease-out hover:-translate-y-0.5 hover:scale-[1.04] hover:shadow-2xl hover:!from-rose-700 hover:!to-rose-900 active:scale-[0.99] will-change-transform"
+            external={false}
+          />
             <CtaLink
               label="Briefing de eventos"
               href={eventosPath}
