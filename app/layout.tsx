@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AnalyticsScripts } from "@/components/analytics-scripts";
-import { BackToTop } from "@/components/back-to-top";
+import { CartBar } from "@/components/cart-bar";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { WhatsAppFab } from "@/components/whatsapp-fab";
@@ -55,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main>{children}</main>
         <Footer />
         <WhatsAppFab />
-        <BackToTop />
+        <CartBar />
       </body>
     </html>
   );

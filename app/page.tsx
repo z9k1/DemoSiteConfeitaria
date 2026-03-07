@@ -67,7 +67,7 @@ export default function HomePage() {
                   onLoadingComplete={() => setHeroImageLoaded(true)}
                   sizes="(max-width: 640px) 92vw, (max-width: 1024px) 640px, 720px"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-rose-50/30 via-rose-50/12 to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-rose-100/18 via-rose-50/6 to-transparent mix-blend-multiply" />
               </div>
             </div>
             <h1 className="mx-auto max-w-[22ch] font-serifDisplay text-3xl leading-tight text-cocoa-900 sm:max-w-[26ch] sm:text-4xl lg:max-w-[30ch] lg:text-[2.9rem]">
