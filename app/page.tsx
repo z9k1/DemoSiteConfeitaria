@@ -1,15 +1,41 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CtaLink } from "@/components/cta-link";
 import { Gallery } from "@/components/gallery";
 import { Reveal } from "@/components/reveal";
 import { assetPath } from "@/lib/asset-path";
 
+const HERO_HEADLINE = "Confeitaria que constrói sonhos em forma de doces...";
+
 export default function HomePage() {
+  const [typedHeadline, setTypedHeadline] = useState("");
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
+
+  useEffect(() => {
+    let frameId = 0;
+    let lastTime = 0;
+    let index = 0;
+    const CHAR_INTERVAL_MS = 32;
+
+    const animate = (timestamp: number) => {
+      if (lastTime === 0) lastTime = timestamp;
+      if (timestamp - lastTime >= CHAR_INTERVAL_MS) {
+        index += 1;
+        setTypedHeadline(HERO_HEADLINE.slice(0, index));
+        lastTime = timestamp;
+      }
+      if (index < HERO_HEADLINE.length) {
+        frameId = window.requestAnimationFrame(animate);
+      }
+    };
+
+    frameId = window.requestAnimationFrame(animate);
+    return () => window.cancelAnimationFrame(frameId);
   }, []);
 
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "/DemoSiteConfeitaria";
@@ -24,10 +50,21 @@ export default function HomePage() {
           <p className="text-xs font-semibold uppercase tracking-[0.4em] text-rose-500">Cristiane Santos Gastronomia</p>
         </Reveal>
         <Reveal delay={80}>
-          <div className="mx-auto flex max-w-2xl flex-col items-center justify-center gap-4">
-            <Image src={assetPath("/gallery/logo.jpg")} alt="Logo Cristiane Santos Gastronomia" width={180} height={180} className="rounded-lg object-cover" />
+          <div className="mx-auto flex max-w-2xl flex-col items-center justify-center gap-6">
+            <div className="relative w-full max-w-xl overflow-hidden rounded-2xl shadow-panel">
+              <div className="relative aspect-[16/9] w-full">
+                <Image
+                  src={assetPath("/gallery/imagembonitaparainicio.jpeg")}
+                  alt="Imagem de destaque da confeitaria"
+                  fill
+                  priority
+                  className="object-cover"
+                  sizes="(max-width: 640px) 92vw, (max-width: 1024px) 640px, 720px"
+                />
+              </div>
+            </div>
             <h1 className="max-w-[18ch] font-serifDisplay text-3xl text-cocoa-900 leading-tight sm:text-4xl lg:text-[2.9rem]">
-              Confeitaria que constrói sonhos em forma de doces...
+              {typedHeadline}
             </h1>
           </div>
           <p className="mx-auto mt-4 max-w-3xl text-base text-cocoa-700 sm:text-lg">

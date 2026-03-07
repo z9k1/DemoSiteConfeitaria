@@ -28,9 +28,11 @@ export function Gallery() {
                     priority={index === 0}
                   />
                 </div>
-                <div className="bg-gradient-to-t from-black/60 to-transparent px-5 py-6 text-white">
-                  <p className="text-sm uppercase tracking-[0.3em] text-rose-200">{item.title}</p>
-                  <p className="mt-2 text-xs leading-relaxed text-white/90">{item.description}</p>
+                <div className="bg-gradient-to-t from-black/75 via-black/35 to-transparent px-5 py-6 text-white">
+                  <p className="text-sm font-semibold uppercase tracking-[0.24em] text-rose-100 drop-shadow-sm sm:text-base">
+                    {item.title}
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-white/95 drop-shadow-sm">{item.description}</p>
                 </div>
               </article>
             </Reveal>

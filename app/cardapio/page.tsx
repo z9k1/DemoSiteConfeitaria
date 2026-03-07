@@ -118,12 +118,13 @@ type SimpleProduct = {
   id: string;
   name: string;
   description: string;
+  unitPrice: number;
   priceLabel: string;
   imageUrl: string;
 };
 
 type CartItem = {
-  category: "bolo" | "docinho" | "bombom" | "cento" | "barra" | "macaron" | "biscoito-florido" | "kit";
+  category: "bolo" | "docinho" | "bombom" | "cento" | "barra" | "macaron" | "biscoito-florido" | "kit" | "simple";
   productId: string;
   productName: string;
   basePrice: number;
@@ -528,6 +529,7 @@ const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
     id: "caixa-acrilica-7x4",
     name: "Caixa acrílica (7cm x 4cm)",
     description: "Acomoda 4 mini macarons*",
+    unitPrice: 18,
     priceLabel: "R$ 18,00",
     imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
   },
@@ -535,6 +537,7 @@ const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
     id: "caixa-acrilica-6x6",
     name: "Caixa acrílica (6cm x 6cm)",
     description: "Acomoda 2 macarons médios",
+    unitPrice: 18,
     priceLabel: "R$ 18,00",
     imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
   },
@@ -542,6 +545,7 @@ const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
     id: "caixa-visor-1",
     name: "Caixa com visor",
     description: "Acomoda 1 macaron médio",
+    unitPrice: 10,
     priceLabel: "R$ 10,00",
     imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
   },
@@ -549,6 +553,7 @@ const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
     id: "caixa-visor-2",
     name: "Caixa com visor",
     description: "Acomoda 2 macarons médios",
+    unitPrice: 18,
     priceLabel: "R$ 18,00",
     imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
   },
@@ -556,6 +561,7 @@ const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
     id: "caixa-visor-3",
     name: "Caixa com visor",
     description: "Acomoda 3 macarons médios",
+    unitPrice: 25,
     priceLabel: "R$ 25,00",
     imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
   },
@@ -563,6 +569,7 @@ const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
     id: "caixa-visor-4",
     name: "Caixa com visor",
     description: "Acomoda 4 macarons médios",
+    unitPrice: 30,
     priceLabel: "R$ 30,00",
     imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
   },
@@ -570,6 +577,7 @@ const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
     id: "caixa-visor-6",
     name: "Caixa com visor",
     description: "Acomoda 6 macarons médios",
+    unitPrice: 50,
     priceLabel: "R$ 50,00",
     imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
   },
@@ -577,6 +585,7 @@ const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
     id: "caixa-visor-7-champanhe",
     name: "Caixa com visor",
     description: "Acomoda 7 macarons médios + champanhe à escolha",
+    unitPrice: 110,
     priceLabel: "A partir de R$ 110,00",
     imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
   }
@@ -587,6 +596,7 @@ const TORRES_MACARONS_PRODUCTS: SimpleProduct[] = [
     id: "torre-4-andares",
     name: "Torre de macarons — 4 andares",
     description: "47 macarons | Altura: 15cm | Base: 18cm",
+    unitPrice: 395,
     priceLabel: "R$ 395,00",
     imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
   },
@@ -594,6 +604,7 @@ const TORRES_MACARONS_PRODUCTS: SimpleProduct[] = [
     id: "torre-5-andares",
     name: "Torre de macarons — 5 andares",
     description: "69 macarons | Altura: 21cm | Base: 20cm",
+    unitPrice: 575,
     priceLabel: "R$ 575,00",
     imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
   },
@@ -601,6 +612,7 @@ const TORRES_MACARONS_PRODUCTS: SimpleProduct[] = [
     id: "torre-6-andares",
     name: "Torre de macarons — 6 andares",
     description: "95 macarons | Altura: 25cm | Base: 23cm",
+    unitPrice: 745,
     priceLabel: "R$ 745,00",
     imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
   },
@@ -608,6 +620,7 @@ const TORRES_MACARONS_PRODUCTS: SimpleProduct[] = [
     id: "torre-8-andares",
     name: "Torre de macarons — 8 andares",
     description: "159 macarons | Altura: 35cm | Base: 28cm",
+    unitPrice: 1195,
     priceLabel: "R$ 1.195,00",
     imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
   },
@@ -615,6 +628,7 @@ const TORRES_MACARONS_PRODUCTS: SimpleProduct[] = [
     id: "torre-10-andares",
     name: "Torre de macarons — 10 andares",
     description: "237 macarons | Altura: 55cm | Base: 33cm",
+    unitPrice: 1750,
     priceLabel: "R$ 1.750,00",
     imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
   }
@@ -758,6 +772,8 @@ export default function CardapioPage() {
   const [selectedBarra, setSelectedBarra] = useState<BarraProduct | null>(null);
   const [selectedMacaron, setSelectedMacaron] = useState<MacaronProduct | null>(null);
   const [selectedBiscoitoFlorido, setSelectedBiscoitoFlorido] = useState<BiscoitoFloridoProduct | null>(null);
+  const [selectedSimpleProduct, setSelectedSimpleProduct] = useState<SimpleProduct | null>(null);
+  const [selectedSimpleCategory, setSelectedSimpleCategory] = useState<"embalagens-macarons" | "torres-macarons" | null>(null);
   const [selectedKitProduct, setSelectedKitProduct] = useState<KitProduct | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [quantityInput, setQuantityInput] = useState("1");
@@ -793,6 +809,9 @@ export default function CardapioPage() {
   const [biscoitoFloridoQuantity, setBiscoitoFloridoQuantity] = useState(1);
   const [biscoitoFloridoQuantityInput, setBiscoitoFloridoQuantityInput] = useState("1");
   const [biscoitoFloridoQuantityError, setBiscoitoFloridoQuantityError] = useState("");
+  const [simpleQuantity, setSimpleQuantity] = useState(1);
+  const [simpleQuantityInput, setSimpleQuantityInput] = useState("1");
+  const [simpleQuantityError, setSimpleQuantityError] = useState("");
   const [kitCakeFlavorId, setKitCakeFlavorId] = useState<KitCakeFlavorId>(KIT_CAKE_FLAVORS[0].id);
   const [kitCoveringId, setKitCoveringId] = useState<KitCoveringId>(KIT_COVERINGS[0].id);
   const [kitDecorationIds, setKitDecorationIds] = useState<string[]>([]);
@@ -840,7 +859,8 @@ export default function CardapioPage() {
               item.category === "barra" ||
               item.category === "macaron" ||
               item.category === "biscoito-florido" ||
-              item.category === "kit") &&
+              item.category === "kit" ||
+              item.category === "simple") &&
             Array.isArray(item.decorationIds) &&
             Array.isArray(item.decorationLabels) &&
             Array.isArray(item.detailLines)
@@ -976,6 +996,11 @@ export default function CardapioPage() {
     return selectedBiscoitoFlorido.unitPrice * biscoitoFloridoQuantity;
   }, [selectedBiscoitoFlorido, biscoitoFloridoQuantity]);
 
+  const simpleTotal = useMemo(() => {
+    if (!selectedSimpleProduct) return 0;
+    return selectedSimpleProduct.unitPrice * simpleQuantity;
+  }, [selectedSimpleProduct, simpleQuantity]);
+
   const selectedKitDecorations = useMemo(
     () => KIT_DECORATIONS.filter((item) => kitDecorationIds.includes(item.id)),
     [kitDecorationIds]
@@ -1076,6 +1101,8 @@ export default function CardapioPage() {
     setSelectedBarra(null);
     setSelectedMacaron(null);
     setSelectedBiscoitoFlorido(null);
+    setSelectedSimpleProduct(null);
+    setSelectedSimpleCategory(null);
     setSelectedBolo(bolo);
     setQuantity(1);
     setQuantityInput("1");
@@ -1089,6 +1116,8 @@ export default function CardapioPage() {
     setSelectedBarra(null);
     setSelectedMacaron(null);
     setSelectedBiscoitoFlorido(null);
+    setSelectedSimpleProduct(null);
+    setSelectedSimpleCategory(null);
     setSelectedDocinho(docinho);
     setDocinhoQuantity(DOCINHO_MIN_QTY);
     setDocinhoQuantityInput(DOCINHO_MIN_QTY.toString());
@@ -1103,6 +1132,8 @@ export default function CardapioPage() {
     setSelectedBarra(null);
     setSelectedMacaron(null);
     setSelectedBiscoitoFlorido(null);
+    setSelectedSimpleProduct(null);
+    setSelectedSimpleCategory(null);
     setSelectedBombom(bombom);
     setSelectedBombomModeId("unidades");
     setSelectedBombomFlavorId(BOMBOM_FLAVORS[0]?.id ?? "");
@@ -1119,6 +1150,8 @@ export default function CardapioPage() {
     setSelectedBarra(null);
     setSelectedMacaron(null);
     setSelectedBiscoitoFlorido(null);
+    setSelectedSimpleProduct(null);
+    setSelectedSimpleCategory(null);
     setSelectedCento(cento);
     setCentoQuantity(1);
     setCentoQuantityInput("1");
@@ -1135,6 +1168,8 @@ export default function CardapioPage() {
     setSelectedBarra(barra);
     setSelectedMacaron(null);
     setSelectedBiscoitoFlorido(null);
+    setSelectedSimpleProduct(null);
+    setSelectedSimpleCategory(null);
     setSelectedBarraSizeId(BARRAS_FLORIDAS_SIZES[0]?.id ?? "mini-30g");
     setSelectedBarraChocolateId(BARRAS_FLORIDAS_CHOCOLATES[0]?.id ?? "ao-leite");
     setBarraQuantity(1);
@@ -1149,6 +1184,8 @@ export default function CardapioPage() {
     setSelectedCento(null);
     setSelectedBarra(null);
     setSelectedBiscoitoFlorido(null);
+    setSelectedSimpleProduct(null);
+    setSelectedSimpleCategory(null);
     setSelectedMacaron(macaron);
     setSelectedMacaronFlavorId(MACARON_FLAVORS[0]?.id ?? "");
     setMacaronQuantity(10);
@@ -1163,6 +1200,8 @@ export default function CardapioPage() {
     setSelectedCento(null);
     setSelectedBarra(null);
     setSelectedMacaron(null);
+    setSelectedSimpleProduct(null);
+    setSelectedSimpleCategory(null);
     setSelectedBiscoitoFlorido(biscoito);
     setBiscoitoFloridoQuantity(1);
     setBiscoitoFloridoQuantityInput("1");
@@ -1177,12 +1216,33 @@ export default function CardapioPage() {
     setSelectedBarra(null);
     setSelectedMacaron(null);
     setSelectedBiscoitoFlorido(null);
+    setSelectedSimpleProduct(null);
+    setSelectedSimpleCategory(null);
     setSelectedKitProduct(kit);
     setKitCakeFlavorId(KIT_CAKE_FLAVORS[0].id);
     setKitCoveringId(KIT_COVERINGS[0].id);
     setKitDecorationIds([]);
     setKitDocinhoIds([]);
     setKitDocinhoError("");
+  };
+
+  const openSimpleModal = (
+    product: SimpleProduct,
+    category: "embalagens-macarons" | "torres-macarons"
+  ) => {
+    setSelectedBolo(null);
+    setSelectedDocinho(null);
+    setSelectedBombom(null);
+    setSelectedCento(null);
+    setSelectedBarra(null);
+    setSelectedMacaron(null);
+    setSelectedBiscoitoFlorido(null);
+    setSelectedKitProduct(null);
+    setSelectedSimpleProduct(product);
+    setSelectedSimpleCategory(category);
+    setSimpleQuantity(1);
+    setSimpleQuantityInput("1");
+    setSimpleQuantityError("");
   };
 
   const toggleDecoration = (id: string) => {
@@ -1261,6 +1321,19 @@ export default function CardapioPage() {
     return parsed;
   }, [biscoitoFloridoQuantityInput]);
 
+  const validateSimpleQuantity = useCallback(() => {
+    const parsed = Number.parseInt(simpleQuantityInput, 10);
+    if (Number.isNaN(parsed) || parsed < 1) {
+      setSimpleQuantity(1);
+      setSimpleQuantityInput("1");
+      setSimpleQuantityError("Quantidade mínima de 1 unidade.");
+      return 1;
+    }
+    setSimpleQuantity(parsed);
+    setSimpleQuantityError("");
+    return parsed;
+  }, [simpleQuantityInput]);
+
   const validateMacaronQuantity = useCallback(() => {
     const parsed = Number.parseInt(macaronQuantityInput, 10);
     if (Number.isNaN(parsed) || parsed < 10) {
@@ -1282,6 +1355,8 @@ export default function CardapioPage() {
     setSelectedBarra(null);
     setSelectedMacaron(null);
     setSelectedBiscoitoFlorido(null);
+    setSelectedSimpleProduct(null);
+    setSelectedSimpleCategory(null);
     setSelectedKitProduct(null);
     setQuantity(1);
     setQuantityInput("1");
@@ -1604,6 +1679,50 @@ export default function CardapioPage() {
     closeModal();
   };
 
+  const addSimpleToCart = () => {
+    if (!selectedSimpleProduct || !selectedSimpleCategory) return;
+    const safeQuantity = validateSimpleQuantity();
+    const lineTotal = selectedSimpleProduct.unitPrice * safeQuantity;
+    const categoryLabel =
+      selectedSimpleCategory === "embalagens-macarons"
+        ? "Embalagens para macarons"
+        : "Torres de macarons";
+
+    const newItem: CartItem = {
+      category: "simple",
+      productId: selectedSimpleProduct.id,
+      productName: selectedSimpleProduct.name,
+      basePrice: selectedSimpleProduct.unitPrice,
+      quantity: safeQuantity,
+      decorationIds: [selectedSimpleCategory],
+      decorationLabels: [categoryLabel],
+      decorationTotal: 0,
+      lineTotal,
+      detailLines: [`Categoria: ${categoryLabel}`]
+    };
+
+    setCart((prev) => {
+      const existingIndex = prev.findIndex(
+        (item) =>
+          item.productId === newItem.productId &&
+          item.decorationIds.join("|") === newItem.decorationIds.join("|")
+      );
+      if (existingIndex === -1) return [...prev, newItem];
+
+      const updated = [...prev];
+      const existing = updated[existingIndex];
+      const mergedQuantity = existing.quantity + newItem.quantity;
+      updated[existingIndex] = {
+        ...existing,
+        quantity: mergedQuantity,
+        lineTotal: existing.basePrice * mergedQuantity
+      };
+      return updated;
+    });
+
+    closeModal();
+  };
+
   const addKitToCart = () => {
     if (!selectedKitProduct) return;
     if (kitDocinhoIds.length !== 3) {
@@ -1721,28 +1840,37 @@ export default function CardapioPage() {
 
   return (
     <div className="container-pad py-12">
-    <header className="mb-8 text-center">
+    <header className="mb-8 min-h-[210px] text-center">
       <p className="text-xs font-semibold uppercase tracking-[0.35em] text-rose-500">Cardápio na palma da sua mão</p>
-      <h1 className="mt-3 font-serifDisplay text-5xl text-cocoa-900">{activeTabInfo.title}</h1>
+      <h1 className="mt-3 font-serifDisplay text-5xl text-cocoa-900">Cardápio</h1>
       <p className="mx-auto mt-3 max-w-2xl text-sm text-cocoa-700">
         Escolha seus produtos, adicione ao carrinho e finalize o pedido pelo WhatsApp.
       </p>
-      <p className="mx-auto mt-3 max-w-2xl text-lg text-cocoa-700">{activeTabInfo.description}</p>
+      <p className="mx-auto mt-3 max-w-2xl text-lg text-cocoa-700">
+        Doces artesanais para festas e eventos, com pedido rápido e finalização pelo WhatsApp.
+      </p>
     </header>
 
-  <nav className="mb-8 flex flex-nowrap gap-5 overflow-x-auto whitespace-nowrap text-lg !font-medium uppercase !tracking-tight md:flex-wrap md:justify-center md:gap-8 md:text-xl">
-      {categoryConfigs.map((tab) => (
-        <button
-          key={tab.id}
-          type="button"
-          onClick={() => setActiveTab(tab.id)}
-          className={`shrink-0 rounded-full px-6 py-3.5 transition ${activeTab === tab.id ? "bg-rose-100/70 text-cocoa-900" : "text-cocoa-600 hover:text-cocoa-900"}`}
-        >
-          {tab.label}
-        </button>
-      ))}
-      </nav>
-      <div className="mx-auto mt-4 mb-10 h-0.5 max-w-3xl rounded-full bg-gradient-to-r from-transparent via-rose-400/80 to-transparent" />
+  <div className="mb-10">
+    <div className="mx-auto mb-4 h-px max-w-3xl rounded-full bg-gradient-to-r from-transparent via-rose-400/80 to-transparent" />
+    <nav className="flex flex-nowrap items-center gap-5 overflow-x-auto whitespace-nowrap px-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:flex-wrap md:justify-center md:overflow-x-visible md:whitespace-normal md:px-0">
+        {categoryConfigs.map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            onClick={() => setActiveTab(tab.id)}
+            className={`shrink-0 border-b-2 pb-2 text-sm font-semibold uppercase tracking-[0.08em] transition md:text-base ${
+              activeTab === tab.id
+                ? "border-cocoa-900 text-cocoa-900"
+                : "border-transparent text-cocoa-600 hover:text-cocoa-900"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+    </nav>
+    <div className="mx-auto mt-4 h-px max-w-3xl rounded-full bg-gradient-to-r from-transparent via-rose-400/80 to-transparent" />
+  </div>
 
     {activeTab === "bolos" ? (
       <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -1980,13 +2108,18 @@ export default function CardapioPage() {
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {EMBALAGENS_MACARONS_PRODUCTS.map((item) => (
-            <div key={item.id} className="flex h-full w-full flex-col overflow-hidden rounded-lg bg-white/90 text-left shadow-panel">
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => openSimpleModal(item, "embalagens-macarons")}
+              className="group flex h-full w-full flex-col overflow-hidden rounded-lg bg-white/90 text-left shadow-panel transition duration-500 md:hover:-translate-y-1 md:hover:shadow-2xl"
+            >
               <div className="relative h-56 w-full overflow-hidden rounded-t-lg">
                 <Image
                   src={item.imageUrl}
                   alt={`Imagem da ${item.name}`}
                   fill
-                  className="object-cover"
+                  className="object-cover transition duration-500 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                 />
               </div>
@@ -1996,7 +2129,7 @@ export default function CardapioPage() {
                 <p className="mt-1 text-xs text-cocoa-500">*consultar valor do mini macaron</p>
                 <p className="mt-auto pt-4 text-lg font-semibold text-cocoa-900">{item.priceLabel}</p>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </section>
@@ -2009,14 +2142,7 @@ export default function CardapioPage() {
             <button
               key={item.id}
               type="button"
-              onClick={() => {
-                const message = `Olá! Tenho interesse em ${item.name}.`;
-                window.open(
-                  `https://wa.me/${brandSettings.whatsappNumber}?text=${encodeURIComponent(message)}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }}
+              onClick={() => openSimpleModal(item, "torres-macarons")}
               className="group flex h-full w-full flex-col overflow-hidden rounded-lg bg-white/90 text-left shadow-panel transition duration-500 md:hover:-translate-y-1 md:hover:shadow-2xl"
             >
               <div className="relative h-56 w-full overflow-hidden rounded-t-lg">
@@ -2035,9 +2161,6 @@ export default function CardapioPage() {
               </div>
             </button>
           ))}
-        </div>
-        <div className="rounded-lg bg-white/70 p-5 text-sm text-cocoa-700 shadow-panel">
-          <p>Caso haja devolução do suporte em perfeito estado, haverá estorno de R$90,00.</p>
         </div>
       </section>
     ) : null}
@@ -2802,6 +2925,69 @@ export default function CardapioPage() {
                 <button
                   type="button"
                   onClick={addBiscoitoFloridoToCart}
+                  className="inline-flex min-h-[48px] flex-[2] items-center justify-center rounded-lg bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-4 py-2 text-center text-sm font-semibold uppercase leading-tight tracking-[0.08em] text-white whitespace-normal sm:h-12 sm:py-0 sm:text-base sm:whitespace-nowrap sm:tracking-[0.12em] md:hover:from-cocoa-800 md:hover:to-cocoa-950"
+                >
+                  Adicionar ao carrinho
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {selectedSimpleProduct ? (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-cocoa-900/50 p-4">
+          <div className="w-full max-w-lg max-h-[95vh] rounded-lg bg-white p-6 sm:p-8 shadow-soft flex flex-col">
+            <div className="flex-1 overflow-y-auto pr-1">
+              <div className="relative mb-4 h-56 w-full overflow-hidden rounded-lg">
+                <Image
+                  src={selectedSimpleProduct.imageUrl}
+                  alt={`Imagem do ${selectedSimpleProduct.name}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 540px"
+                />
+              </div>
+              <h2 className="font-serifDisplay text-3xl text-cocoa-900">{selectedSimpleProduct.name}</h2>
+              <p className="mt-2 text-lg text-cocoa-700">{selectedSimpleProduct.description}</p>
+              <p className="mt-2 text-lg font-semibold text-cocoa-900">{selectedSimpleProduct.priceLabel}</p>
+              {selectedSimpleCategory === "torres-macarons" ? (
+                <p className="mt-2 text-sm text-cocoa-700">
+                  Caso haja devolução do suporte em perfeito estado, haverá estorno de R$90,00.
+                </p>
+              ) : null}
+
+              <div className="mt-4 space-y-3">
+                <label className="flex flex-col gap-1 text-base font-bold text-cocoa-700">
+                  Quantidade
+                  <input
+                    type="number"
+                    min={1}
+                    value={simpleQuantityInput}
+                    onChange={(event) => setSimpleQuantityInput(event.target.value)}
+                    onBlur={validateSimpleQuantity}
+                    className="h-14 py-2 ml-2 w-[calc(100%-0.5rem)] rounded-lg border border-rose-200 px-6 text-lg outline-none ring-cocoa-700/20 focus:ring-1"
+                  />
+                  {simpleQuantityError ? (
+                    <p className="mt-1 text-xs font-semibold text-rose-700">{simpleQuantityError}</p>
+                  ) : null}
+                </label>
+              </div>
+            </div>
+
+            <div className="pt-4">
+              <p className="text-lg font-semibold text-cocoa-900">Total: {formatCurrency(simpleTotal)}</p>
+              <div className="mt-4 flex flex-row gap-3">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="inline-flex h-12 flex-1 items-center justify-center rounded-lg border border-rose-200 px-4 text-base font-semibold uppercase tracking-[0.12em] text-cocoa-800 md:hover:bg-rose-50"
+                >
+                  Fechar
+                </button>
+                <button
+                  type="button"
+                  onClick={addSimpleToCart}
                   className="inline-flex min-h-[48px] flex-[2] items-center justify-center rounded-lg bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-4 py-2 text-center text-sm font-semibold uppercase leading-tight tracking-[0.08em] text-white whitespace-normal sm:h-12 sm:py-0 sm:text-base sm:whitespace-nowrap sm:tracking-[0.12em] md:hover:from-cocoa-800 md:hover:to-cocoa-950"
                 >
                   Adicionar ao carrinho
