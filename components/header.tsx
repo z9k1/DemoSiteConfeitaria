@@ -51,7 +51,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-20 border-b border-rose-100 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+      <div className="flex w-full items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3 text-sm font-semibold tracking-wide text-cocoa-700 sm:text-base">
           <Image src={assetPath("/gallery/logo.jpg")} alt="Logo Cristiane Santos Gastronomia" width={32} height={32} className="rounded-lg" />
           <span>{brandSettings.businessName}</span>

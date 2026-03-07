@@ -2310,8 +2310,8 @@ export default function CardapioPage() {
     ) : null}
 
       {isCartOpen ? (
-        <aside className="fixed inset-x-0 bottom-0 top-14 z-10 w-screen overflow-hidden bg-white/95 px-5 pb-5 shadow-soft backdrop-blur sm:px-6 sm:pb-6">
-          <div className="flex h-full flex-col">
+        <aside className="fixed inset-0 z-10 h-screen w-screen overflow-hidden bg-white/95 px-5 pb-5 shadow-soft backdrop-blur sm:px-6 sm:pb-6">
+          <div className="flex h-full flex-col pt-14">
             <div className="relative z-10 pt-3">
               <div className="flex items-baseline justify-between gap-3">
                 <h3 className="font-serifDisplay text-2xl text-cocoa-900">Resumo do pedido</h3>
