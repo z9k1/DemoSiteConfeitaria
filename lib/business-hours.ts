@@ -1,4 +1,4 @@
-const BUSINESS_TIME_ZONE = "America/Sao_Paulo";
+﻿const BUSINESS_TIME_ZONE = "America/Sao_Paulo";
 const OPEN_HOUR = 9;
 const CLOSE_HOUR = 18;
 const OPEN_DAYS = new Set([1, 2, 3, 4, 5]);
@@ -81,18 +81,6 @@ function addLocalDays(year: number, month: number, day: number, offset: number) 
   };
 }
 
-function formatDateTime(date: Date): string {
-  return new Intl.DateTimeFormat("pt-BR", {
-    timeZone: BUSINESS_TIME_ZONE,
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hourCycle: "h23"
-  }).format(date);
-}
-
 function formatOpenTimeLabel(opensAt: Date): string {
   const parts = getZonedDateParts(opensAt);
   // Prefer "9h" over "09h" for friendlier copy in UI.
@@ -115,15 +103,15 @@ function formatNextOpenShortLabel(opensAt: Date, now: Date): string {
   const weekdayShort: Record<number, string> = {
     0: "domingo",
     1: "segunda",
-    2: "terça",
+    2: "terÃ§a",
     3: "quarta",
     4: "quinta",
     5: "sexta",
-    6: "sábado"
+    6: "sÃ¡bado"
   };
 
-  const dayLabel = isSameDay ? "hoje" : isTomorrow ? "amanhã" : weekdayShort[openParts.weekday] ?? "amanhã";
-  return `Abre ${dayLabel} às ${formatOpenTimeLabel(opensAt)}`;
+  const dayLabel = isSameDay ? "hoje" : isTomorrow ? "amanhÃ£" : weekdayShort[openParts.weekday] ?? "amanhÃ£";
+  return `Abre ${dayLabel} Ã s ${formatOpenTimeLabel(opensAt)}`;
 }
 
 function getNextOpeningDate(date: Date): Date {
@@ -156,13 +144,6 @@ export function getBusinessHoursStatus(date = new Date()): BusinessHoursStatus {
 
   if (isOpen) {
     const closesAt = zonedLocalToDate(parts.year, parts.month, parts.day, CLOSE_HOUR, 0);
-    const nextOpen = getNextOpeningDate(new Date(closesAt.getTime() + 60000));
-    const closesInMs = Math.max(0, closesAt.getTime() - date.getTime());
-    const closesInMinutes = Math.ceil(closesInMs / 60000);
-    const closesHours = Math.floor(closesInMinutes / 60);
-    const closesMinutes = closesInMinutes % 60;
-    const countdownLabel =
-      closesHours > 0 ? `fecha em ${closesHours}h ${closesMinutes}min` : `fecha em ${closesMinutes}min`;
 
     return {
       isOpen: true,
@@ -170,9 +151,9 @@ export function getBusinessHoursStatus(date = new Date()): BusinessHoursStatus {
       closesAt,
       nextTransitionAt: closesAt,
       statusLabel: "Aberto agora",
-      detailLabel: "Recebemos pedidos em tempo real de segunda a sexta, das 9h às 18h.",
-      nextOpenLabel: `Se fechar agora, abre novamente em ${formatDateTime(nextOpen)}.`,
-      countdownLabel
+      detailLabel: "Recebemos pedidos de segunda a sexta das 9h às 18h.",
+      nextOpenLabel: "",
+      countdownLabel: ""
     };
   }
 
@@ -184,8 +165,10 @@ export function getBusinessHoursStatus(date = new Date()): BusinessHoursStatus {
     closesAt: null,
     nextTransitionAt: opensAt,
     statusLabel: "Fechado agora",
-    detailLabel: "Atendimento pelo Whatsapp disponível de segunda a sexta, das 9h às 18h",
+    detailLabel: "Atendimento pelo Whatsapp disponÃ­vel de segunda a sexta, das 9h Ã s 18h",
     nextOpenLabel: formatNextOpenShortLabel(opensAt, date),
     countdownLabel: ""
   };
 }
+
+

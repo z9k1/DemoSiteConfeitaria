@@ -33,10 +33,13 @@ type BombomProduct = {
   name: string;
   description: string;
   imageUrl: string;
+  modes?: BombomMode[];
+  flavors?: BombomFlavor[];
+  quantityHelperText?: string;
 };
 
 type BombomMode = {
-  id: "unidades" | "caixa2" | "caixa4";
+  id: string;
   label: string;
   price: number;
   minQty: number;
@@ -84,6 +87,9 @@ type MacaronProduct = {
   name: string;
   description: string;
   imageUrl: string;
+  minimumQuantity: number;
+  priceAdjustment: number;
+  priceLabel?: string;
 };
 
 type BiscoitoFloridoProduct = {
@@ -123,6 +129,8 @@ type SimpleProduct = {
   unitPrice: number;
   priceLabel: string;
   imageUrl: string;
+  flavorOptions?: string[];
+  minimumQuantity?: number;
 };
 
 type CartItem = {
@@ -190,9 +198,9 @@ const categoryConfigs = [
   },
   {
     id: "embalagens-macarons",
-    label: "Embalagens para macarons",
-    title: "Embalagens para macarons",
-    description: "Caixas e embalagens para presentear macarons.",
+    label: "Embalagens",
+    title: "Embalagens",
+    description: "Embalagens para presentes e lembranças, com pedido mínimo de 10 unidades.",
     isReady: true
   },
   {
@@ -364,7 +372,25 @@ const BOMBOM_PRODUCT: BombomProduct = {
   name: "Bombons personalizados",
   description:
     "Bombons finos e personalizados para eventos e presentes. Feitos com chocolate nobre e acabamento artístico.",
-  imageUrl: assetPath("/images/bolos/caixa-2-bombons-personalizados.jpeg")
+  imageUrl: assetPath("/images/bolos/caixa-2-bombons-personalizados.jpeg"),
+  quantityHelperText: "Mínimo de 35 unidades para encomenda solta ou 1 caixa por pedido."
+};
+
+const BOMBOM_SAKURA_PRODUCT: BombomProduct = {
+  id: "bombom-sakura",
+  name: "Bombom Sakura",
+  description: "Bombom em formato de sakura, com opções para presente e sabores delicados.",
+  imageUrl: assetPath("/images/bolos/bombom-sakura.jpeg"),
+  modes: [
+    { id: "saquinho", label: "Saquinho", price: 15, minQty: 1 },
+    { id: "caixinha", label: "Caixinha", price: 20, minQty: 1 }
+  ],
+  flavors: [
+    { id: "brigadeiro", label: "Brigadeiro" },
+    { id: "limao", label: "Limão" },
+    { id: "frutas-vermelhas", label: "Frutas vermelhas" }
+  ],
+  quantityHelperText: "Escolha o sabor e a apresentação desejada."
 };
 
 const BOMBOM_MODES: BombomMode[] = [
@@ -378,6 +404,8 @@ const BOMBOM_FLAVORS: BombomFlavor[] = [
   { id: "castanhas", label: "Castanhas" },
   { id: "raspas-limao", label: "Raspas de limão" }
 ];
+
+const BOMBOM_PRODUCTS: BombomProduct[] = [BOMBOM_PRODUCT, BOMBOM_SAKURA_PRODUCT];
 
 const CENTO_13G_PRODUCT: CentoProduct = {
   id: "cento-docinhos-13g",
@@ -530,6 +558,22 @@ const KIT_FESTA_50_PRODUCT: KitProduct = {
 
 const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
   {
+    id: "caixa-4-macarons-chandon",
+    name: "Caixa com Chandon e macarons",
+    description: "Acomoda 4 macarons médios + Chandon",
+    unitPrice: 100,
+    priceLabel: "R$ 100,00",
+    imageUrl: assetPath("/images/bolos/caixacomxande4macarons.jpeg")
+  },
+  {
+    id: "caixa-visor-7-champanhe",
+    name: "Caixa com 7 macarons e champanhe",
+    description: "Acomoda 7 macarons médios + champanhe à escolha",
+    unitPrice: 110,
+    priceLabel: "A partir de R$ 110,00",
+    imageUrl: assetPath("/images/bolos/caixa7macaronscomchampanheaescolha.jpeg")
+  },
+  {
     id: "caixa-acrilica-7x4",
     name: "Caixa acrílica (7cm x 4cm)",
     description: "Acomoda 4 mini macarons*",
@@ -543,7 +587,7 @@ const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
     description: "Acomoda 2 macarons médios",
     unitPrice: 18,
     priceLabel: "R$ 18,00",
-    imageUrl: assetPath("/images/bolos/macaronspers.jpeg")
+    imageUrl: assetPath("/images/bolos/caixaacrilica2macarons.jpeg")
   },
   {
     id: "caixa-visor-1",
@@ -551,7 +595,7 @@ const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
     description: "Acomoda 1 macaron médio",
     unitPrice: 10,
     priceLabel: "R$ 10,00",
-    imageUrl: assetPath("/images/bolos/macaronspers.jpeg")
+    imageUrl: assetPath("/images/bolos/caixade1macaron.jpeg")
   },
   {
     id: "caixa-visor-2",
@@ -559,7 +603,7 @@ const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
     description: "Acomoda 2 macarons médios",
     unitPrice: 18,
     priceLabel: "R$ 18,00",
-    imageUrl: assetPath("/images/bolos/macaronspers.jpeg")
+    imageUrl: assetPath("/images/bolos/caixa2macaronsminicomvisorjpeg.jpeg")
   },
   {
     id: "caixa-visor-3",
@@ -567,15 +611,7 @@ const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
     description: "Acomoda 3 macarons médios",
     unitPrice: 25,
     priceLabel: "R$ 25,00",
-    imageUrl: assetPath("/images/bolos/3macaronmediosemvisor.jpeg")
-  },
-  {
-    id: "caixa-visor-4",
-    name: "Caixa com visor",
-    description: "Acomoda 4 macarons médios",
-    unitPrice: 30,
-    priceLabel: "R$ 30,00",
-    imageUrl: assetPath("/images/bolos/caixacomxande4macarons.jpeg")
+    imageUrl: assetPath("/images/bolos/caixacomvisor3macaronsmedios.jpeg")
   },
   {
     id: "caixa-visor-6",
@@ -583,17 +619,72 @@ const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
     description: "Acomoda 6 macarons médios",
     unitPrice: 50,
     priceLabel: "R$ 50,00",
-    imageUrl: assetPath("/images/bolos/macaronspers.jpeg")
+    imageUrl: assetPath("/images/bolos/caixa6macarons-visor.jpeg")
   },
   {
-    id: "caixa-visor-7-champanhe",
-    name: "Caixa com visor",
-    description: "Acomoda 7 macarons médios + champanhe à escolha",
-    unitPrice: 110,
-    priceLabel: "A partir de R$ 110,00",
-    imageUrl: assetPath("/images/bolos/caixa7macaronscomchampanheaescolha.jpeg")
+    id: "caixa-docinho-1",
+    name: "Caixa com 1 docinho + fita e tag",
+    description: "Embalagem individual para presente.",
+    unitPrice: 5,
+    priceLabel: "R$ 5,00",
+    imageUrl: assetPath("/images/bolos/caixadocinho1-fita-tag-5.jpeg")
+  },
+  {
+    id: "caixa-4-docinhos-personalizacao",
+    name: "Caixa com 4 docinhos com personalização",
+    description: "Embalagem com 4 docinhos personalizados.",
+    unitPrice: 20,
+    priceLabel: "R$ 20,00",
+    imageUrl: assetPath("/images/bolos/caixa-4-docinhos-personalizacao-20.jpeg")
   }
 ];
+
+const MINI_MACARON_FLAVOR_OPTIONS = [
+  "Brigadeiro",
+  "Beijinho",
+  "Casadinho",
+  "Surpresa de uva",
+  "Damasco",
+  "Ninho com Nutella"
+];
+
+const DOCES_FINOS_SIMPLE_PRODUCTS: SimpleProduct[] = [
+  {
+    id: "palha-italiana",
+    name: "Palha italiana",
+    description: "Doce artesanal em versão individual.",
+    unitPrice: 10,
+    priceLabel: "R$ 10,00",
+    imageUrl: assetPath("/images/bolos/palhaitaliana10.jpeg")
+  },
+  {
+    id: "cupcake-personalizado",
+    name: "Cupcake personalizado",
+    description: "Cupcake individual na caixinha, ideal para presentes e lembranças.",
+    unitPrice: 13,
+    priceLabel: "R$ 13,00",
+    imageUrl: assetPath("/images/bolos/cupcakepersonalizado13.jpeg")
+  },
+  {
+    id: "caixa-1-bombom-1-mini-macaron",
+    name: "Caixa com 1 bombom florido e 1 mini macaron",
+    description: "Acompanha fita e tag.",
+    unitPrice: 10,
+    priceLabel: "R$ 10,00",
+    imageUrl: assetPath("/images/bolos/caixa-1-bombom-1-mini-macaron-10.jpeg"),
+    flavorOptions: MINI_MACARON_FLAVOR_OPTIONS
+  },
+  {
+    id: "caixa-docinhos-floridos",
+    name: "Caixa com 4 docinhos floridos",
+    description: "Caixa presenteável com 4 docinhos decorados.",
+    unitPrice: 18,
+    priceLabel: "R$ 18,00",
+    imageUrl: assetPath("/images/bolos/caixa-docinhos-flores-18.jpeg")
+  }
+];
+
+const MACARONS_SIMPLE_PRODUCTS: SimpleProduct[] = [];
 
 const TORRES_MACARONS_PRODUCTS: SimpleProduct[] = [
   {
@@ -733,19 +824,56 @@ const MACARON_PRODUCT: MacaronProduct = {
   name: "Macarons",
   description:
     "Macarons artesanais por unidade.\nPedido mínimo: 10 unidades\n10 a 19 unidades: até 2 sabores e 1 cor\nAcima de 20 unidades: até 4 sabores e 2 cores.",
-  imageUrl: assetPath("/images/bolos/macaronspers.jpeg")
+  imageUrl: assetPath("/images/bolos/macaronspers.jpeg"),
+  minimumQuantity: 10,
+  priceAdjustment: 0
 };
 
+const MACARONS_PERSONALIZADOS_PRODUCT: MacaronProduct = {
+  id: "macarons-personalizados",
+  name: "Macarons personalizados",
+  description:
+    "Macarons personalizados com adicional de R$ 2,00 por unidade. Pedido mínimo: 10 unidades.",
+  imageUrl: assetPath("/images/bolos/macaronspers.jpeg"),
+  minimumQuantity: 10,
+  priceAdjustment: 2
+};
+
+const MACARON_SAQUINHO_PRODUCT: MacaronProduct = {
+  id: "macaron-saquinho-adesivo",
+  name: "Macaron no saquinho com adesivo",
+  description: "Macaron individual com apresentação em saquinho e adesivo. Adicional de R$ 1,00 sobre o sabor.",
+  imageUrl: assetPath("/images/bolos/macaron-saquinho-adesivo.jpeg"),
+  minimumQuantity: 1,
+  priceAdjustment: 1
+};
+
+const MACARON_FITA_TAG_PRODUCT: MacaronProduct = {
+  id: "macaron-fita-tag",
+  name: "1 macaron com fita e tag",
+  description: "Macaron individual com fita e tag. Adicional de R$ 2,00 sobre o sabor escolhido.",
+  imageUrl: assetPath("/images/bolos/macaron-fita-tag.jpeg"),
+  minimumQuantity: 1,
+  priceAdjustment: 2
+};
+
+const MACARON_PRODUCTS: MacaronProduct[] = [
+  MACARON_PRODUCT,
+  MACARONS_PERSONALIZADOS_PRODUCT,
+  MACARON_SAQUINHO_PRODUCT,
+  MACARON_FITA_TAG_PRODUCT
+];
+
 const MACARON_FLAVORS: MacaronFlavor[] = [
-  { id: "chocolate-branco", label: "Chocolate branco", price: 7 },
-  { id: "brigadeiro-meio-amargo", label: "Brigadeiro meio amargo", price: 7 },
-  { id: "casadinho", label: "Casadinho", price: 7 },
-  { id: "pacoca", label: "Paçoca", price: 7 },
-  { id: "baunilha", label: "Baunilha", price: 7.5 },
-  { id: "frutas-vermelhas", label: "Frutas vermelhas", price: 7.5 },
-  { id: "maracuja", label: "Maracujá", price: 7 },
-  { id: "limao-siciliano", label: "Limão siciliano", price: 7 },
-  { id: "ninho-nutella", label: "Ninho com Nutella", price: 7 }
+  { id: "chocolate-branco", label: "Chocolate branco", price: 8 },
+  { id: "brigadeiro-meio-amargo", label: "Brigadeiro meio amargo", price: 8 },
+  { id: "casadinho", label: "Casadinho", price: 8 },
+  { id: "pacoca", label: "Paçoca", price: 8 },
+  { id: "baunilha", label: "Baunilha", price: 8.5 },
+  { id: "frutas-vermelhas", label: "Frutas vermelhas", price: 8.5 },
+  { id: "maracuja", label: "Maracujá", price: 8 },
+  { id: "limao-siciliano", label: "Limão siciliano", price: 8 },
+  { id: "ninho-nutella", label: "Ninho com Nutella", price: 8 }
 ];
 
 function formatCurrency(value: number): string {
@@ -794,7 +922,10 @@ export default function CardapioPage() {
   const [selectedMacaron, setSelectedMacaron] = useState<MacaronProduct | null>(null);
   const [selectedBiscoitoFlorido, setSelectedBiscoitoFlorido] = useState<BiscoitoFloridoProduct | null>(null);
   const [selectedSimpleProduct, setSelectedSimpleProduct] = useState<SimpleProduct | null>(null);
-  const [selectedSimpleCategory, setSelectedSimpleCategory] = useState<"embalagens-macarons" | "torres-macarons" | null>(null);
+  const [selectedSimpleCategory, setSelectedSimpleCategory] = useState<
+    "embalagens-macarons" | "torres-macarons" | "docinhos" | "macarons" | null
+  >(null);
+  const [selectedSimpleFlavor, setSelectedSimpleFlavor] = useState("");
   const [selectedKitProduct, setSelectedKitProduct] = useState<KitProduct | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [quantityInput, setQuantityInput] = useState("1");
@@ -856,10 +987,6 @@ export default function CardapioPage() {
     () => Math.min(...DOCINHO_FLAVORS.map((flavor) => flavor.price)),
     []
   );
-  const minBombomPrice = useMemo(
-    () => Math.min(...BOMBOM_MODES.map((mode) => mode.price)),
-    []
-  );
   const minBarraPrice = useMemo(
     () => Math.min(...BARRAS_FLORIDAS_SIZES.map((size) => size.price)),
     []
@@ -868,6 +995,8 @@ export default function CardapioPage() {
     () => Math.min(...MACARON_FLAVORS.map((flavor) => flavor.price)),
     []
   );
+  const activeBombomModes = selectedBombom?.modes ?? BOMBOM_MODES;
+  const activeBombomFlavors = selectedBombom?.flavors ?? BOMBOM_FLAVORS;
 
   useEffect(() => {
     const raw = localStorage.getItem(CART_STORAGE_KEY);
@@ -991,13 +1120,13 @@ export default function CardapioPage() {
   );
 
   const selectedBombomMode = useMemo(
-    () => BOMBOM_MODES.find((mode) => mode.id === selectedBombomModeId) ?? BOMBOM_MODES[0],
-    [selectedBombomModeId]
+    () => activeBombomModes.find((mode) => mode.id === selectedBombomModeId) ?? activeBombomModes[0],
+    [activeBombomModes, selectedBombomModeId]
   );
 
   const selectedBombomFlavor = useMemo(
-    () => BOMBOM_FLAVORS.find((flavor) => flavor.id === selectedBombomFlavorId) ?? BOMBOM_FLAVORS[0],
-    [selectedBombomFlavorId]
+    () => activeBombomFlavors.find((flavor) => flavor.id === selectedBombomFlavorId) ?? activeBombomFlavors[0],
+    [activeBombomFlavors, selectedBombomFlavorId]
   );
 
   const docinhoTotal = useMemo(() => {
@@ -1041,9 +1170,9 @@ export default function CardapioPage() {
   }, [selectedBarraSize, barraQuantity]);
 
   const macaronTotal = useMemo(() => {
-    if (!selectedMacaronFlavor) return 0;
-    return selectedMacaronFlavor.price * macaronQuantity;
-  }, [selectedMacaronFlavor, macaronQuantity]);
+    if (!selectedMacaronFlavor || !selectedMacaron) return 0;
+    return (selectedMacaronFlavor.price + selectedMacaron.priceAdjustment) * macaronQuantity;
+  }, [selectedMacaron, selectedMacaronFlavor, macaronQuantity]);
 
   const biscoitoFloridoTotal = useMemo(() => {
     if (!selectedBiscoitoFlorido) return 0;
@@ -1192,10 +1321,12 @@ export default function CardapioPage() {
     setSelectedSimpleProduct(null);
     setSelectedSimpleCategory(null);
     setSelectedBombom(bombom);
-    setSelectedBombomModeId("unidades");
-    setSelectedBombomFlavorId(BOMBOM_FLAVORS[0]?.id ?? "");
-    setBombomQuantity(BOMBOM_MODES[0]?.minQty ?? 35);
-    setBombomQuantityInput((BOMBOM_MODES[0]?.minQty ?? 35).toString());
+    const firstMode = bombom.modes?.[0] ?? BOMBOM_MODES[0];
+    const firstFlavor = bombom.flavors?.[0] ?? BOMBOM_FLAVORS[0];
+    setSelectedBombomModeId(firstMode?.id ?? "unidades");
+    setSelectedBombomFlavorId(firstFlavor?.id ?? "");
+    setBombomQuantity(firstMode?.minQty ?? 35);
+    setBombomQuantityInput((firstMode?.minQty ?? 35).toString());
     setBombomQuantityError("");
     setBombomTheme("");
   };
@@ -1245,8 +1376,8 @@ export default function CardapioPage() {
     setSelectedSimpleCategory(null);
     setSelectedMacaron(macaron);
     setSelectedMacaronFlavorId(MACARON_FLAVORS[0]?.id ?? "");
-    setMacaronQuantity(10);
-    setMacaronQuantityInput("10");
+    setMacaronQuantity(macaron.minimumQuantity);
+    setMacaronQuantityInput(macaron.minimumQuantity.toString());
     setMacaronQuantityError("");
   };
 
@@ -1287,7 +1418,7 @@ export default function CardapioPage() {
 
   const openSimpleModal = (
     product: SimpleProduct,
-    category: "embalagens-macarons" | "torres-macarons"
+    category: "embalagens-macarons" | "torres-macarons" | "docinhos" | "macarons"
   ) => {
     setSelectedBolo(null);
     setSelectedDocinho(null);
@@ -1299,9 +1430,11 @@ export default function CardapioPage() {
     setSelectedKitProduct(null);
     setSelectedSimpleProduct(product);
     setSelectedSimpleCategory(category);
-    setSimpleQuantity(1);
-    setSimpleQuantityInput("1");
+    const minQuantity = category === "embalagens-macarons" ? 10 : (product.minimumQuantity ?? 1);
+    setSimpleQuantity(minQuantity);
+    setSimpleQuantityInput(minQuantity.toString());
     setSimpleQuantityError("");
+    setSelectedSimpleFlavor(product.flavorOptions?.[0] ?? "");
   };
 
   const toggleDecoration = (id: string) => {
@@ -1386,30 +1519,32 @@ export default function CardapioPage() {
   }, [biscoitoFloridoQuantityInput]);
 
   const validateSimpleQuantity = useCallback(() => {
+    const minimumQuantity = selectedSimpleCategory === "embalagens-macarons" ? 10 : (selectedSimpleProduct?.minimumQuantity ?? 1);
     const parsed = Number.parseInt(simpleQuantityInput, 10);
-    if (Number.isNaN(parsed) || parsed < 1) {
-      setSimpleQuantity(1);
-      setSimpleQuantityInput("1");
-      setSimpleQuantityError("Quantidade mínima de 1 unidade.");
-      return 1;
+    if (Number.isNaN(parsed) || parsed < minimumQuantity) {
+      setSimpleQuantity(minimumQuantity);
+      setSimpleQuantityInput(minimumQuantity.toString());
+      setSimpleQuantityError(`Quantidade mínima de ${minimumQuantity} unidade${minimumQuantity > 1 ? "s" : ""}.`);
+      return minimumQuantity;
     }
     setSimpleQuantity(parsed);
     setSimpleQuantityError("");
     return parsed;
-  }, [simpleQuantityInput]);
+  }, [selectedSimpleCategory, selectedSimpleProduct, simpleQuantityInput]);
 
   const validateMacaronQuantity = useCallback(() => {
+    const minimumQuantity = selectedMacaron?.minimumQuantity ?? 10;
     const parsed = Number.parseInt(macaronQuantityInput, 10);
-    if (Number.isNaN(parsed) || parsed < 10) {
-      setMacaronQuantity(10);
-      setMacaronQuantityInput("10");
-      setMacaronQuantityError("Quantidade minima de 10 unidades.");
-      return 10;
+    if (Number.isNaN(parsed) || parsed < minimumQuantity) {
+      setMacaronQuantity(minimumQuantity);
+      setMacaronQuantityInput(minimumQuantity.toString());
+      setMacaronQuantityError(`Quantidade minima de ${minimumQuantity} unidade${minimumQuantity > 1 ? "s" : ""}.`);
+      return minimumQuantity;
     }
     setMacaronQuantity(parsed);
     setMacaronQuantityError("");
     return parsed;
-  }, [macaronQuantityInput]);
+  }, [macaronQuantityInput, selectedMacaron]);
 
   const closeModal = () => {
     setSelectedBolo(null);
@@ -1422,6 +1557,7 @@ export default function CardapioPage() {
     setSelectedSimpleProduct(null);
     setSelectedSimpleCategory(null);
     setSelectedKitProduct(null);
+    setSelectedSimpleFlavor("");
     setQuantity(1);
     setQuantityInput("1");
     setTopoChocolateMessage("");
@@ -1704,18 +1840,23 @@ export default function CardapioPage() {
   const addMacaronToCart = () => {
     if (!selectedMacaron || !selectedMacaronFlavor) return;
     const safeQuantity = validateMacaronQuantity();
-    const lineTotal = selectedMacaronFlavor.price * safeQuantity;
+    const unitPrice = selectedMacaronFlavor.price + selectedMacaron.priceAdjustment;
+    const lineTotal = unitPrice * safeQuantity;
+    const detailLines = [`Sabor: ${selectedMacaronFlavor.label}`];
+    if (selectedMacaron.priceAdjustment > 0) {
+      detailLines.push(`Apresentação/personalização: + ${formatCurrency(selectedMacaron.priceAdjustment)} por unidade`);
+    }
     const newItem: CartItem = {
       category: "macaron",
       productId: selectedMacaron.id,
       productName: selectedMacaron.name,
-      basePrice: selectedMacaronFlavor.price,
+      basePrice: unitPrice,
       quantity: safeQuantity,
       decorationIds: [selectedMacaronFlavor.id],
       decorationLabels: [selectedMacaronFlavor.label],
       decorationTotal: 0,
       lineTotal,
-      detailLines: [`Sabor: ${selectedMacaronFlavor.label}`]
+      detailLines
     };
 
     setCart((prev) => {
@@ -1783,11 +1924,23 @@ export default function CardapioPage() {
   const addSimpleToCart = () => {
     if (!selectedSimpleProduct || !selectedSimpleCategory) return;
     const safeQuantity = validateSimpleQuantity();
+    if (selectedSimpleProduct.flavorOptions?.length && !selectedSimpleFlavor) {
+      setSimpleQuantityError("Selecione um sabor para continuar.");
+      return;
+    }
     const lineTotal = selectedSimpleProduct.unitPrice * safeQuantity;
     const categoryLabel =
       selectedSimpleCategory === "embalagens-macarons"
-        ? "Embalagens para macarons"
-        : "Torres de macarons";
+        ? "Embalagens"
+        : selectedSimpleCategory === "torres-macarons"
+          ? "Torres de macarons"
+          : selectedSimpleCategory === "docinhos"
+            ? "Doces finos"
+            : "Macarons";
+    const detailLines = [`Categoria: ${categoryLabel}`];
+    if (selectedSimpleFlavor) {
+      detailLines.push(`Sabor: ${selectedSimpleFlavor}`);
+    }
 
     const newItem: CartItem = {
       category: "simple",
@@ -1795,11 +1948,11 @@ export default function CardapioPage() {
       productName: selectedSimpleProduct.name,
       basePrice: selectedSimpleProduct.unitPrice,
       quantity: safeQuantity,
-      decorationIds: [selectedSimpleCategory],
-      decorationLabels: [categoryLabel],
+      decorationIds: [selectedSimpleCategory, selectedSimpleFlavor].filter(Boolean),
+      decorationLabels: [categoryLabel, selectedSimpleFlavor].filter(Boolean),
       decorationTotal: 0,
       lineTotal,
-      detailLines: [`Categoria: ${categoryLabel}`]
+      detailLines
     };
 
     setCart((prev) => {
@@ -1937,9 +2090,7 @@ export default function CardapioPage() {
         const itemName =
           item.category === "bolo"
             ? `Bolo ${item.productName}`
-            : item.category === "macaron"
-              ? "Macarons"
-              : item.productName;
+            : item.productName;
         const quantityLabel = item.category === "bolo" ? `${item.quantity} kg` : `${item.quantity}x`;
         const optionLines = item.detailLines.filter((line) => !line.toLowerCase().startsWith("quantidade:"));
         if (item.category === "bombom" && item.bombomTheme) {
@@ -2127,67 +2278,99 @@ export default function CardapioPage() {
             </div>
           </div>
         </button>
-        <button
-          type="button"
-          onClick={() => openBombomModal(BOMBOM_PRODUCT)}
-          className={productCardClass}
-        >
-          <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
-            <Image
-              src={BOMBOM_PRODUCT.imageUrl}
-              alt={`Imagem do ${BOMBOM_PRODUCT.name}`}
-              fill
-              className={productImageClass}
-              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-            />
-          </div>
-          <div className="flex flex-1 flex-col p-5">
-            <h2 className="font-serifDisplay text-2xl text-cocoa-900">{BOMBOM_PRODUCT.name}</h2>
-            <p className="mt-2 text-lg text-cocoa-700">{BOMBOM_PRODUCT.description}</p>
-            <div className={productMetaClass}>
-              <p className="text-lg font-semibold text-cocoa-900">
-                A partir de {formatCurrency(minBombomPrice)} / unidade
-              </p>
-              <p className={productCtaClass}>
-                Ver detalhes {"\u2192"}
-              </p>
+        {BOMBOM_PRODUCTS.map((bombom) => (
+          <button
+            key={bombom.id}
+            type="button"
+            onClick={() => openBombomModal(bombom)}
+            className={productCardClass}
+          >
+            <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
+              <Image
+                src={bombom.imageUrl}
+                alt={`Imagem do ${bombom.name}`}
+                fill
+                className={productImageClass}
+                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+              />
             </div>
-          </div>
-        </button>
+            <div className="flex flex-1 flex-col p-5">
+              <h2 className="font-serifDisplay text-2xl text-cocoa-900">{bombom.name}</h2>
+              <p className="mt-2 text-lg text-cocoa-700">{bombom.description}</p>
+              <div className={productMetaClass}>
+                <p className="text-lg font-semibold text-cocoa-900">
+                  A partir de {formatCurrency((bombom.modes?.[0] ?? BOMBOM_MODES[0]).price)}
+                </p>
+                <p className={productCtaClass}>
+                  Ver detalhes {"\u2192"}
+                </p>
+              </div>
+            </div>
+          </button>
+        ))}
+        {DOCES_FINOS_SIMPLE_PRODUCTS.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => openSimpleModal(item, "docinhos")}
+            className={productCardClass}
+          >
+            <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
+              <Image
+                src={item.imageUrl}
+                alt={`Imagem do ${item.name}`}
+                fill
+                className={productImageClass}
+                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+              />
+            </div>
+            <div className="flex flex-1 flex-col p-5">
+              <h2 className="font-serifDisplay text-2xl text-cocoa-900">{item.name}</h2>
+              <p className="mt-2 text-lg text-cocoa-700">{item.description}</p>
+              <div className={productMetaClass}>
+                <p className="text-lg font-semibold text-cocoa-900">{item.priceLabel}</p>
+                <p className={productCtaClass}>
+                  Ver detalhes {"\u2192"}
+                </p>
+              </div>
+            </div>
+          </button>
+        ))}
       </section>
     ) : null}
 
     {activeTab === "macarons" ? (
       <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <button
-          type="button"
-          onClick={() => openMacaronModal(MACARON_PRODUCT)}
-          className={productCardClass}
-        >
-          <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
-            <Image
-              src={MACARON_PRODUCT.imageUrl}
-              alt={`Imagem do ${MACARON_PRODUCT.name}`}
-              fill
-              className={productImageClass}
-              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-            />
-          </div>
-          <div className="flex flex-1 flex-col p-5">
-            <h2 className="font-serifDisplay text-2xl text-cocoa-900">{MACARON_PRODUCT.name}</h2>
-            <p className="mt-2 whitespace-pre-line text-lg text-cocoa-700">
-              {MACARON_PRODUCT.description}
-            </p>
-            <div className={productMetaClass}>
-              <p className="text-lg font-semibold text-cocoa-900">
-                A partir de {formatCurrency(minMacaronPrice)} / unidade
-              </p>
-              <p className={productCtaClass}>
-                Ver detalhes {"\u2192"}
-              </p>
+        {MACARON_PRODUCTS.map((product) => (
+          <button
+            key={product.id}
+            type="button"
+            onClick={() => openMacaronModal(product)}
+            className={productCardClass}
+          >
+            <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
+              <Image
+                src={product.imageUrl}
+                alt={`Imagem do ${product.name}`}
+                fill
+                className={productImageClass}
+                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+              />
             </div>
-          </div>
-        </button>
+            <div className="flex flex-1 flex-col p-5">
+              <h2 className="font-serifDisplay text-2xl text-cocoa-900">{product.name}</h2>
+              <p className="mt-2 whitespace-pre-line text-lg text-cocoa-700">{product.description}</p>
+              <div className={productMetaClass}>
+                <p className="text-lg font-semibold text-cocoa-900">
+                  A partir de {formatCurrency(minMacaronPrice + product.priceAdjustment)} / unidade
+                </p>
+                <p className={productCtaClass}>
+                  Ver detalhes {"\u2192"}
+                </p>
+              </div>
+            </div>
+          </button>
+        ))}
         <button
           type="button"
           onClick={() => openCentoModal(CENTO_MACARONS_MINI_PRODUCT)}
@@ -2216,6 +2399,34 @@ export default function CardapioPage() {
             </div>
           </div>
         </button>
+        {MACARONS_SIMPLE_PRODUCTS.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => openSimpleModal(item, "macarons")}
+            className={productCardClass}
+          >
+            <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
+              <Image
+                src={item.imageUrl}
+                alt={`Imagem do ${item.name}`}
+                fill
+                className={productImageClass}
+                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+              />
+            </div>
+            <div className="flex flex-1 flex-col p-5">
+              <h2 className="font-serifDisplay text-2xl text-cocoa-900">{item.name}</h2>
+              <p className="mt-2 text-lg text-cocoa-700">{item.description}</p>
+              <div className={productMetaClass}>
+                <p className="text-lg font-semibold text-cocoa-900">{item.priceLabel}</p>
+                <p className={productCtaClass}>
+                  Ver detalhes {"\u2192"}
+                </p>
+              </div>
+            </div>
+          </button>
+        ))}
       </section>
     ) : null}
 
@@ -2283,6 +2494,7 @@ export default function CardapioPage() {
 
     {activeTab === "embalagens-macarons" ? (
       <section className="space-y-6">
+        <p className="text-sm text-cocoa-600">Pedido mínimo de 10 unidades para os produtos da categoria Embalagens.</p>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {EMBALAGENS_MACARONS_PRODUCTS.map((item) => (
             <button
@@ -2456,11 +2668,11 @@ export default function CardapioPage() {
                                 <p className="text-sm font-semibold text-cocoa-900">{`Bolo ${item.productName}`}</p>
                                 <p className="mt-0.5 text-xs font-semibold text-cocoa-700">{`${item.quantity} kg`}</p>
                               </div>
-                            ) : (
-                              <p className="text-sm font-semibold text-cocoa-900">
-                                {`${item.quantity}x ${item.category === "macaron" ? "Macarons" : item.productName}`}
-                              </p>
-                            )}
+                      ) : (
+                        <p className="text-sm font-semibold text-cocoa-900">
+                          {`${item.quantity}x ${item.productName}`}
+                        </p>
+                      )}
                             {item.detailLines.map((line) => (
                               <p key={line} className="mt-1 text-xs text-cocoa-700">
                                 {line}
@@ -2743,7 +2955,7 @@ export default function CardapioPage() {
                 <div className="text-base font-bold text-cocoa-700">
                   Modalidade de compra
                   <div className="mt-3 space-y-2">
-                    {BOMBOM_MODES.map((mode) => (
+                    {activeBombomModes.map((mode) => (
                       <label key={mode.id} className="option-row flex items-start gap-3 text-sm font-normal text-cocoa-700">
                         <input
                           type="radio"
@@ -2783,9 +2995,10 @@ export default function CardapioPage() {
                     <p className="mt-1 text-xs font-semibold text-rose-700">{bombomQuantityError}</p>
                   ) : (
                     <p className="mt-1 text-xs font-normal text-cocoa-600">
-                      {selectedBombomMode.id === "unidades"
-                        ? "Mínimo de 35 unidades para encomenda solta."
-                        : "Mínimo de 1 caixa por pedido."}
+                      {selectedBombom.quantityHelperText ??
+                        (selectedBombomMode.id === "unidades"
+                          ? "Mínimo de 35 unidades para encomenda solta."
+                          : "Mínimo de 1 caixa por pedido.")}
                     </p>
                   )}
                 </label>
@@ -2793,7 +3006,7 @@ export default function CardapioPage() {
                 <div className="text-base font-bold text-cocoa-700">
                   Seleção de sabor
                   <div className="mt-3 space-y-2">
-                    {BOMBOM_FLAVORS.map((flavor) => (
+                    {activeBombomFlavors.map((flavor) => (
                       <label key={flavor.id} className="option-row flex items-start gap-3 text-sm font-normal text-cocoa-700">
                         <input
                           type="radio"
@@ -2808,21 +3021,25 @@ export default function CardapioPage() {
                   </div>
                 </div>
 
-                <label className="block text-base font-bold text-cocoa-700">
-                  Tema da personalização
-                  <textarea
-                    value={bombomTheme}
-                    onChange={(event) => setBombomTheme(event.target.value)}
-                    placeholder="Descreva o tema para personalização"
-                    className="mt-1 min-h-[96px] w-[calc(100%-0.5rem)] ml-2 rounded-lg border border-rose-200 px-6 py-3 text-base outline-none ring-cocoa-700/30 focus:ring resize-none"
-                  />
-                </label>
+                {selectedBombom.id === BOMBOM_PRODUCT.id ? (
+                  <label className="block text-base font-bold text-cocoa-700">
+                    Tema da personalização
+                    <textarea
+                      value={bombomTheme}
+                      onChange={(event) => setBombomTheme(event.target.value)}
+                      placeholder="Descreva o tema para personalização"
+                      className="mt-1 min-h-[96px] w-[calc(100%-0.5rem)] ml-2 rounded-lg border border-rose-200 px-6 py-3 text-base outline-none ring-cocoa-700/30 focus:ring resize-none"
+                    />
+                  </label>
+                ) : null}
               </div>
             </div>
 
             <div className={modalFooterClass}>
               <p className="text-2xl font-bold tracking-tight text-cocoa-900 sm:text-[1.75rem]">Total: {formatCurrency(bombomTotal)}</p>
-              <p className="mt-1 text-xs text-cocoa-600">Consulte valores para quantidades maiores</p>
+              {selectedBombom.id === BOMBOM_PRODUCT.id ? (
+                <p className="mt-1 text-xs text-cocoa-600">Consulte valores para quantidades maiores</p>
+              ) : null}
               <div className="mt-4 flex flex-row gap-3">
                 <button
                   type="button"
@@ -2961,10 +3178,14 @@ export default function CardapioPage() {
               </div>
               <h2 className="font-serifDisplay text-3xl text-cocoa-900">{selectedMacaron.name}</h2>
               <div className="mt-3 rounded-lg bg-rose-50/70 px-4 py-3 text-sm text-cocoa-700 space-y-1">
-                <p className="font-semibold text-cocoa-900">Macarons artesanais por unidade.</p>
-                <p>Pedido mínimo: 10 unidades</p>
-                <p>10 a 19 unidades: até 2 sabores e 1 cor</p>
-                <p>Acima de 20 unidades: até 4 sabores e 2 cores.</p>
+                <p className="font-semibold text-cocoa-900">{selectedMacaron.description.split("\n")[0]}</p>
+                <p>Pedido mínimo: {selectedMacaron.minimumQuantity} unidade{selectedMacaron.minimumQuantity > 1 ? "s" : ""}</p>
+                {selectedMacaron.id === MACARON_PRODUCT.id || selectedMacaron.id === MACARONS_PERSONALIZADOS_PRODUCT.id ? (
+                  <>
+                    <p>10 a 19 unidades: até 2 sabores e 1 cor</p>
+                    <p>Acima de 20 unidades: até 4 sabores e 2 cores.</p>
+                  </>
+                ) : null}
               </div>
 
               <div className="mt-4 space-y-3">
@@ -3000,7 +3221,9 @@ export default function CardapioPage() {
                         />
                         <span className="flex flex-col">
                           <span className="text-sm font-semibold text-cocoa-800">{flavor.label}</span>
-                          <span className="text-xs text-cocoa-600">{formatCurrency(flavor.price)} / unidade</span>
+                          <span className="text-xs text-cocoa-600">
+                            {formatCurrency(flavor.price + selectedMacaron.priceAdjustment)} / unidade
+                          </span>
                         </span>
                       </label>
                     ))}
@@ -3219,15 +3442,8 @@ export default function CardapioPage() {
               {selectedSimpleCategory === "embalagens-macarons" ? (
                 <div className="mt-3 rounded-lg bg-rose-50/35 p-4 text-sm text-cocoa-700">
                   <p className="font-semibold text-cocoa-900">Informações importantes</p>
-                  <p className="mt-2 text-sm">
-                    Presenteie seus funcionários ou componha a caixa de convite de padrinhos.
-                  </p>
-                  <p className="mt-1 text-sm text-cocoa-700">
-                    Para caixas de até 4 macarons, o pedido mínimo é de 10 caixinhas.
-                  </p>
-                  <p className="mt-1 text-sm text-cocoa-700">
-                    Valores com TAG e fita inclusos.
-                  </p>
+                  <p className="mt-2 text-sm">Pedido mínimo de 10 unidades por produto.</p>
+                  <p className="mt-1 text-sm text-cocoa-700">Valores com TAG e fita inclusos quando indicado no item.</p>
                 </div>
               ) : null}
               {selectedSimpleCategory === "torres-macarons" ? (
@@ -3241,7 +3457,7 @@ export default function CardapioPage() {
                   Quantidade
                   <input
                     type="number"
-                    min={1}
+                    min={selectedSimpleCategory === "embalagens-macarons" ? 10 : (selectedSimpleProduct.minimumQuantity ?? 1)}
                     value={simpleQuantityInput}
                     onChange={(event) => setSimpleQuantityInput(event.target.value)}
                     onBlur={validateSimpleQuantity}
@@ -3251,6 +3467,28 @@ export default function CardapioPage() {
                     <p className="mt-1 text-xs font-semibold text-rose-700">{simpleQuantityError}</p>
                   ) : null}
                 </label>
+                {selectedSimpleProduct.flavorOptions?.length ? (
+                  <div className="text-base font-bold text-cocoa-700">
+                    Sabor do mini macaron
+                    <div className="mt-3 space-y-2">
+                      {selectedSimpleProduct.flavorOptions.map((flavor) => (
+                        <label key={flavor} className="option-row flex items-start gap-3 text-sm font-normal text-cocoa-700">
+                          <input
+                            type="radio"
+                            name="simple-flavor"
+                            checked={selectedSimpleFlavor === flavor}
+                            onChange={() => {
+                              setSelectedSimpleFlavor(flavor);
+                              setSimpleQuantityError("");
+                            }}
+                            className="mt-0.5 h-4 w-4 border-rose-200 text-cocoa-800 focus:ring-cocoa-700/30"
+                          />
+                          <span className="text-sm font-semibold text-cocoa-800">{flavor}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </div>
 
