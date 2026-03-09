@@ -628,14 +628,6 @@ const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
     unitPrice: 5,
     priceLabel: "R$ 5,00",
     imageUrl: assetPath("/images/bolos/caixadocinho1-fita-tag-5.jpeg")
-  },
-  {
-    id: "caixa-4-docinhos-personalizacao",
-    name: "Caixa com 4 docinhos com personalização",
-    description: "Embalagem com 4 docinhos personalizados.",
-    unitPrice: 20,
-    priceLabel: "R$ 20,00",
-    imageUrl: assetPath("/images/bolos/caixa-4-docinhos-personalizacao-20.jpeg")
   }
 ];
 
@@ -673,6 +665,14 @@ const DOCES_FINOS_SIMPLE_PRODUCTS: SimpleProduct[] = [
     priceLabel: "R$ 10,00",
     imageUrl: assetPath("/images/bolos/caixa-1-bombom-1-mini-macaron-10.jpeg"),
     flavorOptions: MINI_MACARON_FLAVOR_OPTIONS
+  },
+  {
+    id: "caixa-4-docinhos-personalizacao",
+    name: "Caixa com 4 docinhos com personalização",
+    description: "Embalagem com 4 docinhos personalizados.",
+    unitPrice: 20,
+    priceLabel: "R$ 20,00",
+    imageUrl: assetPath("/images/bolos/caixa-4-docinhos-personalizacao-20.jpeg")
   },
   {
     id: "caixa-docinhos-floridos",

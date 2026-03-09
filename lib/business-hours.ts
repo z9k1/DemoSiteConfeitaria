@@ -103,15 +103,15 @@ function formatNextOpenShortLabel(opensAt: Date, now: Date): string {
   const weekdayShort: Record<number, string> = {
     0: "domingo",
     1: "segunda",
-    2: "terÃ§a",
+    2: "terça",
     3: "quarta",
     4: "quinta",
     5: "sexta",
-    6: "sÃ¡bado"
+    6: "sábado"
   };
 
-  const dayLabel = isSameDay ? "hoje" : isTomorrow ? "amanhÃ£" : weekdayShort[openParts.weekday] ?? "amanhÃ£";
-  return `Abre ${dayLabel} Ã s ${formatOpenTimeLabel(opensAt)}`;
+  const dayLabel = isSameDay ? "hoje" : isTomorrow ? "amanhã" : weekdayShort[openParts.weekday] ?? "amanhã";
+  return `Abre ${dayLabel} às ${formatOpenTimeLabel(opensAt)}`;
 }
 
 function getNextOpeningDate(date: Date): Date {
@@ -165,7 +165,7 @@ export function getBusinessHoursStatus(date = new Date()): BusinessHoursStatus {
     closesAt: null,
     nextTransitionAt: opensAt,
     statusLabel: "Fechado agora",
-    detailLabel: "Atendimento pelo Whatsapp disponÃ­vel de segunda a sexta, das 9h Ã s 18h",
+    detailLabel: "Atendimento pelo Whatsapp disponível de segunda a sexta, das 9h às 18h",
     nextOpenLabel: formatNextOpenShortLabel(opensAt, date),
     countdownLabel: ""
   };
