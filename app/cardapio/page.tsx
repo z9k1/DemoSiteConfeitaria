@@ -136,6 +136,7 @@ type CartItem = {
   decorationTotal: number;
   lineTotal: number;
   detailLines: string[];
+  chocolateTopperMessage?: string;
   bombomModeLabel?: string;
   bombomFlavorLabel?: string;
   bombomTheme?: string;
@@ -488,7 +489,7 @@ const KIT_FESTA_10_PRODUCT: KitProduct = {
   description:
     "Kit festa para 10 pessoas. Bolo de 1 kg a 1,2 kg + 30 docinhos de 25g. Escolha o sabor do bolo, cobertura, sabores de docinhos e personalize a decoração.",
   price: 160,
-  imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
+  imageUrl: assetPath("/images/bolos/kitfesta1.jpeg")
 };
 
 const KIT_FESTA_20_PRODUCT: KitProduct = {
@@ -497,7 +498,7 @@ const KIT_FESTA_20_PRODUCT: KitProduct = {
   description:
     "Kit festa para 20 pessoas. Bolo de 2 kg a 2,2 kg + 60 docinhos de 25 gramas. Escolha o sabor do bolo, cobertura, sabores de docinhos e personalize a decoração.",
   price: 310,
-  imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
+  imageUrl: assetPath("/images/bolos/kitfesta2.jpeg")
 };
 
 const KIT_FESTA_30_PRODUCT: KitProduct = {
@@ -506,7 +507,7 @@ const KIT_FESTA_30_PRODUCT: KitProduct = {
   description:
     "Bolo de 3 kg a 3,2 kg + 90 docinhos de 25 gramas. Escolha o sabor do bolo, cobertura, sabores de docinhos e personalize a decoração.",
   price: 460,
-  imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
+  imageUrl: assetPath("/images/bolos/kitfesta3.jpeg")
 };
 
 const KIT_FESTA_40_PRODUCT: KitProduct = {
@@ -515,7 +516,7 @@ const KIT_FESTA_40_PRODUCT: KitProduct = {
   description:
     "Bolo de 4 kg a 4,2 kg + 120 docinhos de 25 gramas. Escolha o sabor do bolo, cobertura, sabores de docinhos e personalize a decoração.",
   price: 600,
-  imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
+  imageUrl: assetPath("/images/bolos/kitfesta2.jpeg")
 };
 
 const KIT_FESTA_50_PRODUCT: KitProduct = {
@@ -524,7 +525,7 @@ const KIT_FESTA_50_PRODUCT: KitProduct = {
   description:
     "Bolo de 5 kg a 5,2 kg + 150 docinhos de 25 gramas. Escolha o sabor do bolo, cobertura, sabores de docinhos e personalize a decoração.",
   price: 780,
-  imageUrl: assetPath("/images/bolos/bolo-placeholder.jpg")
+  imageUrl: assetPath("/images/bolos/kitfesta3.jpeg")
 };
 
 const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
@@ -782,6 +783,8 @@ export default function CardapioPage() {
   const [quantity, setQuantity] = useState(1);
   const [quantityInput, setQuantityInput] = useState("1");
   const [selectedDecorationIds, setSelectedDecorationIds] = useState<string[]>([]);
+  const [topoChocolateMessage, setTopoChocolateMessage] = useState("");
+  const [topoChocolateError, setTopoChocolateError] = useState("");
   const [docinhoQuantity, setDocinhoQuantity] = useState(DOCINHO_MIN_QTY);
   const [selectedFlavorId, setSelectedFlavorId] = useState("");
   const [docinhoQuantityInput, setDocinhoQuantityInput] = useState(DOCINHO_MIN_QTY.toString());
@@ -819,6 +822,8 @@ export default function CardapioPage() {
   const [kitCakeFlavorId, setKitCakeFlavorId] = useState<KitCakeFlavorId>(KIT_CAKE_FLAVORS[0].id);
   const [kitCoveringId, setKitCoveringId] = useState<KitCoveringId>(KIT_COVERINGS[0].id);
   const [kitDecorationIds, setKitDecorationIds] = useState<string[]>([]);
+  const [kitTopoChocolateMessage, setKitTopoChocolateMessage] = useState("");
+  const [kitTopoChocolateError, setKitTopoChocolateError] = useState("");
   const [kitDocinhoIds, setKitDocinhoIds] = useState<string[]>([]);
   const [kitDocinhoError, setKitDocinhoError] = useState("");
   const [selectedMacaronFlavorId, setSelectedMacaronFlavorId] = useState("");
@@ -1141,6 +1146,8 @@ export default function CardapioPage() {
     setQuantity(1);
     setQuantityInput("1");
     setSelectedDecorationIds([]);
+    setTopoChocolateMessage("");
+    setTopoChocolateError("");
   };
 
   const openDocinhoModal = (docinho: DocinhoProduct) => {
@@ -1256,6 +1263,8 @@ export default function CardapioPage() {
     setKitCakeFlavorId(KIT_CAKE_FLAVORS[0].id);
     setKitCoveringId(KIT_COVERINGS[0].id);
     setKitDecorationIds([]);
+    setKitTopoChocolateMessage("");
+    setKitTopoChocolateError("");
     setKitDocinhoIds([]);
     setKitDocinhoError("");
   };
@@ -1280,9 +1289,14 @@ export default function CardapioPage() {
   };
 
   const toggleDecoration = (id: string) => {
-    setSelectedDecorationIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
+    setSelectedDecorationIds((prev) => {
+      const next = prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id];
+      if (!next.includes("topo-chocolate")) {
+        setTopoChocolateMessage("");
+        setTopoChocolateError("");
+      }
+      return next;
+    });
   };
 
   const validateDocinhoQuantity = useCallback(() => {
@@ -1394,6 +1408,10 @@ export default function CardapioPage() {
     setSelectedKitProduct(null);
     setQuantity(1);
     setQuantityInput("1");
+    setTopoChocolateMessage("");
+    setTopoChocolateError("");
+    setKitTopoChocolateMessage("");
+    setKitTopoChocolateError("");
   };
 
   const showCartToast = (productName: string) => {
@@ -1412,10 +1430,21 @@ export default function CardapioPage() {
   const addToCart = () => {
     if (!selectedBolo) return;
     const safeQuantity = validateBoloQuantity();
+    const hasChocolateTopper = selectedDecorationIds.includes("topo-chocolate");
+    const trimmedTopperMessage = topoChocolateMessage.trim();
+    if (hasChocolateTopper && !trimmedTopperMessage) {
+      setTopoChocolateError("Digite o texto do topo de chocolate.");
+      return;
+    }
+    setTopoChocolateError("");
 
     const lineTotal = selectedBolo.basePrice * safeQuantity + selectedDecorationTotal;
     const decorationIds = selectedDecorations.map((item) => item.id).sort();
     const decorationLabels = selectedDecorations.map((item) => item.label);
+    const detailLines = [`Decoração: ${decorationLabels.length ? decorationLabels.join(", ") : "Nenhuma"}`];
+    if (hasChocolateTopper) {
+      detailLines.push(`Topo de chocolate: ${trimmedTopperMessage}`);
+    }
     const newItem: CartItem = {
       category: "bolo",
       productId: selectedBolo.id,
@@ -1426,7 +1455,8 @@ export default function CardapioPage() {
       decorationLabels,
       decorationTotal: selectedDecorationTotal,
       lineTotal,
-      detailLines: [`Decoração: ${decorationLabels.length ? decorationLabels.join(", ") : "Nenhuma"}`]
+      detailLines,
+      chocolateTopperMessage: hasChocolateTopper ? trimmedTopperMessage : undefined
     };
 
     setCart((prev) => {
@@ -1434,7 +1464,8 @@ export default function CardapioPage() {
       const existingIndex = prev.findIndex(
         (item) =>
           item.productId === newItem.productId &&
-          item.decorationIds.join("|") === decorationKey
+          item.decorationIds.join("|") === decorationKey &&
+          item.chocolateTopperMessage === newItem.chocolateTopperMessage
       );
       if (existingIndex === -1) {
         return [...prev, newItem];
@@ -1784,8 +1815,15 @@ export default function CardapioPage() {
       setKitDocinhoError("Selecione exatamente 3 sabores de docinhos.");
       return;
     }
+    const hasChocolateTopper = kitDecorationIds.includes("topo-chocolate");
+    const trimmedTopperMessage = kitTopoChocolateMessage.trim();
+    if (hasChocolateTopper && !trimmedTopperMessage) {
+      setKitTopoChocolateError("Digite o texto do topo de chocolate.");
+      return;
+    }
 
     setKitDocinhoError("");
+    setKitTopoChocolateError("");
     const decorationLabels = selectedKitDecorations.map((item) => item.label);
     const docinhoLabels = selectedKitDocinhos.map((item) => item.label);
     const lineBase = selectedKitProduct.price + kitDecorationTotal;
@@ -1796,12 +1834,16 @@ export default function CardapioPage() {
       `Decoração: ${decorationLabels.length ? decorationLabels.join(", ") : "Nenhuma"}`,
       `Docinhos: ${docinhoLabels.join(", ")}`
     ];
+    if (hasChocolateTopper) {
+      detailLines.push(`Topo de chocolate: ${trimmedTopperMessage}`);
+    }
 
     const configKey = [
       kitCakeFlavorId,
       kitCoveringId,
       [...kitDecorationIds].sort().join("|"),
-      [...kitDocinhoIds].sort().join("|")
+      [...kitDocinhoIds].sort().join("|"),
+      trimmedTopperMessage
     ].join("::");
 
     const newItem: CartItem = {
@@ -1814,7 +1856,8 @@ export default function CardapioPage() {
       decorationLabels,
       decorationTotal: kitDecorationTotal,
       lineTotal,
-      detailLines
+      detailLines,
+      chocolateTopperMessage: hasChocolateTopper ? trimmedTopperMessage : undefined
     };
 
     setCart((prev) => {
@@ -1909,26 +1952,26 @@ export default function CardapioPage() {
   return (
     <div className="container-pad py-12">
     <header className="mb-8 min-h-[210px] text-center">
-      <p className="text-xs font-semibold uppercase tracking-[0.35em] text-rose-500">Cardápio na palma da sua mão</p>
+      <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-rose-400">Cardápio na palma da sua mão</p>
       <h1 className="mt-3 font-serifDisplay text-5xl text-cocoa-900">Cardápio</h1>
-      <p className="mx-auto mt-3 max-w-2xl text-sm text-cocoa-700">
+      <p className="mx-auto mt-3 max-w-2xl text-sm text-cocoa-600">
         Escolha seus produtos, adicione ao carrinho e finalize o pedido pelo WhatsApp.
       </p>
-      <p className="mx-auto mt-3 max-w-2xl text-lg text-cocoa-700">
+      <p className="mx-auto mt-3 max-w-2xl text-base text-cocoa-600">
         Doces artesanais para festas e eventos, com pedido rápido e finalização pelo WhatsApp.
       </p>
       <div
-        className={`mx-auto mt-5 max-w-2xl rounded-xl border px-4 py-3 text-left shadow-sm ${
-          businessStatus.isOpen ? "border-emerald-200 bg-emerald-50/80" : "border-amber-200 bg-amber-50/90"
+        className={`mx-auto mt-5 max-w-2xl rounded-xl border px-4 py-3 text-left ${
+          businessStatus.isOpen ? "border-emerald-100 bg-emerald-50/45" : "border-amber-100 bg-amber-50/45"
         }`}
       >
-        <p className={`text-sm font-semibold ${businessStatus.isOpen ? "text-emerald-800" : "text-amber-800"}`}>
+        <p className={`text-sm font-medium ${businessStatus.isOpen ? "text-emerald-700" : "text-amber-700"}`}>
           {businessStatus.statusLabel}
         </p>
-        <p className="mt-1 text-sm text-cocoa-800">{businessStatus.detailLabel}</p>
-        <p className="mt-1 text-sm text-cocoa-700">{businessStatus.nextOpenLabel}</p>
+        <p className="mt-1 text-sm text-cocoa-600">{businessStatus.detailLabel}</p>
+        <p className="mt-1 text-sm text-cocoa-600">{businessStatus.nextOpenLabel}</p>
         {businessStatus.countdownLabel ? (
-          <p className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-cocoa-600">
+          <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.08em] text-cocoa-500">
             {businessStatus.countdownLabel}
           </p>
         ) : null}
@@ -2343,113 +2386,136 @@ export default function CardapioPage() {
     ) : null}
 
       {isCartOpen ? (
-        <aside className="fixed inset-0 z-10 h-screen w-screen overflow-hidden bg-white/95 px-5 pb-5 shadow-soft backdrop-blur sm:px-6 sm:pb-6">
-          <div className="flex h-full flex-col pt-14">
-            <div className="relative z-10 pt-3">
-              <div className="flex items-baseline justify-between gap-3">
-                <h3 className="font-serifDisplay text-2xl text-cocoa-900">Resumo do pedido</h3>
-                <span className="text-sm font-semibold text-cocoa-700">
+        <div className="fixed inset-0 z-30 bg-cocoa-950/40 backdrop-blur-[2px]">
+          <button
+            type="button"
+            aria-label="Fechar resumo do pedido"
+            onClick={() => setIsCartOpen(false)}
+            className="absolute inset-0 sm:hidden"
+          />
+          <aside className="absolute inset-x-0 bottom-0 flex h-[min(90dvh,46rem)] flex-col overflow-hidden rounded-t-[2rem] bg-white shadow-soft sm:inset-y-0 sm:right-0 sm:left-auto sm:h-screen sm:w-full sm:max-w-[28rem] sm:rounded-none sm:bg-white/95">
+            <div className="flex items-center justify-center pt-3 sm:hidden">
+              <span className="h-1.5 w-14 rounded-full bg-cocoa-200" />
+            </div>
+            <div className="flex items-start justify-between gap-4 px-5 pb-4 pt-4 sm:px-6 sm:pb-5 sm:pt-14">
+              <div>
+                <h3 className="font-serifDisplay text-[1.95rem] leading-none text-cocoa-900 sm:text-2xl">
+                  Resumo do pedido
+                </h3>
+                <p className="mt-2 text-sm text-cocoa-700">Revise os itens antes de finalizar.</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="pt-1 text-sm font-semibold text-cocoa-700">
                   {cart.length} {cart.length === 1 ? "item" : "itens"}
                 </span>
+                <button
+                  type="button"
+                  onClick={() => setIsCartOpen(false)}
+                  className="inline-flex h-11 items-center justify-center rounded-full border border-rose-200 px-5 text-sm font-semibold text-cocoa-800 transition md:hover:bg-rose-50"
+                >
+                  Fechar
+                </button>
               </div>
             </div>
-            <div className="relative z-0 mt-4 flex-1 max-h-[50vh] overflow-y-auto pr-1">
+
+            <div className="flex-1 overflow-y-auto px-5 pb-6 sm:px-6">
               {cart.length === 0 ? (
                 <p className="text-sm text-cocoa-700">Seu carrinho está vazio.</p>
               ) : (
-                <ul className="space-y-4 pb-6">
-                  {cart.map((item, index) => (
-                    <li
-                      key={`${item.productId}-${item.decorationIds.join("|")}-${index}`}
-                      className="rounded-xl bg-white shadow-md border border-gray-100 p-3"
-                    >
-                      {item.category === "bolo" ? (
-                        <div>
-                          <p className="text-sm font-semibold text-cocoa-900">{`Bolo ${item.productName}`}</p>
-                          <p className="mt-0.5 text-xs font-semibold text-cocoa-700">{`${item.quantity} kg`}</p>
-                        </div>
-                      ) : (
-                        <p className="text-sm font-semibold text-cocoa-900">
-                          {`${item.quantity}x ${item.category === "macaron" ? "Macarons" : item.productName}`}
-                        </p>
-                      )}
-                      {item.detailLines.map((line) => (
-                        <p key={line} className="mt-1 text-xs text-cocoa-700">
-                          {line}
-                        </p>
-                      ))}
-                      <p className="mt-1 text-xs text-cocoa-700">Subtotal: {formatCurrency(item.lineTotal)}</p>
-                      <button
-                        type="button"
-                        onClick={() => removeItem(index)}
-                        className="mt-2 text-xs font-semibold uppercase tracking-[0.15em] text-rose-600 md:hover:text-rose-700"
+                <div className="space-y-5">
+                  <ul className="space-y-4">
+                    {cart.map((item, index) => (
+                      <li
+                        key={`${item.productId}-${item.decorationIds.join("|")}-${index}`}
+                        className="rounded-2xl border border-rose-100 bg-white p-4 shadow-[0_14px_34px_rgba(93,55,44,0.08)]"
                       >
-                        Remover
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="min-w-0 flex-1">
+                            {item.category === "bolo" ? (
+                              <div>
+                                <p className="text-sm font-semibold text-cocoa-900">{`Bolo ${item.productName}`}</p>
+                                <p className="mt-0.5 text-xs font-semibold text-cocoa-700">{`${item.quantity} kg`}</p>
+                              </div>
+                            ) : (
+                              <p className="text-sm font-semibold text-cocoa-900">
+                                {`${item.quantity}x ${item.category === "macaron" ? "Macarons" : item.productName}`}
+                              </p>
+                            )}
+                            {item.detailLines.map((line) => (
+                              <p key={line} className="mt-1 text-xs text-cocoa-700">
+                                {line}
+                              </p>
+                            ))}
+                            <p className="mt-3 text-sm font-semibold text-cocoa-900">
+                              Subtotal: {formatCurrency(item.lineTotal)}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeItem(index)}
+                            className="inline-flex shrink-0 items-center justify-center rounded-full border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 transition md:hover:bg-rose-50"
+                          >
+                            Remover
+                          </button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="space-y-3 border-t border-rose-100 pt-4">
+                    <label className="block text-base font-bold text-cocoa-900">
+                      Nome de quem vai retirar o pedido
+                      <input
+                        type="text"
+                        value={customerName}
+                        onChange={(event) => setCustomerName(event.target.value)}
+                        placeholder="Digite o nome completo"
+                        className="mt-1 h-14 w-full rounded-lg border border-rose-200 px-6 text-lg font-normal placeholder:text-base placeholder:font-normal outline-none ring-cocoa-700/30 focus:ring"
+                      />
+                    </label>
+                    <label className="block text-base font-bold text-cocoa-900">
+                      Data da Retirada / Evento
+                      <input
+                        type="date"
+                        value={eventDate}
+                        min={minOrderDate}
+                        onChange={(event) => setEventDate(event.target.value)}
+                        placeholder="Quando você precisa do pedido?"
+                        className="mt-1 h-14 w-full rounded-lg border border-rose-200 px-6 py-2 text-lg leading-none outline-none ring-cocoa-700/30 focus:ring"
+                      />
+                      <p className="mt-1 text-sm font-normal text-cocoa-700">
+                        Lembre-se: pedidos com no mínimo 5 dias de antecedência.
+                      </p>
+                    </label>
+                    <p className="text-sm leading-relaxed text-cocoa-700">
+                      Atendimento pelo WhatsApp de segunda a sexta, das 9h às 18h. {businessStatus.nextOpenLabel}
+                    </p>
+                  </div>
+                </div>
               )}
             </div>
-            <div className="mt-4 border-t border-rose-100 pt-4 pb-4">
+
+            <div className="shrink-0 border-t border-rose-100 bg-white px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-4 shadow-[0_-14px_30px_rgba(93,55,44,0.08)] sm:px-6">
               <div className="space-y-3">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-cocoa-700">Total geral</p>
-                  <p className="mt-1 text-2xl font-bold leading-none text-cocoa-900">{formatCurrency(cartTotal)}</p>
-                </div>
-                <label className="block text-base font-bold text-cocoa-900">
-                  Nome de quem vai retirar o pedido
-                  <input
-                    type="text"
-                    value={customerName}
-                    onChange={(event) => setCustomerName(event.target.value)}
-                    placeholder="Digite o nome completo"
-                    className="mt-1 h-14 w-full rounded-lg border border-rose-200 px-6 text-lg font-normal placeholder:text-base placeholder:font-normal outline-none ring-cocoa-700/30 focus:ring"
-                  />
-                </label>
-                <label className="block text-base font-bold text-cocoa-900">
-                  Data da Retirada / Evento
-                  <input
-                    type="date"
-                    value={eventDate}
-                    min={minOrderDate}
-                    onChange={(event) => setEventDate(event.target.value)}
-                    placeholder="Quando você precisa do pedido?"
-                    className="mt-1 h-14 w-[calc(100%-0.5rem)] ml-2 rounded-lg border border-rose-200 px-6 py-2 text-lg leading-none outline-none ring-cocoa-700/30 focus:ring"
-                  />
-                  <p className="mt-1 text-sm font-normal text-cocoa-700">
-                    Lembre-se: pedidos com no mínimo 5 dias de antecedência.
+                <div className="rounded-xl bg-rose-50/35 px-4 py-2.5">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-cocoa-700">Total geral</p>
+                  <p className="mt-1 text-[2rem] font-semibold leading-none text-cocoa-900 md:text-3xl">
+                    {formatCurrency(cartTotal)}
                   </p>
-                </label>
-                <div
-                  className={`rounded-lg border px-4 py-3 text-sm ${
-                    businessStatus.isOpen ? "border-emerald-200 bg-emerald-50/70" : "border-amber-200 bg-amber-50/80"
-                  }`}
-                >
-                  <p className={`font-semibold ${businessStatus.isOpen ? "text-emerald-800" : "text-amber-800"}`}>
-                    {businessStatus.statusLabel}
-                  </p>
-                  <p className="mt-1 text-cocoa-700">{businessStatus.detailLabel}</p>
-                  <p className="mt-1 text-cocoa-700">{businessStatus.nextOpenLabel}</p>
-                  {businessStatus.countdownLabel ? (
-                    <p className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-cocoa-600">
-                      {businessStatus.countdownLabel}
-                    </p>
-                  ) : null}
                 </div>
                 {submitError ? <p className="text-xs text-rose-700">{submitError}</p> : null}
                 <button
                   type="button"
                   onClick={finalizeOrder}
                   disabled={cart.length === 0 || !businessStatus.isOpen}
-                  className="inline-flex h-12 md:h-14 w-full items-center justify-center rounded-lg bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-6 text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-white transition md:enabled:hover:from-cocoa-800 md:enabled:hover:to-cocoa-950 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-6 text-base font-semibold uppercase tracking-[0.14em] text-white transition md:h-14 md:text-lg md:tracking-[0.2em] md:enabled:hover:from-cocoa-800 md:enabled:hover:to-cocoa-950 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Finalizar pedido
                 </button>
               </div>
             </div>
-          </div>
-        </aside>
+          </aside>
+        </div>
       ) : null}
 
       {selectedBolo ? (
@@ -2507,6 +2573,24 @@ export default function CardapioPage() {
                       </label>
                     ))}
                   </div>
+                  {selectedDecorationIds.includes("topo-chocolate") ? (
+                    <label className="block text-sm font-semibold text-cocoa-800">
+                      Texto do topo de chocolate
+                      <input
+                        type="text"
+                        value={topoChocolateMessage}
+                        onChange={(event) => {
+                          setTopoChocolateMessage(event.target.value);
+                          setTopoChocolateError("");
+                        }}
+                        placeholder='Ex.: Parabéns Ana'
+                        className="mt-2 h-12 w-full rounded-lg border border-rose-200 px-4 text-base font-normal placeholder:text-sm outline-none ring-cocoa-700/20 focus:ring-1"
+                      />
+                      {topoChocolateError ? (
+                        <p className="mt-2 text-xs font-semibold text-rose-700">{topoChocolateError}</p>
+                      ) : null}
+                    </label>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -3251,7 +3335,12 @@ export default function CardapioPage() {
                             onChange={() => {
                               setKitDecorationIds((prev) => {
                                 if (prev.includes(decoration.id)) {
-                                  return prev.filter((item) => item !== decoration.id);
+                                  const next = prev.filter((item) => item !== decoration.id);
+                                  if (!next.includes("topo-chocolate")) {
+                                    setKitTopoChocolateMessage("");
+                                    setKitTopoChocolateError("");
+                                  }
+                                  return next;
                                 }
                                 if (prev.length >= 3) return prev;
                                 if (decoration.id === "macarons-minis" && prev.includes("macarons-medios")) return prev;
@@ -3269,6 +3358,24 @@ export default function CardapioPage() {
                       );
                     })}
                   </div>
+                  {kitDecorationIds.includes("topo-chocolate") ? (
+                    <label className="mt-3 block text-sm font-semibold text-cocoa-800">
+                      Texto do topo de chocolate
+                      <input
+                        type="text"
+                        value={kitTopoChocolateMessage}
+                        onChange={(event) => {
+                          setKitTopoChocolateMessage(event.target.value);
+                          setKitTopoChocolateError("");
+                        }}
+                        placeholder='Ex.: Parabéns Ana'
+                        className="mt-2 h-12 w-full rounded-lg border border-rose-200 px-4 text-base font-normal placeholder:text-sm outline-none ring-cocoa-700/20 focus:ring-1"
+                      />
+                      {kitTopoChocolateError ? (
+                        <p className="mt-2 text-xs font-semibold text-rose-700">{kitTopoChocolateError}</p>
+                      ) : null}
+                    </label>
+                  ) : null}
                 </div>
 
                 <div className="text-base font-bold text-cocoa-700">
