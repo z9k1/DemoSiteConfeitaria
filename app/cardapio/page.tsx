@@ -382,7 +382,7 @@ const BOLOS: Bolo[] = [
     name: "Bolo pudim",
     basePrice: 119.8,
     description: "Massa branca uma camada de pudim e uma camada de mousse de doce de leite",
-    imageUrl: assetPath("/images/bolos/ipiranga2.jpeg")
+    imageUrl: assetPath("/images/bolos/pudim.jpeg")
   },
   {
     id: "trufado-chocolate",
