@@ -2,6 +2,9 @@ import { brandSettings } from "@/lib/site-data";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "/DemoSiteConfeitaria";
 const policyPath = `${basePath.replace(/\/$/, "")}/politica-de-privacidade`;
+const pickupMapsUrl =
+  "https://www.google.com/maps/search/Cristiane%20Santos%20Gastronomia/@-23.342,-51.1458,17z?hl=pt-BR";
+const deliveryFeeNotice = "Entrega: até 5 km — R$ 20,00. Demais km: consultar.";
 
 type IconLinkProps = {
   href: string;
@@ -51,6 +54,12 @@ export function Footer() {
                 Política de privacidade
               </a>
             </li>
+            <li>
+              <a href={pickupMapsUrl} target="_blank" rel="noreferrer" className="hover:text-cocoa-900">
+                Retirada: Cristiane Santos Gastronomia (Maps)
+              </a>
+            </li>
+            <li>{deliveryFeeNotice}</li>
             <li>{brandSettings.address}</li>
           </ul>
         </div>

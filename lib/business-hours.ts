@@ -2,6 +2,7 @@
 const OPEN_HOUR = 9;
 const CLOSE_HOUR = 18;
 const OPEN_DAYS = new Set([1, 2, 3, 4, 5]);
+const FORCE_BUSINESS_OPEN = process.env.NEXT_PUBLIC_FORCE_BUSINESS_OPEN === "true";
 
 type ZonedDateParts = {
   year: number;
@@ -136,6 +137,22 @@ function getNextOpeningDate(date: Date): Date {
 
 export function getBusinessHoursStatus(date = new Date()): BusinessHoursStatus {
   const parts = getZonedDateParts(date);
+  if (FORCE_BUSINESS_OPEN) {
+    const opensAt = zonedLocalToDate(parts.year, parts.month, parts.day, OPEN_HOUR, 0);
+    const closesAt = zonedLocalToDate(parts.year, parts.month, parts.day, CLOSE_HOUR, 0);
+
+    return {
+      isOpen: true,
+      opensAt,
+      closesAt,
+      nextTransitionAt: closesAt,
+      statusLabel: "Aberto agora",
+      detailLabel: "Recebemos pedidos de segunda a sexta das 9h às 18h.",
+      nextOpenLabel: "",
+      countdownLabel: ""
+    };
+  }
+
   const isOpenDay = OPEN_DAYS.has(parts.weekday);
   const currentMinutes = parts.hour * 60 + parts.minute;
   const openMinutes = OPEN_HOUR * 60;
