@@ -150,6 +150,30 @@ type CartItem = {
   bombomTheme?: string;
 };
 
+type SearchableSimpleCategory = "macarons-presentear" | "doces-mimos" | "macarons" | "torres-macarons";
+
+type SearchableItem = {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+  priceLabel: string;
+  categoryLabel: string;
+  searchText: string;
+  kind: "bolo" | "docinho" | "bombom" | "cento" | "barra" | "macaron" | "biscoito-florido" | "kit" | "simple";
+  product:
+    | Bolo
+    | DocinhoProduct
+    | BombomProduct
+    | CentoProduct
+    | BarraProduct
+    | MacaronProduct
+    | BiscoitoFloridoProduct
+    | KitProduct
+    | SimpleProduct;
+  simpleCategory?: SearchableSimpleCategory;
+};
+
 const CART_STORAGE_KEY = "csg_cardapio_bolos_cart_v1";
 const CART_TOAST_EVENT = "csg:cart-toast";
 
@@ -220,6 +244,14 @@ const categoryConfigs = [
 ] as const;
 
 type TabId = (typeof categoryConfigs)[number]["id"];
+
+function normalizeSearchText(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+}
 
 const BOLOS: Bolo[] = [
   {
@@ -380,7 +412,10 @@ const BOMBOM_PRODUCT: BombomProduct = {
   description:
     "Bombons finos e personalizados para eventos e presentes. Feitos com chocolate nobre e acabamento artístico.",
   imageUrl: assetPath("/images/bolos/caixa-2-bombons-personalizados.jpeg"),
-  quantityHelperText: "Mínimo de 35 unidades para encomenda solta ou 1 caixa por pedido."
+  modes: [
+    { id: "caixa2", label: "Caixinha com 2 unidades", price: 12, minQty: 1 }
+  ],
+  quantityHelperText: "Mínimo de 1 caixinha por pedido."
 };
 
 const BOMBOM_SAKURA_PRODUCT: BombomProduct = {
@@ -743,7 +778,8 @@ const DOCES_MIMOS_SIMPLE_PRODUCTS: SimpleProduct[] = [
     description: "Caixinha individual com 1 bombom personalizado, acompanha fita e tag.",
     unitPrice: 7,
     priceLabel: "R$ 7,00",
-    imageUrl: assetPath("/images/bolos/caixa-1-bombom-personalizado.jpeg")
+    imageUrl: assetPath("/images/bolos/caixa-1-bombom-personalizado.jpeg"),
+    minimumQuantity: 10
   },
   {
     id: "caixa-3-bombons-personalizados",
@@ -751,7 +787,16 @@ const DOCES_MIMOS_SIMPLE_PRODUCTS: SimpleProduct[] = [
     description: "Caixa transparente com 3 bombons personalizados, acompanha fita e tag.",
     unitPrice: 18,
     priceLabel: "R$ 18,00",
-    imageUrl: assetPath("/images/bolos/caixa-3-bombons-personalizados.jpeg")
+    imageUrl: assetPath("/images/bolos/caixa-3-bombons-personalizados.jpeg"),
+    minimumQuantity: 10
+  },
+  {
+    id: "caixa-4-bombons-personalizados",
+    name: "Caixa com 4 bombons personalizados",
+    description: "Caixa transparente com 4 bombons personalizados, acompanha fita e tag.",
+    unitPrice: 25,
+    priceLabel: "R$ 25,00",
+    imageUrl: assetPath("/images/bolos/caixa-4-bombons-personalizados.jpeg")
   },
   {
     id: "kit-docura-2",
@@ -1022,6 +1067,7 @@ export default function CardapioPage() {
   const modalPrimaryButtonClass =
     "inline-flex min-h-[48px] items-center justify-center rounded-xl bg-gradient-to-br from-cocoa-700 to-cocoa-900 px-4 py-2 text-center text-sm font-semibold uppercase leading-tight tracking-[0.08em] text-white whitespace-normal transition sm:h-12 sm:py-0 sm:text-base sm:whitespace-nowrap sm:tracking-[0.12em] md:hover:from-cocoa-800 md:hover:to-cocoa-950";
   const [activeTab, setActiveTab] = useState<TabId>("bolos");
+  const [searchQuery, setSearchQuery] = useState("");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedBolo, setSelectedBolo] = useState<Bolo | null>(null);
@@ -1109,6 +1155,162 @@ export default function CardapioPage() {
   const minMacaronPrice = useMemo(
     () => Math.min(...MACARON_FLAVORS.map((flavor) => flavor.price)),
     []
+  );
+  const normalizedSearchQuery = normalizeSearchText(searchQuery);
+  const searchableItems = useMemo<SearchableItem[]>(
+    () => [
+      ...BOLOS.map((bolo) => ({
+        id: `bolo-${bolo.id}`,
+        name: bolo.name,
+        description: bolo.description,
+        imageUrl: bolo.imageUrl,
+        priceLabel: `${formatCurrency(bolo.basePrice)} / 1kg`,
+        categoryLabel: "Bolos artesanais",
+        searchText: normalizeSearchText(`Bolos artesanais ${bolo.name} ${bolo.description}`),
+        kind: "bolo" as const,
+        product: bolo
+      })),
+      {
+        id: `docinho-${DOCINHO_PRODUCT.id}`,
+        name: DOCINHO_PRODUCT.name,
+        description: DOCINHO_PRODUCT.description,
+        imageUrl: DOCINHO_PRODUCT.imageUrl,
+        priceLabel: `A partir de ${formatCurrency(minDocinhoPrice)} / unidade`,
+        categoryLabel: "Doces finos",
+        searchText: normalizeSearchText(`Doces finos ${DOCINHO_PRODUCT.name} ${DOCINHO_PRODUCT.description}`),
+        kind: "docinho" as const,
+        product: DOCINHO_PRODUCT
+      },
+      ...[CENTO_18G_PRODUCT, CENTO_13G_PRODUCT, CENTO_MACARONS_MINI_PRODUCT].map((cento) => ({
+        id: `cento-${cento.id}`,
+        name: cento.name,
+        description: cento.description,
+        imageUrl: cento.imageUrl,
+        priceLabel: cento.priceLabel ?? `${formatCurrency(cento.unitPrice)} / cento`,
+        categoryLabel: cento.id === CENTO_MACARONS_MINI_PRODUCT.id ? "Macarons" : "Doces finos",
+        searchText: normalizeSearchText(
+          `${cento.id === CENTO_MACARONS_MINI_PRODUCT.id ? "Macarons" : "Doces finos"} ${cento.name} ${cento.description}`
+        ),
+        kind: "cento" as const,
+        product: cento
+      })),
+      ...BOMBOM_PRODUCTS.map((bombom) => ({
+        id: `bombom-${bombom.id}`,
+        name: bombom.name,
+        description: bombom.description,
+        imageUrl: bombom.imageUrl,
+        priceLabel: `A partir de ${formatCurrency((bombom.modes?.[0] ?? BOMBOM_MODES[0]).price)}`,
+        categoryLabel: "Doces mimos",
+        searchText: normalizeSearchText(`Doces mimos ${bombom.name} ${bombom.description}`),
+        kind: "bombom" as const,
+        product: bombom
+      })),
+      ...MACARON_PRODUCTS.map((product) => ({
+        id: `macaron-${product.id}`,
+        name: product.name,
+        description: product.description,
+        imageUrl: product.imageUrl,
+        priceLabel: `A partir de ${formatCurrency(minMacaronPrice + product.priceAdjustment)} / unidade`,
+        categoryLabel: "Macarons",
+        searchText: normalizeSearchText(`Macarons ${product.name} ${product.description}`),
+        kind: "macaron" as const,
+        product
+      })),
+      ...MACARONS_PRESENTEAR_PRODUCTS.map((product) => ({
+        id: `macaron-presentear-${product.id}`,
+        name: product.name,
+        description: product.description,
+        imageUrl: product.imageUrl,
+        priceLabel: `A partir de ${formatCurrency(minMacaronPrice + product.priceAdjustment)} / unidade`,
+        categoryLabel: "Macarons para presentear",
+        searchText: normalizeSearchText(`Macarons para presentear ${product.name} ${product.description}`),
+        kind: "macaron" as const,
+        product
+      })),
+      ...DOCES_MIMOS_SIMPLE_PRODUCTS.map((item) => ({
+        id: `mimo-${item.id}`,
+        name: item.name,
+        description: item.description,
+        imageUrl: item.imageUrl,
+        priceLabel: item.priceLabel,
+        categoryLabel: "Doces mimos",
+        searchText: normalizeSearchText(`Doces mimos ${item.name} ${item.description}`),
+        kind: "simple" as const,
+        product: item,
+        simpleCategory: "doces-mimos" as const
+      })),
+      ...EMBALAGENS_MACARONS_PRODUCTS.map((item) => ({
+        id: `presentear-${item.id}`,
+        name: item.name,
+        description: item.description,
+        imageUrl: item.imageUrl,
+        priceLabel: item.priceLabel,
+        categoryLabel: "Macarons para presentear",
+        searchText: normalizeSearchText(`Macarons para presentear ${item.name} ${item.description}`),
+        kind: "simple" as const,
+        product: item,
+        simpleCategory: "macarons-presentear" as const
+      })),
+      ...TORRES_MACARONS_PRODUCTS.map((item) => ({
+        id: `torre-${item.id}`,
+        name: item.name,
+        description: item.description,
+        imageUrl: item.imageUrl,
+        priceLabel: item.priceLabel,
+        categoryLabel: "Torres de macarons",
+        searchText: normalizeSearchText(`Torres de macarons ${item.name} ${item.description}`),
+        kind: "simple" as const,
+        product: item,
+        simpleCategory: "torres-macarons" as const
+      })),
+      {
+        id: `barra-${BARRAS_FLORIDAS_PRODUCT.id}`,
+        name: BARRAS_FLORIDAS_PRODUCT.name,
+        description: BARRAS_FLORIDAS_PRODUCT.description,
+        imageUrl: BARRAS_FLORIDAS_PRODUCT.imageUrl,
+        priceLabel: `A partir de ${formatCurrency(minBarraPrice)}`,
+        categoryLabel: "Barras de chocolate",
+        searchText: normalizeSearchText(`Barras de chocolate ${BARRAS_FLORIDAS_PRODUCT.name} ${BARRAS_FLORIDAS_PRODUCT.description}`),
+        kind: "barra" as const,
+        product: BARRAS_FLORIDAS_PRODUCT
+      },
+      {
+        id: `biscoito-${BISCOITOS_FLORIDOS_PRODUCT.id}`,
+        name: BISCOITOS_FLORIDOS_PRODUCT.name,
+        description: BISCOITOS_FLORIDOS_PRODUCT.description,
+        imageUrl: BISCOITOS_FLORIDOS_PRODUCT.imageUrl,
+        priceLabel: BISCOITOS_FLORIDOS_PRODUCT.priceLabel,
+        categoryLabel: "Biscoitos floridos",
+        searchText: normalizeSearchText(`Biscoitos floridos ${BISCOITOS_FLORIDOS_PRODUCT.name} ${BISCOITOS_FLORIDOS_PRODUCT.description}`),
+        kind: "biscoito-florido" as const,
+        product: BISCOITOS_FLORIDOS_PRODUCT
+      },
+      ...[
+        KIT_FESTA_10_PRODUCT,
+        KIT_FESTA_20_PRODUCT,
+        KIT_FESTA_30_PRODUCT,
+        KIT_FESTA_40_PRODUCT,
+        KIT_FESTA_50_PRODUCT
+      ].map((kit) => ({
+        id: `kit-${kit.id}`,
+        name: kit.name,
+        description: kit.description,
+        imageUrl: kit.imageUrl,
+        priceLabel: formatCurrency(kit.price),
+        categoryLabel: "Kits para festa",
+        searchText: normalizeSearchText(`Kits para festa ${kit.name} ${kit.description}`),
+        kind: "kit" as const,
+        product: kit
+      }))
+    ],
+    [minBarraPrice, minDocinhoPrice, minMacaronPrice]
+  );
+  const filteredSearchItems = useMemo(
+    () =>
+      normalizedSearchQuery
+        ? searchableItems.filter((item) => item.searchText.includes(normalizedSearchQuery))
+        : [],
+    [normalizedSearchQuery, searchableItems]
   );
   const activeBombomModes = selectedBombom?.modes ?? BOMBOM_MODES;
   const activeBombomFlavors = selectedBombom?.flavors ?? BOMBOM_FLAVORS;
@@ -2266,6 +2468,40 @@ export default function CardapioPage() {
     sendOrderToWhatsapp();
   };
 
+  const openSearchResult = (item: SearchableItem) => {
+    switch (item.kind) {
+      case "bolo":
+        openModal(item.product as Bolo);
+        return;
+      case "docinho":
+        openDocinhoModal(item.product as DocinhoProduct);
+        return;
+      case "bombom":
+        openBombomModal(item.product as BombomProduct);
+        return;
+      case "cento":
+        openCentoModal(item.product as CentoProduct);
+        return;
+      case "barra":
+        openBarraModal(item.product as BarraProduct);
+        return;
+      case "macaron":
+        openMacaronModal(item.product as MacaronProduct);
+        return;
+      case "biscoito-florido":
+        openBiscoitoFloridoModal(item.product as BiscoitoFloridoProduct);
+        return;
+      case "kit":
+        openKitModal(item.product as KitProduct);
+        return;
+      case "simple":
+        openSimpleModal(item.product as SimpleProduct, item.simpleCategory ?? "doces-mimos");
+        return;
+      default:
+        return;
+    }
+  };
+
   return (
     <div className="container-pad py-12">
     <header className="mb-8 min-h-[210px] text-center">
@@ -2307,6 +2543,89 @@ export default function CardapioPage() {
       </div>
     </header>
 
+  <div className="mx-auto mb-8 max-w-3xl">
+    <label className="block text-left">
+      <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cocoa-500">Buscar produto</span>
+      <div className="mt-2 flex items-center gap-3 rounded-2xl border border-rose-100 bg-white/90 px-4 py-3 shadow-[0_12px_30px_rgba(93,55,44,0.06)]">
+        <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-cocoa-500" fill="none" stroke="currentColor" strokeWidth="2">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.5-3.5" strokeLinecap="round" />
+        </svg>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.target.value)}
+          placeholder="Busque por bolo, macaron, kit, bombom..."
+          className="min-w-0 flex-1 bg-transparent text-base text-cocoa-900 outline-none placeholder:text-cocoa-400"
+        />
+        {searchQuery ? (
+          <button
+            type="button"
+            onClick={() => setSearchQuery("")}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full text-cocoa-500 transition hover:bg-rose-50 hover:text-cocoa-800"
+            aria-label="Limpar busca"
+          >
+            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M6 6l12 12" strokeLinecap="round" />
+              <path d="M18 6L6 18" strokeLinecap="round" />
+            </svg>
+          </button>
+        ) : null}
+      </div>
+    </label>
+  </div>
+
+  {normalizedSearchQuery ? (
+    <section className="space-y-5">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cocoa-500">Resultados da busca</p>
+          <h2 className="mt-1 font-serifDisplay text-3xl text-cocoa-900">
+            {filteredSearchItems.length} resultado{filteredSearchItems.length === 1 ? "" : "s"} para &quot;{searchQuery.trim()}&quot;
+          </h2>
+        </div>
+      </div>
+      {filteredSearchItems.length ? (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {filteredSearchItems.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => openSearchResult(item)}
+              className={productCardClass}
+            >
+              <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
+                <Image
+                  src={item.imageUrl}
+                  alt={`Imagem do ${item.name}`}
+                  fill
+                  className={productImageClass}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                />
+              </div>
+              <div className="flex flex-1 flex-col p-5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-cocoa-500">{item.categoryLabel}</p>
+                <h3 className="mt-2 font-serifDisplay text-2xl text-cocoa-900">{item.name}</h3>
+                <p className="mt-2 text-lg text-cocoa-700">{item.description}</p>
+                <div className={productMetaClass}>
+                  <p className="text-lg font-semibold text-cocoa-900">{item.priceLabel}</p>
+                  <p className={productCtaClass}>
+                    Ver detalhes {"\u2192"}
+                  </p>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      ) : (
+        <section className="rounded-2xl border border-rose-100 bg-white/85 px-6 py-10 text-center shadow-[0_16px_40px_rgba(93,55,44,0.06)]">
+          <h3 className="font-serifDisplay text-3xl text-cocoa-900">Nenhum produto encontrado</h3>
+          <p className="mt-3 text-base text-cocoa-600">Tente buscar por nome, categoria ou tipo de doce.</p>
+        </section>
+      )}
+    </section>
+  ) : (
+  <>
   <div className="mb-10">
     <div className="mx-auto mb-4 h-px max-w-3xl rounded-full bg-gradient-to-r from-transparent via-rose-400/80 to-transparent" />
     <nav className="flex flex-nowrap items-center gap-5 overflow-x-auto whitespace-nowrap px-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:flex-wrap md:justify-center md:overflow-x-visible md:whitespace-normal md:px-0">
@@ -2867,6 +3186,8 @@ export default function CardapioPage() {
         <p className="mt-3 text-lg">Estamos preparando novidades exclusivas. Em breve!</p>
       </section>
     ) : null}
+  </>
+  )}
 
       {isCartOpen ? (
         <div className="animate-cart-fade-in fixed inset-0 z-30 bg-cocoa-950/32 backdrop-blur-[2px]">
