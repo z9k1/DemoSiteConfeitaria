@@ -154,7 +154,12 @@ type CartItem = {
   bombomTheme?: string;
 };
 
-type SearchableSimpleCategory = "macarons-presentear" | "doces-mimos" | "macarons" | "torres-macarons";
+type SearchableSimpleCategory =
+  | "macarons-presentear"
+  | "doces-mimos"
+  | "macarons"
+  | "torres-macarons"
+  | "docinhos";
 
 type SearchableItem = {
   id: string;
