@@ -660,7 +660,6 @@ const EMBALAGENS_MACARONS_PRODUCTS: SimpleProduct[] = [
     id: "caixa-visor-7-champanhe",
     name: "Caixa com 7 macarons e champanhe",
     description: "Acomoda 7 macarons médios + champanhe à escolha",
-    unitPrice: 110,
     unitPrice: 120,
     priceLabel: "A partir de R$ 120,00",
     imageUrl: assetPath("/images/bolos/caixa7macaronscomchampanheaescolha.jpeg"),
