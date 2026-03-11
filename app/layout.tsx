@@ -8,6 +8,7 @@ import { WhatsAppFab } from "@/components/whatsapp-fab";
 import { brandSettings } from "@/lib/site-data";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
+const ogImagePath = "/gallery/imagembonitaparainicio.jpeg";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -27,7 +28,21 @@ export const metadata: Metadata = {
     description: brandSettings.summary,
     url: siteUrl,
     locale: "pt_BR",
-    type: "website"
+    type: "website",
+    images: [
+      {
+        url: ogImagePath,
+        width: 1200,
+        height: 630,
+        alt: brandSettings.businessName
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: brandSettings.businessName,
+    description: brandSettings.summary,
+    images: [ogImagePath]
   },
   alternates: {
     canonical: siteUrl
