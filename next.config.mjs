@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "/DemoSiteConfeitaria";
+const rawBasePath = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").trim();
+const basePath = rawBasePath === "/" ? "" : rawBasePath.replace(/\/$/, "");
 
 const nextConfig = {
   output: "export",

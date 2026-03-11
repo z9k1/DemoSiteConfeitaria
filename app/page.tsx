@@ -39,9 +39,9 @@ export default function HomePage() {
     return () => window.cancelAnimationFrame(frameId);
   }, []);
 
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "/DemoSiteConfeitaria";
-  const cardapioPath = `${basePath.replace(/\/$/, "")}/cardapio`;
-  const eventosPath = `${basePath.replace(/\/$/, "")}/eventos`;
+  const basePath = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").replace(/\/$/, "");
+  const cardapioPath = `${basePath}/cardapio`;
+  const eventosPath = `${basePath}/eventos`;
 
   return (
     <div>
