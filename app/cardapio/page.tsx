@@ -1219,6 +1219,8 @@ export default function CardapioPage() {
 
   const productCardClass =
     "group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-rose-100/80 bg-white/92 text-left shadow-[0_16px_40px_rgba(93,55,44,0.09)] transition duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300/70 md:hover:-translate-y-1.5 md:hover:shadow-[0_22px_52px_rgba(93,55,44,0.14)]";
+  const sectionCardClass =
+    "rounded-2xl border border-rose-100/80 bg-white/92 p-5 shadow-[0_16px_40px_rgba(93,55,44,0.09)] sm:p-6";
   const productImageClass = "object-cover transition duration-700 group-hover:scale-[1.04]";
   const productMetaClass = "mt-auto flex items-end justify-between gap-3 pt-5";
   const productCtaClass =
@@ -1245,6 +1247,7 @@ export default function CardapioPage() {
   const [selectedMacaron, setSelectedMacaron] = useState<MacaronProduct | null>(null);
   const [selectedBiscoitoFlorido, setSelectedBiscoitoFlorido] = useState<BiscoitoFloridoProduct | null>(null);
   const [selectedSimpleProduct, setSelectedSimpleProduct] = useState<SimpleProduct | null>(null);
+  const [isMacaronPackagesOpen, setIsMacaronPackagesOpen] = useState(false);
   const [selectedSimpleCategory, setSelectedSimpleCategory] = useState<
     "macarons-presentear" | "torres-macarons" | "docinhos" | "doces-mimos" | "macarons" | null
   >(null);
@@ -3132,123 +3135,161 @@ export default function CardapioPage() {
     ) : null}
 
     {activeTab === "macarons" ? (
-      <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {MACARON_PRODUCTS.slice(0, 1).map((product) => (
+      <section className="space-y-10">
+        <div className={sectionCardClass}>
           <button
-            key={product.id}
             type="button"
-            onClick={() => openMacaronModal(product)}
-            className={productCardClass}
+            onClick={() => setIsMacaronPackagesOpen((prev) => !prev)}
+            aria-expanded={isMacaronPackagesOpen}
+            className="flex w-full items-center justify-between gap-4 text-left"
           >
-            <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
-              <Image
-                src={product.imageUrl}
-                alt={`Imagem do ${product.name}`}
-                fill
-                className={productImageClass}
-                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-              />
-            </div>
-            <div className="flex flex-1 flex-col p-5">
-              <h2 className="font-serifDisplay text-2xl text-cocoa-900">{product.name}</h2>
-              <p className="mt-2 whitespace-pre-line text-lg text-cocoa-700">{product.description}</p>
-              <div className={productMetaClass}>
-                <p className="text-lg font-semibold text-cocoa-900">
-                  A partir de {formatCurrency(minMacaronPrice + product.priceAdjustment)} / unidade
-                </p>
-                <p className={productCtaClass}>
-                  Ver detalhes {"\u2192"}
-                </p>
-              </div>
-            </div>
+            <h2 className="font-serifDisplay text-3xl text-cocoa-900">Pedido mais prático para 10 ou 20 unidades</h2>
+            <span
+              className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-rose-200 text-cocoa-700 transition ${
+                isMacaronPackagesOpen ? "rotate-180" : ""
+              }`}
+              aria-hidden="true"
+            >
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
           </button>
-        ))}
-        <button
-          type="button"
-          onClick={() => openCentoModal(CENTO_MACARONS_MINI_PRODUCT)}
-          className={productCardClass}
-        >
-          <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
-            <Image
-              src={CENTO_MACARONS_MINI_PRODUCT.imageUrl}
-              alt={`Imagem do ${CENTO_MACARONS_MINI_PRODUCT.name}`}
-              fill
-              className={productImageClass}
-              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-            />
+
+          {isMacaronPackagesOpen ? (
+            <div className="mt-6 grid gap-6 md:grid-cols-2">
+              {MACARONS_SIMPLE_PRODUCTS.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => openSimpleModal(item, "macarons")}
+                  className={productCardClass}
+                >
+                  <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
+                    <Image
+                      src={item.imageUrl}
+                      alt={`Imagem do ${item.name}`}
+                      fill
+                      className={productImageClass}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                    />
+                  </div>
+                  <div className="flex flex-1 flex-col p-5">
+                    <h2 className="font-serifDisplay text-2xl text-cocoa-900">{item.name}</h2>
+                    <p className="mt-2 text-lg text-cocoa-700">{item.description}</p>
+                    <div className={productMetaClass}>
+                      <p className="text-lg font-semibold text-cocoa-900">{item.priceLabel}</p>
+                      <p className={productCtaClass}>
+                        Ver detalhes {"\u2192"}
+                      </p>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          ) : null}
+        </div>
+
+        <div>
+          <div className={`${sectionCardClass} mb-5`}>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cocoa-500">Outras opções</p>
+            <h2 className="mt-2 font-serifDisplay text-3xl text-cocoa-900">Macarons por unidade, mini cento e personalizados</h2>
+            <p className="mt-2 max-w-3xl text-sm text-cocoa-600 sm:text-base">
+              Se preferir montar o pedido do jeito tradicional, estas opções continuam disponíveis normalmente.
+            </p>
           </div>
-          <div className="flex flex-1 flex-col p-5">
-            <h2 className="font-serifDisplay text-2xl text-cocoa-900">{CENTO_MACARONS_MINI_PRODUCT.name}</h2>
-            <p className="mt-2 text-lg text-cocoa-700">{CENTO_MACARONS_MINI_PRODUCT.description}</p>
-            <div className={productMetaClass}>
-              <p className="text-lg font-semibold text-cocoa-900">
-                {CENTO_MACARONS_MINI_PRODUCT.priceLabel ??
-                  `${formatCurrency(CENTO_MACARONS_MINI_PRODUCT.unitPrice)} / cento (por sabor)`}
-              </p>
-              <p className={productCtaClass}>
-                Ver detalhes {"\u2192"}
-              </p>
-            </div>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {MACARON_PRODUCTS.slice(0, 1).map((product) => (
+              <button
+                key={product.id}
+                type="button"
+                onClick={() => openMacaronModal(product)}
+                className={productCardClass}
+              >
+                <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
+                  <Image
+                    src={product.imageUrl}
+                    alt={`Imagem do ${product.name}`}
+                    fill
+                    className={productImageClass}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                  />
+                </div>
+                <div className="flex flex-1 flex-col p-5">
+                  <h2 className="font-serifDisplay text-2xl text-cocoa-900">{product.name}</h2>
+                  <p className="mt-2 whitespace-pre-line text-lg text-cocoa-700">{product.description}</p>
+                  <div className={productMetaClass}>
+                    <p className="text-lg font-semibold text-cocoa-900">
+                      A partir de {formatCurrency(minMacaronPrice + product.priceAdjustment)} / unidade
+                    </p>
+                    <p className={productCtaClass}>
+                      Ver detalhes {"\u2192"}
+                    </p>
+                  </div>
+                </div>
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={() => openCentoModal(CENTO_MACARONS_MINI_PRODUCT)}
+              className={productCardClass}
+            >
+              <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
+                <Image
+                  src={CENTO_MACARONS_MINI_PRODUCT.imageUrl}
+                  alt={`Imagem do ${CENTO_MACARONS_MINI_PRODUCT.name}`}
+                  fill
+                  className={productImageClass}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                />
+              </div>
+              <div className="flex flex-1 flex-col p-5">
+                <h2 className="font-serifDisplay text-2xl text-cocoa-900">{CENTO_MACARONS_MINI_PRODUCT.name}</h2>
+                <p className="mt-2 text-lg text-cocoa-700">{CENTO_MACARONS_MINI_PRODUCT.description}</p>
+                <div className={productMetaClass}>
+                  <p className="text-lg font-semibold text-cocoa-900">
+                    {CENTO_MACARONS_MINI_PRODUCT.priceLabel ??
+                      `${formatCurrency(CENTO_MACARONS_MINI_PRODUCT.unitPrice)} / cento (por sabor)`}
+                  </p>
+                  <p className={productCtaClass}>
+                    Ver detalhes {"\u2192"}
+                  </p>
+                </div>
+              </div>
+            </button>
+            {MACARON_PRODUCTS.slice(1).map((product) => (
+              <button
+                key={product.id}
+                type="button"
+                onClick={() => openMacaronModal(product)}
+                className={productCardClass}
+              >
+                <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
+                  <Image
+                    src={product.imageUrl}
+                    alt={`Imagem do ${product.name}`}
+                    fill
+                    className={productImageClass}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                  />
+                </div>
+                <div className="flex flex-1 flex-col p-5">
+                  <h2 className="font-serifDisplay text-2xl text-cocoa-900">{product.name}</h2>
+                  <p className="mt-2 whitespace-pre-line text-lg text-cocoa-700">{product.description}</p>
+                  <div className={productMetaClass}>
+                    <p className="text-lg font-semibold text-cocoa-900">
+                      A partir de {formatCurrency(minMacaronPrice + product.priceAdjustment)} / unidade
+                    </p>
+                    <p className={productCtaClass}>
+                      Ver detalhes {"\u2192"}
+                    </p>
+                  </div>
+                </div>
+              </button>
+            ))}
           </div>
-        </button>
-        {MACARON_PRODUCTS.slice(1).map((product) => (
-          <button
-            key={product.id}
-            type="button"
-            onClick={() => openMacaronModal(product)}
-            className={productCardClass}
-          >
-            <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
-              <Image
-                src={product.imageUrl}
-                alt={`Imagem do ${product.name}`}
-                fill
-                className={productImageClass}
-                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-              />
-            </div>
-            <div className="flex flex-1 flex-col p-5">
-              <h2 className="font-serifDisplay text-2xl text-cocoa-900">{product.name}</h2>
-              <p className="mt-2 whitespace-pre-line text-lg text-cocoa-700">{product.description}</p>
-              <div className={productMetaClass}>
-                <p className="text-lg font-semibold text-cocoa-900">
-                  A partir de {formatCurrency(minMacaronPrice + product.priceAdjustment)} / unidade
-                </p>
-                <p className={productCtaClass}>
-                  Ver detalhes {"\u2192"}
-                </p>
-              </div>
-            </div>
-          </button>
-        ))}
-        {MACARONS_SIMPLE_PRODUCTS.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => openSimpleModal(item, "macarons")}
-            className={productCardClass}
-          >
-            <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
-              <Image
-                src={item.imageUrl}
-                alt={`Imagem do ${item.name}`}
-                fill
-                className={productImageClass}
-                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-              />
-            </div>
-            <div className="flex flex-1 flex-col p-5">
-              <h2 className="font-serifDisplay text-2xl text-cocoa-900">{item.name}</h2>
-              <p className="mt-2 text-lg text-cocoa-700">{item.description}</p>
-              <div className={productMetaClass}>
-                <p className="text-lg font-semibold text-cocoa-900">{item.priceLabel}</p>
-                <p className={productCtaClass}>
-                  Ver detalhes {"\u2192"}
-                </p>
-              </div>
-            </div>
-          </button>
-        ))}
+        </div>
       </section>
     ) : null}
 
