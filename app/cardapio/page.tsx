@@ -173,7 +173,6 @@ type CartItem = {
 type SearchableSimpleCategory =
   | "macarons-presentear"
   | "doces-mimos"
-  | "pascoa"
   | "macarons"
   | "torres-macarons"
   | "docinhos";
@@ -231,13 +230,6 @@ const categoryConfigs = [
     label: "Doces mimos",
     title: "Doces mimos",
     description: "Doces presenteáveis e lembranças delicadas para surpreender.",
-    isReady: true
-  },
-  {
-    id: "pascoa",
-    label: "Páscoa",
-    title: "Páscoa",
-    description: "Linha sazonal com ovos, kits e presentes especiais para a Páscoa.",
     isReady: true
   },
   {
@@ -920,160 +912,6 @@ const DOCES_MIMOS_SIMPLE_PRODUCTS: SimpleProduct[] = [
 ];
 
 
-const PASCOA_SIMPLE_PRODUCTS: SimpleProduct[] = [
-  {
-    id: "pascoa-chocolate-flores-130g",
-    name: "Chocolate com flores comestíveis - 130g",
-    description: "Barra especial de Páscoa com flores comestíveis, conforme imagem do catálogo.",
-    unitPrice: 30,
-    priceLabel: "R$ 30,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-02.png")
-  },
-  {
-    id: "pascoa-chocolate-flores-biscoito",
-    name: "Chocolate com flores comestíveis - 130g + biscoito",
-    description: "Versão presenteável com chocolate floral e biscoito decorado, conforme imagem do catálogo.",
-    unitPrice: 58,
-    priceLabel: "R$ 58,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-03.png")
-  },
-  {
-    id: "pascoa-macarons-1-caixinha",
-    name: "Macarons - 1 unid na caixinha",
-    description: "Caixinha delicada com 1 macaron decorado para presentear.",
-    unitPrice: 10,
-    priceLabel: "R$ 10,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-04-a.png")
-  },
-  {
-    id: "pascoa-macarons-2-caixinha",
-    name: "Macarons - 2 unid na caixinha",
-    description: "Caixinha com 2 macarons decorados para a Páscoa.",
-    unitPrice: 18,
-    priceLabel: "R$ 18,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-04-b.png")
-  },
-  {
-    id: "pascoa-ovo-300-modelo-1",
-    name: "Ovo de Páscoa 300g - Modelo 1",
-    description: "Ovo de Páscoa conforme composição da foto do catálogo.",
-    unitPrice: 130,
-    priceLabel: "R$ 130,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-05.png")
-  },
-  {
-    id: "pascoa-ovo-300-modelo-2",
-    name: "Ovo de Páscoa 300g - Modelo 2",
-    description: "Ovo de Páscoa conforme composição da foto do catálogo.",
-    unitPrice: 130,
-    priceLabel: "R$ 130,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-06.png")
-  },
-  {
-    id: "pascoa-ovo-300-modelo-3",
-    name: "Ovo de Páscoa 300g - Modelo 3",
-    description: "Ovo de Páscoa conforme composição da foto do catálogo.",
-    unitPrice: 130,
-    priceLabel: "R$ 130,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-07.png")
-  },
-  {
-    id: "pascoa-ovo-macarons",
-    name: "Ovo de Páscoa com macarons",
-    description: "Ovo de Páscoa com macarons, conforme imagem do catálogo.",
-    unitPrice: 90,
-    priceLabel: "R$ 90,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-08.png")
-  },
-  {
-    id: "pascoa-ovo-300-modelo-4",
-    name: "Ovo de Páscoa 300g - Modelo 4",
-    description: "Ovo de Páscoa conforme composição da foto do catálogo.",
-    unitPrice: 110,
-    priceLabel: "R$ 110,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-09.png")
-  },
-  {
-    id: "pascoa-ovo-400",
-    name: "Ovo de Páscoa 400g",
-    description: "Ovo de Páscoa especial conforme composição da foto do catálogo.",
-    unitPrice: 150,
-    priceLabel: "R$ 150,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-10.png")
-  },
-  {
-    id: "pascoa-kit-1",
-    name: "Kit 1",
-    description: "Kit especial de Páscoa conforme composição da foto do catálogo.",
-    unitPrice: 25,
-    priceLabel: "R$ 25,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-11.png")
-  },
-  {
-    id: "pascoa-kit-4",
-    name: "Kit 4",
-    description: "Kit especial de Páscoa conforme composição da foto do catálogo.",
-    unitPrice: 30,
-    priceLabel: "R$ 30,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-12.png")
-  },
-  {
-    id: "pascoa-kit-2",
-    name: "Kit 2",
-    description: "Kit especial de Páscoa conforme composição da foto do catálogo.",
-    unitPrice: 25,
-    priceLabel: "R$ 25,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-13.png")
-  },
-  {
-    id: "pascoa-kit-3",
-    name: "Kit 3",
-    description: "Kit especial de Páscoa conforme composição da foto do catálogo.",
-    unitPrice: 25,
-    priceLabel: "R$ 25,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-14.png")
-  },
-  {
-    id: "pascoa-kit-macarons",
-    name: "Kit macarons",
-    description: "Kit especial com macarons temáticos para presentear.",
-    unitPrice: 50,
-    priceLabel: "R$ 50,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-15.png")
-  },
-  {
-    id: "pascoa-kit-docura",
-    name: "Kit Doçura",
-    description: "Kit Doçura de Páscoa conforme composição da foto do catálogo.",
-    unitPrice: 70,
-    priceLabel: "R$ 70,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-16.png")
-  },
-  {
-    id: "pascoa-kit-5",
-    name: "Kit 5",
-    description: "Kit especial de Páscoa conforme composição da foto do catálogo.",
-    unitPrice: 50,
-    priceLabel: "R$ 50,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-17.png")
-  },
-  {
-    id: "pascoa-kit-6",
-    name: "Kit 6",
-    description: "Kit especial de Páscoa conforme composição da foto do catálogo.",
-    unitPrice: 50,
-    priceLabel: "R$ 50,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-18.png")
-  },
-  {
-    id: "pascoa-kit-7",
-    name: "Kit 7",
-    description: "Kit especial de Páscoa conforme composição da foto do catálogo.",
-    unitPrice: 50,
-    priceLabel: "R$ 50,00",
-    imageUrl: assetPath("/images/bolos/pascoa-page-19.png")
-  }
-];
 
 
 const MACARONS_SIMPLE_PRODUCTS: SimpleProduct[] = [
@@ -1414,7 +1252,7 @@ export default function CardapioPage() {
   const [selectedSimpleProduct, setSelectedSimpleProduct] = useState<SimpleProduct | null>(null);
   const [isMacaronPackagesOpen, setIsMacaronPackagesOpen] = useState(false);
   const [selectedSimpleCategory, setSelectedSimpleCategory] = useState<
-    "macarons-presentear" | "torres-macarons" | "docinhos" | "doces-mimos" | "pascoa" | "macarons" | null
+    "macarons-presentear" | "torres-macarons" | "docinhos" | "doces-mimos" | "macarons" | null
   >(null);
   const [selectedSimpleFlavors, setSelectedSimpleFlavors] = useState<string[]>([]);
   const [simpleFlavorError, setSimpleFlavorError] = useState("");
@@ -1595,18 +1433,6 @@ export default function CardapioPage() {
         kind: "simple" as const,
         product: item,
         simpleCategory: "macarons" as const
-      })),
-      ...PASCOA_SIMPLE_PRODUCTS.map((item) => ({
-        id: `pascoa-${item.id}`,
-        name: item.name,
-        description: item.description,
-        imageUrl: item.imageUrl,
-        priceLabel: item.priceLabel,
-        categoryLabel: "Páscoa",
-        searchText: normalizeSearchText(`Páscoa ${item.name} ${item.description}`),
-        kind: "simple" as const,
-        product: item,
-        simpleCategory: "pascoa" as const
       })),
       ...DOCES_MIMOS_SIMPLE_PRODUCTS.map((item) => ({
         id: `mimo-${item.id}`,
@@ -2167,7 +1993,7 @@ export default function CardapioPage() {
 
   const openSimpleModal = (
     product: SimpleProduct,
-    category: "macarons-presentear" | "torres-macarons" | "docinhos" | "doces-mimos" | "pascoa" | "macarons"
+    category: "macarons-presentear" | "torres-macarons" | "docinhos" | "doces-mimos" | "macarons"
   ) => {
     setSelectedBolo(null);
     setSelectedDocinho(null);
@@ -2745,8 +2571,6 @@ export default function CardapioPage() {
             ? "Doces finos"
             : selectedSimpleCategory === "doces-mimos"
               ? "Doces mimos"
-            : selectedSimpleCategory === "pascoa"
-              ? "Páscoa"
             : "Macarons";
     const detailLines = [`Categoria: ${categoryLabel}`];
     if (selectedSimpleFlavors.length) {
@@ -3368,38 +3192,7 @@ export default function CardapioPage() {
       </section>
     ) : null}
 
-    {activeTab === "pascoa" ? (
-      <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {PASCOA_SIMPLE_PRODUCTS.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => openSimpleModal(item, "pascoa")}
-            className={productCardClass}
-          >
-            <div className="relative h-72 w-full overflow-hidden rounded-t-2xl">
-              <Image
-                src={item.imageUrl}
-                alt={`Imagem do ${item.name}`}
-                fill
-                className={productImageClass}
-                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-              />
-            </div>
-            <div className="flex flex-1 flex-col p-5">
-              <h2 className="font-serifDisplay text-2xl text-cocoa-900">{item.name}</h2>
-              <p className="mt-2 text-lg text-cocoa-700">{item.description}</p>
-              <div className={productMetaClass}>
-                <p className="text-lg font-semibold text-cocoa-900">{item.priceLabel}</p>
-                <p className={productCtaClass}>
-                  Ver detalhes {"\u2192"}
-                </p>
-              </div>
-            </div>
-          </button>
-        ))}
-      </section>
-    ) : null}
+
 
     {activeTab === "macarons" ? (
       <section className="space-y-10">
@@ -3765,7 +3558,6 @@ export default function CardapioPage() {
     activeTab !== "docinhos" &&
     activeTab !== "barras" &&
     activeTab !== "macarons" &&
-    activeTab !== "pascoa" &&
     activeTab !== "doces-mimos" &&
     activeTab !== "biscoitos-floridos" &&
     activeTab !== "macarons-presentear" &&
@@ -5128,3 +4920,4 @@ export default function CardapioPage() {
     </div>
   );
 }
+
